@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Masse Builder 8 Semaines</title>
+    <title>Masse Builder v2.0</title>
     <style>
         * {
             margin: 0;
@@ -31,15 +31,86 @@
         h1 {
             text-align: center;
             color: #667eea;
-            margin-bottom: 10px;
+            margin-bottom: 5px;
             font-size: 26px;
+        }
+
+        .version-badge {
+            text-align: center;
+            background: linear-gradient(135deg, #51cf66 0%, #37b24d 100%);
+            color: white;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 11px;
+            font-weight: bold;
+            display: inline-block;
+            margin-bottom: 10px;
         }
         
         .header-info {
             text-align: center;
             color: #666;
-            margin-bottom: 20px;
+            margin-bottom: 15px;
             font-size: 13px;
+        }
+
+        .week-tracker {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 15px;
+            border-radius: 15px;
+            margin-bottom: 15px;
+            text-align: center;
+        }
+
+        .week-display {
+            font-size: 32px;
+            font-weight: bold;
+            margin: 10px 0;
+        }
+
+        .week-controls {
+            display: flex;
+            gap: 8px;
+            justify-content: center;
+            margin-top: 10px;
+        }
+
+        .session-timer {
+            background: #fff3cd;
+            border: 2px solid #ffc107;
+            padding: 12px;
+            border-radius: 10px;
+            margin-bottom: 15px;
+            text-align: center;
+            font-weight: bold;
+        }
+
+        .session-timer-display {
+            font-size: 24px;
+            color: #667eea;
+            margin: 5px 0;
+            font-variant-numeric: tabular-nums;
+        }
+
+        .auto-save-indicator {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: #51cf66;
+            color: white;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: bold;
+            opacity: 0;
+            transition: opacity 0.3s;
+            z-index: 1000;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+        }
+
+        .auto-save-indicator.show {
+            opacity: 1;
         }
         
         .tabs {
@@ -103,6 +174,13 @@
             box-shadow: 0 2px 8px rgba(0,0,0,0.1);
             position: relative;
         }
+
+        .progress-indicator {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            font-size: 20px;
+        }
         
         .exercise-header {
             display: flex;
@@ -134,6 +212,25 @@
         
         .demo-btn:active {
             transform: scale(0.95);
+        }
+
+        .last-week-data {
+            background: #e8f5e9;
+            border-left: 3px solid #51cf66;
+            padding: 8px;
+            margin: 8px 0;
+            border-radius: 6px;
+            font-size: 12px;
+        }
+
+        .suggested-weight {
+            background: #fff9e6;
+            border-left: 3px solid #ffc107;
+            padding: 8px;
+            margin: 8px 0;
+            border-radius: 6px;
+            font-size: 12px;
+            font-weight: bold;
         }
         
         .exercise-visual {
@@ -206,11 +303,17 @@
             border-radius: 6px;
             font-size: 13px;
             text-align: center;
+            transition: border-color 0.3s;
         }
         
         .set-input input:focus {
             outline: none;
             border-color: #667eea;
+        }
+
+        .set-input input.auto-saved {
+            border-color: #51cf66;
+            background: #f0fff4;
         }
         
         .timer {
@@ -227,6 +330,16 @@
             font-weight: bold;
             margin: 10px 0;
             font-variant-numeric: tabular-nums;
+        }
+
+        .timer-display.warning {
+            color: #ffc107;
+            animation: pulse 1s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
         }
         
         .timer-controls {
@@ -292,6 +405,16 @@
             margin: 8px 0;
             font-size: 13px;
         }
+
+        .warning {
+            background: #ffc107;
+            color: #333;
+            padding: 10px;
+            border-radius: 8px;
+            margin: 8px 0;
+            font-size: 13px;
+            font-weight: bold;
+        }
         
         .notes-area {
             width: 100%;
@@ -346,49 +469,59 @@
             font-size: 13px;
         }
 
-        .exercise-gallery {
-            background: white;
-            border-radius: 10px;
-            padding: 12px;
-            margin-bottom: 15px;
-        }
-
-        .gallery-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-            gap: 10px;
-            margin-top: 10px;
-        }
-
-        .gallery-item {
-            background: #f8f9ff;
-            border-radius: 8px;
-            padding: 10px;
-            text-align: center;
-            cursor: pointer;
-            transition: transform 0.2s;
-            border: 2px solid transparent;
-        }
-
-        .gallery-item:hover {
-            transform: scale(1.05);
-            border-color: #667eea;
-        }
-
-        .gallery-item-icon {
-            font-size: 40px;
-            margin-bottom: 5px;
-        }
-
-        .gallery-item-name {
-            font-size: 11px;
-            font-weight: bold;
-            color: #667eea;
-        }
-
         ul {
             margin-left: 20px;
             line-height: 1.6;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.7);
+            z-index: 2000;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal.show {
+            display: flex;
+        }
+
+        .modal-content {
+            background: white;
+            padding: 30px;
+            border-radius: 20px;
+            max-width: 400px;
+            text-align: center;
+            animation: modalPop 0.3s;
+        }
+
+        @keyframes modalPop {
+            from { transform: scale(0.8); opacity: 0; }
+            to { transform: scale(1); opacity: 1; }
+        }
+
+        .modal-icon {
+            font-size: 60px;
+            margin-bottom: 15px;
+        }
+
+        .modal-title {
+            font-size: 22px;
+            font-weight: bold;
+            color: #667eea;
+            margin-bottom: 10px;
+        }
+
+        .modal-text {
+            font-size: 15px;
+            color: #666;
+            margin-bottom: 20px;
+            line-height: 1.5;
         }
 
         @media (max-width: 600px) {
@@ -413,17 +546,42 @@
                 width: 100%;
                 margin-top: 5px;
             }
+
+            .auto-save-indicator {
+                top: 10px;
+                right: 10px;
+                font-size: 11px;
+                padding: 6px 12px;
+            }
         }
     </style>
 </head>
 <body>
+    <div class="auto-save-indicator" id="auto-save-indicator">✅ Sauvegardé</div>
+
     <div class="container">
-        <h1>💪 PROGRAMME MASSE BUILDER</h1>
+        <h1>💪 MASSE BUILDER</h1>
+        <div style="text-align: center;"><span class="version-badge">v2.0 • Auto-Save • Smart Timer</span></div>
         <div class="header-info">8 semaines • 3 séances/semaine</div>
+
+        <div class="week-tracker">
+            <div style="font-size: 14px; margin-bottom: 5px;">📅 PROGRESSION</div>
+            <div class="week-display" id="week-display">SEMAINE 1 / 8</div>
+            <div class="week-controls">
+                <button class="btn btn-secondary" onclick="changeWeek(-1)">◀️ S-1</button>
+                <button class="btn btn-secondary" onclick="changeWeek(1)">S+1 ▶️</button>
+                <button class="btn btn-primary" onclick="resetWeek()">Reset S1</button>
+            </div>
+        </div>
+
+        <div class="session-timer" id="session-timer" style="display: none;">
+            <div>⏱️ DURÉE SÉANCE</div>
+            <div class="session-timer-display" id="session-timer-display">00:00</div>
+        </div>
         
         <div class="notification-setup">
             <h3>🔔 Rappels Training</h3>
-            <p style="margin: 8px 0;">Active les notifications pour recevoir tes rappels Lun/Mer/Ven à 12h30</p>
+            <p style="margin: 8px 0;">Active les notifications pour tes rappels Lun/Mer/Ven à 12h30</p>
             <button class="btn btn-primary" onclick="setupNotifications()">✅ Activer notifications</button>
             <div id="notif-status"></div>
         </div>
@@ -432,7 +590,6 @@
             <button class="tab active" onclick="showTab('lundi')">🔴 LUNDI</button>
             <button class="tab" onclick="showTab('mercredi')">🔵 MERCREDI</button>
             <button class="tab" onclick="showTab('vendredi')">🟢 VENDREDI</button>
-            <button class="tab" onclick="showTab('galerie')">🎬 GALERIE</button>
             <button class="tab" onclick="showTab('progression')">📈 PROGR.</button>
         </div>
         
@@ -464,159 +621,108 @@
             <div class="workout-section">
                 <h3>💪 BLOC 1 - PECS SUPÉRIEURS</h3>
                 
-                <div class="exercise">
+                <div class="exercise" data-exercise-id="lun-incline">
+                    <span class="progress-indicator" id="progress-lun-incline">⚪</span>
                     <div class="exercise-header">
                         <div class="exercise-title">1A. Développé incliné haltères 30°</div>
-                        <button class="demo-btn" onclick="openDemo('https://www.youtube.com/watch?v=8iPEnn-ltC8')">📹 Voir démo</button>
+                        <button class="demo-btn" onclick="openDemo('https://www.youtube.com/watch?v=8iPEnn-ltC8')">📹 Démo</button>
+                    </div>
+                    <div class="last-week-data" id="lastweek-lun-incline">
+                        💾 Semaine dernière: Chargement...
+                    </div>
+                    <div class="suggested-weight" id="suggestion-lun-incline">
+                        💡 Suggestion: 32kg (S1 baseline)
                     </div>
                     <div class="exercise-details">
                         <div class="detail-item"><span class="detail-label">Séries:</span> 4x8</div>
-                        <div class="detail-item"><span class="detail-label">Charge:</span> 32kg</div>
+                        <div class="detail-item"><span class="detail-label">Charge S1:</span> 32kg</div>
                         <div class="detail-item"><span class="detail-label">Tempo:</span> 3-0-2</div>
                         <div class="detail-item"><span class="detail-label">Repos:</span> 90s</div>
                         <div class="detail-item"><span class="detail-label">RPE:</span> 7-8</div>
                     </div>
                     <div class="exercise-visual">
-                        <strong>📐 POSITION :</strong><br>
-                        → Banc incliné 30° (pas plus !)<br>
-                        → Pieds ancrés au sol<br>
-                        → Dos plaqué contre banc<br>
-                        → Haltères niveau épaules au départ
+                        <strong>📐 POSITION:</strong> Banc 30° • Pieds au sol • Dos plaqué • Haltères niveau épaules
                     </div>
                     <div class="movement-diagram">
-                        ⬇️ 3s lent vers clavicule → 💥 2s montée explosive → 💪 Squeeze en haut
-                    </div>
-                    <div class="exercise-technique">
-                        <strong>🎯 Points clés:</strong> Coudes 45° du corps • Haltères descendent niveau clavicule (pas plus bas) • Contrôle descente 3 secondes • Ne pas cambrer excessivement
-                        <br><strong>⚠️ Alarme épaule:</strong> Si douleur >5/10 → Réduire à 28kg ou remplacer par écartés inclinés
+                        ⬇️ 3s lent → 💥 2s montée → 💪 Squeeze
                     </div>
                     <div class="sets-tracker">
                         <div class="set-input">
                             <label>S1 (kg×reps)</label>
-                            <input type="text" id="lun-1a-s1" placeholder="32×8">
+                            <input type="text" id="lun-1a-s1" placeholder="32×8" oninput="autoSave()">
                         </div>
                         <div class="set-input">
                             <label>S2</label>
-                            <input type="text" id="lun-1a-s2">
+                            <input type="text" id="lun-1a-s2" oninput="autoSave()">
                         </div>
                         <div class="set-input">
                             <label>S3</label>
-                            <input type="text" id="lun-1a-s3">
+                            <input type="text" id="lun-1a-s3" oninput="autoSave()">
                         </div>
                         <div class="set-input">
                             <label>S4</label>
-                            <input type="text" id="lun-1a-s4">
+                            <input type="text" id="lun-1a-s4" oninput="autoSave()">
                         </div>
                     </div>
                 </div>
-                
+
                 <div class="exercise">
                     <div class="exercise-header">
                         <div class="exercise-title">1B. Rowing haltère 1 bras</div>
-                        <button class="demo-btn" onclick="openDemo('https://www.youtube.com/watch?v=roCP6wCXPqo')">📹 Voir démo</button>
+                        <button class="demo-btn" onclick="openDemo('https://www.youtube.com/watch?v=roCP6wCXPqo')">📹 Démo</button>
+                    </div>
+                    <div class="last-week-data" id="lastweek-lun-rowing">
+                        💾 Semaine dernière: Chargement...
                     </div>
                     <div class="exercise-details">
-                        <div class="detail-item"><span class="detail-label">Séries:</span> 4x10/bras</div>
-                        <div class="detail-item"><span class="detail-label">Charge:</span> 18kg</div>
-                        <div class="detail-item"><span class="detail-label">Tempo:</span> 2-1-2</div>
-                    </div>
-                    <div class="exercise-visual">
-                        <strong>📐 POSITION :</strong><br>
-                        → Genou + main libre sur banc<br>
-                        → Dos PLAT (parallèle au sol)<br>
-                        → Haltère part du sol
-                    </div>
-                    <div class="movement-diagram">
-                        ⬆️ 2s tirer vers hanche → ⏸️ 1s squeeze → ⬇️ 2s contrôlé
-                    </div>
-                    <div class="exercise-technique">
-                        <strong>🎯 Points clés:</strong> Tirer vers HANCHE (pas épaule) • Coude reste près du corps • Squeeze omoplates 1 seconde en haut • Ne pas tourner le buste
+                        <div class="detail-item"><span class="detail-label">4x10/bras</span></div>
+                        <div class="detail-item"><span class="detail-label">18kg</span></div>
                     </div>
                     <div class="sets-tracker">
                         <div class="set-input">
                             <label>S1 (D/G)</label>
-                            <input type="text" id="lun-1b-s1" placeholder="18×10/10">
+                            <input type="text" id="lun-1b-s1" placeholder="18×10/10" oninput="autoSave()">
                         </div>
                         <div class="set-input">
                             <label>S2</label>
-                            <input type="text" id="lun-1b-s2">
+                            <input type="text" id="lun-1b-s2" oninput="autoSave()">
                         </div>
                         <div class="set-input">
                             <label>S3</label>
-                            <input type="text" id="lun-1b-s3">
+                            <input type="text" id="lun-1b-s3" oninput="autoSave()">
                         </div>
                         <div class="set-input">
                             <label>S4</label>
-                            <input type="text" id="lun-1b-s4">
+                            <input type="text" id="lun-1b-s4" oninput="autoSave()">
                         </div>
                     </div>
                 </div>
             </div>
             
             <div class="workout-section">
-                <h3>🏔️ BLOC 2 - DELTOÏDES 3D</h3>
+                <h3>🏔️ BLOC 2 - DELTOÏDES</h3>
                 
                 <div class="exercise">
                     <div class="exercise-header">
-                        <div class="exercise-title">2A. Développé Arnold</div>
-                        <button class="demo-btn" onclick="openDemo('https://www.youtube.com/watch?v=6Z15_WdXmVw')">📹 Voir démo</button>
-                    </div>
-                    <div class="exercise-details">
-                        <div class="detail-item"><span class="detail-label">4x10</span></div>
-                        <div class="detail-item"><span class="detail-label">20kg</span></div>
+                        <div class="exercise-title">2A. Développé Arnold • 4x10 • 20kg</div>
+                        <button class="demo-btn" onclick="openDemo('https://www.youtube.com/watch?v=6Z15_WdXmVw')">📹 Démo</button>
                     </div>
                     <div class="movement-diagram">
-                        🔄 Départ paumes vers toi → 🔄 Pivoter en montant → 🙌 Finir paumes vers avant
-                    </div>
-                    <div class="exercise-technique">
-                        <strong>💡 Pourquoi Arnold ?</strong> Rotation = moins de stress épaule que militaire barre
-                    </div>
-                    <div class="sets-tracker">
-                        <div class="set-input">
-                            <label>S1</label>
-                            <input type="text" id="lun-2a-s1" placeholder="20×10">
-                        </div>
-                        <div class="set-input">
-                            <label>S2</label>
-                            <input type="text" id="lun-2a-s2">
-                        </div>
-                        <div class="set-input">
-                            <label>S3</label>
-                            <input type="text" id="lun-2a-s3">
-                        </div>
-                        <div class="set-input">
-                            <label>S4</label>
-                            <input type="text" id="lun-2a-s4">
-                        </div>
+                        🔄 Paumes vers toi → 🔄 Pivoter → 🙌 Finir devant
                     </div>
                 </div>
                 
                 <div class="exercise">
-                    <div class="exercise-header">
-                        <div class="exercise-title">2B. Face pull haute</div>
-                        <button class="demo-btn" onclick="openDemo('https://www.youtube.com/watch?v=rep-qVOkqgk')">📹 Voir démo</button>
-                    </div>
-                    <div class="exercise-details">
-                        <div class="detail-item">4x15 Pile 6</div>
-                    </div>
-                    <div class="movement-diagram">
-                        ⬅️ Tirer vers FRONT (pas poitrine) → 🎯 Coudes niveau oreilles
-                    </div>
+                    <div class="exercise-title">2B. Face pull haute • 4x15 Pile 6</div>
                 </div>
                 
                 <div class="exercise">
                     <div class="exercise-header">
-                        <div class="exercise-title">3A. Élévations latérales</div>
-                        <button class="demo-btn" onclick="openDemo('https://www.youtube.com/watch?v=3VcKaXpzqRo')">📹 Voir démo</button>
-                    </div>
-                    <div class="exercise-details">
-                        <div class="detail-item">4x12 • 10kg • Tempo 2-1-3</div>
+                        <div class="exercise-title">3A. Élévations latérales • 4x12 • 10kg</div>
+                        <button class="demo-btn" onclick="openDemo('https://www.youtube.com/watch?v=3VcKaXpzqRo')">📹 Démo</button>
                     </div>
                     <div class="exercise-visual">
-                        <strong>🔑 ASTUCE CRITIQUE :</strong><br>
-                        → Rotation externe légère (pouces vers haut)<br>
-                        → Descente SUPER LENTE 3 secondes<br>
-                        → PAS de balancement corps
+                        <strong>🔑 ASTUCE:</strong> Rotation externe légère • Descente LENTE 3s
                     </div>
                 </div>
                 
@@ -628,18 +734,12 @@
             <div class="workout-section">
                 <h3>💥 BLOC 3 - TRICEPS</h3>
                 <ul>
-                    <li><strong>Dips assistés:</strong> 3x10 (-30kg) • Buste incliné pour pecs <button class="demo-btn" onclick="openDemo('https://www.youtube.com/watch?v=2z8JmcrW-As')" style="margin-left: 10px;">📹 Démo</button></li>
-                    <li><strong>Extension triceps corde:</strong> 3x12 Pile 6 • Coudes FIXES</li>
+                    <li><strong>Dips assistés:</strong> 3x10 (-30kg)</li>
+                    <li><strong>Extension triceps:</strong> 3x12 Pile 6</li>
                 </ul>
             </div>
             
-            <div class="workout-section">
-                <h3>✨ FINISHER (3 min)</h3>
-                <p>3 rounds: Band pull-aparts 20 • Wall slides 10 • Hollow hold 15s</p>
-            </div>
-            
-            <textarea class="notes-area" id="notes-lundi" placeholder="📝 Notes: énergie /10, douleurs, ressenti..."></textarea>
-            <button class="save-btn" onclick="saveWorkout('lundi')">💾 SAUVEGARDER LUNDI</button>
+            <textarea class="notes-area" id="notes-lundi" placeholder="📝 Notes: énergie /10, douleurs..." oninput="autoSave()"></textarea>
         </div>
         
         <!-- MERCREDI -->
@@ -652,130 +752,90 @@
                     <li>Rameur 3 min</li>
                     <li>Dead hang 2x20s</li>
                     <li>Scapular pull-ups 3x8</li>
-                    <li>Band dislocations 2x15</li>
                 </ul>
             </div>
             
             <div class="workout-section">
                 <h3>💪 BLOC 1 - LARGEUR</h3>
                 
-                <div class="exercise">
+                <div class="exercise" data-exercise-id="mer-tractions">
+                    <span class="progress-indicator" id="progress-mer-tractions">⚪</span>
                     <div class="exercise-header">
-                        <div class="exercise-title">1. Tractions pronation assistées</div>
-                        <button class="demo-btn" onclick="openDemo('https://www.youtube.com/watch?v=eGo4IYlbE5g')">📹 Voir démo</button>
+                        <div class="exercise-title">1. Tractions assistées • 5x5</div>
+                        <button class="demo-btn" onclick="openDemo('https://www.youtube.com/watch?v=eGo4IYlbE5g')">📹 Démo</button>
                     </div>
-                    <div class="exercise-details">
-                        <div class="detail-item"><span class="detail-label">5x5</span></div>
-                        <div class="detail-item"><span class="detail-label">Élastique moyen</span></div>
-                        <div class="detail-item"><span class="detail-label">Tempo 3-0-2</span></div>
-                        <div class="detail-item"><span class="detail-label">Repos 2min</span></div>
-                    </div>
-                    <div class="exercise-visual">
-                        <strong>📐 POSITION :</strong><br>
-                        → Prise pronation largeur épaules + 10cm<br>
-                        → Départ bras TENDUS (stretch dorsal)<br>
-                        → Menton passe au-dessus barre
+                    <div class="last-week-data" id="lastweek-mer-tractions">
+                        💾 Semaine dernière: Chargement...
                     </div>
                     <div class="movement-diagram">
-                        ⬇️ 3s descente contrôlée → ⬆️ 2s tirer coudes vers BAS → 💪 Poitrine vers barre
-                    </div>
-                    <div class="exercise-technique">
-                        <strong>🎯 Focus mental:</strong> "Je tire mes COUDES vers le bas, pas mes mains vers le haut"
-                        <br><strong>📈 Objectif S8:</strong> Élastique léger ou 6-8 reps
+                        ⬇️ 3s descente → ⬆️ 2s coudes vers BAS
                     </div>
                     <div class="sets-tracker">
                         <div class="set-input">
                             <label>S1</label>
-                            <input type="text" id="mer-1-s1" placeholder="5">
+                            <input type="text" id="mer-1-s1" placeholder="5" oninput="autoSave()">
                         </div>
                         <div class="set-input">
                             <label>S2</label>
-                            <input type="text" id="mer-1-s2">
+                            <input type="text" id="mer-1-s2" oninput="autoSave()">
                         </div>
                         <div class="set-input">
                             <label>S3</label>
-                            <input type="text" id="mer-1-s3">
+                            <input type="text" id="mer-1-s3" oninput="autoSave()">
                         </div>
                         <div class="set-input">
                             <label>S4</label>
-                            <input type="text" id="mer-1-s4">
+                            <input type="text" id="mer-1-s4" oninput="autoSave()">
                         </div>
                         <div class="set-input">
                             <label>S5</label>
-                            <input type="text" id="mer-1-s5">
+                            <input type="text" id="mer-1-s5" oninput="autoSave()">
                         </div>
                     </div>
                 </div>
                 
                 <div class="exercise">
                     <div class="exercise-header">
-                        <div class="exercise-title">2. Rowing barre buste penché</div>
-                        <button class="demo-btn" onclick="openDemo('https://www.youtube.com/watch?v=kBWAon7ItDw')">📹 Voir démo</button>
+                        <div class="exercise-title">2. Rowing barre • 4x10 • 70kg</div>
+                        <button class="demo-btn" onclick="openDemo('https://www.youtube.com/watch?v=kBWAon7ItDw')">📹 Démo</button>
                     </div>
-                    <div class="exercise-details">
-                        <div class="detail-item"><span class="detail-label">4x10</span></div>
-                        <div class="detail-item"><span class="detail-label">70kg</span></div>
-                        <div class="detail-item"><span class="detail-label">Tempo 3-1-2</span></div>
-                    </div>
-                    <div class="exercise-visual">
-                        <strong>📐 POSITION :</strong><br>
-                        → Buste penché 45° (pas horizontal)<br>
-                        → Genoux légèrement fléchis<br>
-                        → Dos NEUTRE (ne pas arrondir)
-                    </div>
-                    <div class="movement-diagram">
-                        ⬆️ Tirer vers NOMBRIL (pas sternum) → ⏸️ Squeeze 1s → ⬇️ 3s contrôlé
-                    </div>
-                    <div class="exercise-technique">
-                        <strong>💡 Charge:</strong> Barre 20kg + 2 disques 25kg = 70kg total
+                    <div class="last-week-data" id="lastweek-mer-rowing">
+                        💾 Semaine dernière: Chargement...
                     </div>
                     <div class="sets-tracker">
                         <div class="set-input">
                             <label>S1</label>
-                            <input type="text" id="mer-2-s1" placeholder="70×10">
+                            <input type="text" id="mer-2-s1" placeholder="70×10" oninput="autoSave()">
                         </div>
                         <div class="set-input">
                             <label>S2</label>
-                            <input type="text" id="mer-2-s2">
+                            <input type="text" id="mer-2-s2" oninput="autoSave()">
                         </div>
                         <div class="set-input">
                             <label>S3</label>
-                            <input type="text" id="mer-2-s3">
+                            <input type="text" id="mer-2-s3" oninput="autoSave()">
                         </div>
                         <div class="set-input">
                             <label>S4</label>
-                            <input type="text" id="mer-2-s4">
+                            <input type="text" id="mer-2-s4" oninput="autoSave()">
                         </div>
                     </div>
                 </div>
             </div>
             
             <div class="workout-section">
-                <h3>🏔️ BLOC 2 - ÉPAISSEUR</h3>
+                <h3>🏔️ BLOC 2-3</h3>
                 <ul>
-                    <li><strong>Tirage horizontal neutre:</strong> 4x10 Pile 8 • Squeeze 1s <button class="demo-btn" onclick="openDemo('https://www.youtube.com/watch?v=UCXxvVItLoM')" style="margin-left: 10px;">📹 Démo</button></li>
-                    <li><strong>Pull-over poulie:</strong> 4x12 Pile 6 • Stretch dorsal max <button class="demo-btn" onclick="openDemo('https://www.youtube.com/watch?v=nPyUwnILjqQ')" style="margin-left: 10px;">📹 Démo</button></li>
-                    <li><strong>Face pull:</strong> 4x20 Pile 5</li>
-                    <li><strong>Rear delt fly:</strong> 4x15 Pile 5</li>
+                    <li>Tirage horizontal: 4x10 Pile 8</li>
+                    <li>Pull-over: 4x12 Pile 6</li>
+                    <li>Face pull: 4x20 Pile 5</li>
+                    <li>Rear delt fly: 4x15 Pile 5</li>
+                    <li>Shrugs: 3x12 (28kg)</li>
+                    <li>Curl HB: 3x10 (14kg)</li>
                 </ul>
             </div>
             
-            <div class="workout-section">
-                <h3>💥 BLOC 3 - TRAPÈZES + BICEPS</h3>
-                <ul>
-                    <li><strong>Shrugs haltères:</strong> 3x12 (28kg) • Tirer VERS ARRIÈRE</li>
-                    <li><strong>Curl haltères:</strong> 3x10 (14kg) • Supination complète</li>
-                    <li><strong>Curl marteau:</strong> 3x12 Pile 5</li>
-                </ul>
-            </div>
-            
-            <div class="workout-section">
-                <h3>✨ FINISHER CORE</h3>
-                <p>3 rounds: Dead bug 10/côté • Pallof press 12/côté • Planche 20s</p>
-            </div>
-            
-            <textarea class="notes-area" id="notes-mercredi" placeholder="📝 Notes séance..."></textarea>
-            <button class="save-btn" onclick="saveWorkout('mercredi')">💾 SAUVEGARDER MERCREDI</button>
+            <textarea class="notes-area" id="notes-mercredi" placeholder="📝 Notes séance..." oninput="autoSave()"></textarea>
         </div>
         
         <!-- VENDREDI -->
@@ -788,7 +848,6 @@
                     <li>Vélo 4 min</li>
                     <li>Foam roll IT band + quads 3 min</li>
                     <li>90/90 hip transitions 2x8</li>
-                    <li>Cossack squats 2x6</li>
                     <li>Glute bridge 20 reps</li>
                 </ul>
             </div>
@@ -796,271 +855,139 @@
             <div class="workout-section">
                 <h3>💪 BLOC 1 - CHAÎNE POST</h3>
                 
-                <div class="exercise">
+                <div class="exercise" data-exercise-id="ven-rdl">
+                    <span class="progress-indicator" id="progress-ven-rdl">⚪</span>
                     <div class="exercise-header">
-                        <div class="exercise-title">1. Romanian Deadlift (RDL)</div>
-                        <button class="demo-btn" onclick="openDemo('https://www.youtube.com/watch?v=2SHsk9AzdjA')">📹 Voir démo</button>
+                        <div class="exercise-title">1. Romanian Deadlift • 5x8 • 70kg</div>
+                        <button class="demo-btn" onclick="openDemo('https://www.youtube.com/watch?v=2SHsk9AzdjA')">📹 Démo</button>
                     </div>
-                    <div class="exercise-details">
-                        <div class="detail-item"><span class="detail-label">5x8</span></div>
-                        <div class="detail-item"><span class="detail-label">70kg</span></div>
-                        <div class="detail-item"><span class="detail-label">Tempo 3-0-2</span></div>
-                        <div class="detail-item"><span class="detail-label">Repos 2min</span></div>
-                    </div>
-                    <div class="exercise-visual">
-                        <strong>📐 PATTERN HINGING :</strong><br>
-                        → Genoux LÉGÈREMENT fléchis (10-15°) FIXES<br>
-                        → Pousser fesses vers l'arrière<br>
-                        → Barre glisse le long des jambes<br>
-                        → Dos reste NEUTRE (pas arrondi)
+                    <div class="last-week-data" id="lastweek-ven-rdl">
+                        💾 Semaine dernière: Chargement...
                     </div>
                     <div class="movement-diagram">
-                        ⬇️ 3s descente (stretch ischio) → 🍑 Squeeze fessiers → ⬆️ 2s remontée
-                    </div>
-                    <div class="exercise-technique">
-                        <strong>🎯 Focus mental:</strong> "Je sens mes ischio-jambiers s'étirer comme des élastiques"
-                        <br><strong>⚠️ Stop si:</strong> Douleur lombaires >5/10
+                        ⬇️ 3s stretch ischio → 🍑 Squeeze fessiers → ⬆️ 2s
                     </div>
                     <div class="sets-tracker">
                         <div class="set-input">
                             <label>S1</label>
-                            <input type="text" id="ven-1-s1" placeholder="70×8">
+                            <input type="text" id="ven-1-s1" placeholder="70×8" oninput="autoSave()">
                         </div>
                         <div class="set-input">
                             <label>S2</label>
-                            <input type="text" id="ven-1-s2">
+                            <input type="text" id="ven-1-s2" oninput="autoSave()">
                         </div>
                         <div class="set-input">
                             <label>S3</label>
-                            <input type="text" id="ven-1-s3">
+                            <input type="text" id="ven-1-s3" oninput="autoSave()">
                         </div>
                         <div class="set-input">
                             <label>S4</label>
-                            <input type="text" id="ven-1-s4">
+                            <input type="text" id="ven-1-s4" oninput="autoSave()">
                         </div>
                         <div class="set-input">
                             <label>S5</label>
-                            <input type="text" id="ven-1-s5">
+                            <input type="text" id="ven-1-s5" oninput="autoSave()">
                         </div>
                     </div>
                 </div>
                 
                 <div class="exercise">
                     <div class="exercise-header">
-                        <div class="exercise-title">2. Hip thrust barre</div>
-                        <button class="demo-btn" onclick="openDemo('https://www.youtube.com/watch?v=xDmFkJxPzeM')">📹 Voir démo</button>
+                        <div class="exercise-title">2. Hip thrust • 4x12 • 80kg</div>
+                        <button class="demo-btn" onclick="openDemo('https://www.youtube.com/watch?v=xDmFkJxPzeM')">📹 Démo</button>
                     </div>
-                    <div class="exercise-details">
-                        <div class="detail-item"><span class="detail-label">4x12</span></div>
-                        <div class="detail-item"><span class="detail-label">80kg</span></div>
-                        <div class="detail-item"><span class="detail-label">Tempo 2-1-2</span></div>
-                    </div>
-                    <div class="exercise-visual">
-                        <strong>📐 POSITION :</strong><br>
-                        → Omoplates sur banc<br>
-                        → Pieds 50cm du banc<br>
-                        → Barre sur pli des hanches (pad ou serviette)<br>
-                        → Position haute: hanches ALIGNÉES genoux-épaules
-                    </div>
-                    <div class="movement-diagram">
-                        ⬆️ Pousser talons → 🍑 Squeeze FESSIERS 1s → ⬇️ Contrôler descente
-                    </div>
-                    <div class="exercise-technique">
-                        <strong>💡 Pourquoi ?</strong> Correction APT (bassin) + Fessiers puissants
-                        <br><strong>❌ NE PAS:</strong> Cambrer (hyperextension lombaire)
+                    <div class="last-week-data" id="lastweek-ven-hip">
+                        💾 Semaine dernière: Chargement...
                     </div>
                     <div class="sets-tracker">
                         <div class="set-input">
                             <label>S1</label>
-                            <input type="text" id="ven-2-s1" placeholder="80×12">
+                            <input type="text" id="ven-2-s1" placeholder="80×12" oninput="autoSave()">
                         </div>
                         <div class="set-input">
                             <label>S2</label>
-                            <input type="text" id="ven-2-s2">
+                            <input type="text" id="ven-2-s2" oninput="autoSave()">
                         </div>
                         <div class="set-input">
                             <label>S3</label>
-                            <input type="text" id="ven-2-s3">
+                            <input type="text" id="ven-2-s3" oninput="autoSave()">
                         </div>
                         <div class="set-input">
                             <label>S4</label>
-                            <input type="text" id="ven-2-s4">
+                            <input type="text" id="ven-2-s4" oninput="autoSave()">
                         </div>
                     </div>
                 </div>
             </div>
             
             <div class="workout-section">
-                <h3>🏔️ BLOC 2 - QUADRICEPS</h3>
+                <h3>🏔️ BLOC 2-3</h3>
                 <ul>
-                    <li><strong>Goblet squat:</strong> 4x12 (32kg) • Profondeur complète <button class="demo-btn" onclick="openDemo('https://www.youtube.com/watch?v=MeIiIdhvXT4')" style="margin-left: 10px;">📹 Démo</button></li>
-                    <li><strong>Presse:</strong> 4x12 (120kg) • Pieds hauts, amplitude max</li>
-                    <li><strong>⚠️ Si douleur genou >4/10:</strong> Remplacer par Leg extension 4x15</li>
+                    <li>Goblet squat: 4x12 (32kg)</li>
+                    <li>Presse: 4x12 (120kg)</li>
+                    <li>Fentes bulgares: 3x8/jambe (18kg)</li>
+                    <li>Leg curl: 4x12 Pile 6</li>
+                    <li>Mollets: 4x15 (80kg)</li>
                 </ul>
             </div>
             
-            <div class="workout-section">
-                <h3>💥 BLOC 3 - ISCHIO + STAB</h3>
-                <ul>
-                    <li><strong>Fentes bulgares:</strong> 3x8/jambe (18kg) <button class="demo-btn" onclick="openDemo('https://www.youtube.com/watch?v=2C-uNgKwPLE')" style="margin-left: 10px;">📹 Démo</button></li>
-                    <li><strong>Leg curl:</strong> 4x12 Pile 6 • Tempo 2-1-3 (descente LENTE)</li>
-                    <li><strong>Abduction:</strong> 3x20 Pile 6 • Moyen fessier</li>
-                    <li><strong>Mollets:</strong> 4x15 (80kg) • Pause 1s en haut</li>
-                </ul>
-            </div>
-            
-            <div class="workout-section">
-                <h3>✨ FINISHER CORE</h3>
-                <p>3 rounds: Bird dog 8/côté (hold 5s) • Copenhagen plank 15s • Bear crawl 15m</p>
-            </div>
-            
-            <textarea class="notes-area" id="notes-vendredi" placeholder="📝 Notes (douleur genou ?)..."></textarea>
-            <button class="save-btn" onclick="saveWorkout('vendredi')">💾 SAUVEGARDER VENDREDI</button>
-        </div>
-        
-        <!-- GALERIE EXERCICES -->
-        <div id="tab-galerie" class="tab-content">
-            <h2 style="color: #667eea; margin-bottom: 12px; font-size: 20px;">🎬 GALERIE EXERCICES</h2>
-            
-            <div class="exercise-gallery">
-                <h3 style="color: #667eea; margin-bottom: 10px;">📚 Bibliothèque complète</h3>
-                <p style="font-size: 13px; color: #666; margin-bottom: 10px;">Clique sur un exercice pour voir la vidéo démo</p>
-                
-                <div class="gallery-grid">
-                    <div class="gallery-item" onclick="openDemo('https://www.youtube.com/watch?v=8iPEnn-ltC8')">
-                        <div class="gallery-item-icon">💪</div>
-                        <div class="gallery-item-name">Développé incliné HB</div>
-                    </div>
-                    <div class="gallery-item" onclick="openDemo('https://www.youtube.com/watch?v=roCP6wCXPqo')">
-                        <div class="gallery-item-icon">🔙</div>
-                        <div class="gallery-item-name">Rowing 1 bras</div>
-                    </div>
-                    <div class="gallery-item" onclick="openDemo('https://www.youtube.com/watch?v=6Z15_WdXmVw')">
-                        <div class="gallery-item-icon">🏔️</div>
-                        <div class="gallery-item-name">Développé Arnold</div>
-                    </div>
-                    <div class="gallery-item" onclick="openDemo('https://www.youtube.com/watch?v=rep-qVOkqgk')">
-                        <div class="gallery-item-icon">👁️</div>
-                        <div class="gallery-item-name">Face pull</div>
-                    </div>
-                    <div class="gallery-item" onclick="openDemo('https://www.youtube.com/watch?v=3VcKaXpzqRo')">
-                        <div class="gallery-item-icon">🦅</div>
-                        <div class="gallery-item-name">Élévations latérales</div>
-                    </div>
-                    <div class="gallery-item" onclick="openDemo('https://www.youtube.com/watch?v=2z8JmcrW-As')">
-                        <div class="gallery-item-icon">💥</div>
-                        <div class="gallery-item-name">Dips</div>
-                    </div>
-                    <div class="gallery-item" onclick="openDemo('https://www.youtube.com/watch?v=eGo4IYlbE5g')">
-                        <div class="gallery-item-icon">🎯</div>
-                        <div class="gallery-item-name">Tractions</div>
-                    </div>
-                    <div class="gallery-item" onclick="openDemo('https://www.youtube.com/watch?v=kBWAon7ItDw')">
-                        <div class="gallery-item-icon">📐</div>
-                        <div class="gallery-item-name">Rowing barre</div>
-                    </div>
-                    <div class="gallery-item" onclick="openDemo('https://www.youtube.com/watch?v=UCXxvVItLoM')">
-                        <div class="gallery-item-icon">🔄</div>
-                        <div class="gallery-item-name">Tirage horizontal</div>
-                    </div>
-                    <div class="gallery-item" onclick="openDemo('https://www.youtube.com/watch?v=nPyUwnILjqQ')">
-                        <div class="gallery-item-icon">🌊</div>
-                        <div class="gallery-item-name">Pull-over</div>
-                    </div>
-                    <div class="gallery-item" onclick="openDemo('https://www.youtube.com/watch?v=2SHsk9AzdjA')">
-                        <div class="gallery-item-icon">🦵</div>
-                        <div class="gallery-item-name">Romanian DL</div>
-                    </div>
-                    <div class="gallery-item" onclick="openDemo('https://www.youtube.com/watch?v=xDmFkJxPzeM')">
-                        <div class="gallery-item-icon">🍑</div>
-                        <div class="gallery-item-name">Hip thrust</div>
-                    </div>
-                    <div class="gallery-item" onclick="openDemo('https://www.youtube.com/watch?v=MeIiIdhvXT4')">
-                        <div class="gallery-item-icon">🏋️</div>
-                        <div class="gallery-item-name">Goblet squat</div>
-                    </div>
-                    <div class="gallery-item" onclick="openDemo('https://www.youtube.com/watch?v=2C-uNgKwPLE')">
-                        <div class="gallery-item-icon">🚶</div>
-                        <div class="gallery-item-name">Fentes bulgares</div>
-                    </div>
-                </div>
-            </div>
-            
-            <div class="workout-section">
-                <h3>🎓 Ressources additionnelles</h3>
-                <ul style="line-height: 2;">
-                    <li><strong>Chaîne YouTube recommandée:</strong> <a href="https://www.youtube.com/@JeffNippard" target="_blank" style="color: #667eea;">Jeff Nippard</a> (science-based)</li>
-                    <li><strong>Form check:</strong> <a href="https://www.youtube.com/@athleanx" target="_blank" style="color: #667eea;">Athlean-X</a> (corrections techniques)</li>
-                    <li><strong>Mobilité:</strong> <a href="https://www.youtube.com/@TheReadyState" target="_blank" style="color: #667eea;">The Ready State</a></li>
-                </ul>
-            </div>
+            <textarea class="notes-area" id="notes-vendredi" placeholder="📝 Notes (genou ?)..." oninput="autoSave()"></textarea>
         </div>
         
         <!-- PROGRESSION -->
         <div id="tab-progression" class="tab-content">
-            <h2 style="color: #667eea; margin-bottom: 12px; font-size: 20px;">📈 SUIVI PROGRESSION</h2>
+            <h2 style="color: #667eea; margin-bottom: 12px; font-size: 20px;">📈 PROGRESSION</h2>
             
             <div class="workout-section">
-                <h3>🎯 Objectifs 8 semaines</h3>
-                <p style="margin: 10px 0; line-height: 1.6;">
-                    <strong>Poids:</strong> 93kg → 91-92kg<br>
-                    <strong>Tour taille:</strong> -4-6cm<br>
-                    <strong>Muscle:</strong> +1,5-2,5kg<br>
-                    <strong>Gras:</strong> -3-4kg
-                </p>
+                <h3>📸 Rappels photos</h3>
+                <div id="photo-reminder"></div>
             </div>
             
             <div class="workout-section">
-                <h3>📏 Mesures corporelles</h3>
+                <h3>📏 Mesures</h3>
                 <div class="progress-item">
                     <span>Poids (kg)</span>
-                    <input type="text" id="prog-poids" placeholder="93">
+                    <input type="text" id="prog-poids" placeholder="93" oninput="autoSave()">
                 </div>
                 <div class="progress-item">
                     <span>Tour taille (cm)</span>
-                    <input type="text" id="prog-taille" placeholder="102">
+                    <input type="text" id="prog-taille" placeholder="102" oninput="autoSave()">
                 </div>
-                <div class="progress-item">
-                    <span>Tour épaules (cm)</span>
-                    <input type="text" id="prog-epaules" placeholder="128">
-                </div>
-                <div class="progress-item">
-                    <span>Tour bras (cm)</span>
-                    <input type="text" id="prog-bras" placeholder="">
-                </div>
-                <button class="btn btn-primary" style="width: 100%; margin-top: 10px;" onclick="saveMeasures()">💾 Sauvegarder mesures</button>
             </div>
             
             <div class="workout-section">
-                <h3>💪 Progression charges</h3>
-                <p style="margin-bottom: 10px; font-size: 13px;"><strong>Règle:</strong> Si 4×8 reps faciles (RPE <8) → +2,5kg semaine suivante</p>
-                
+                <h3>💪 Charges clés</h3>
                 <div class="progress-item">
                     <span>Incliné HB (kg)</span>
-                    <input type="text" id="prog-incline" placeholder="32">
+                    <input type="text" id="prog-incline" placeholder="32" oninput="autoSave()">
                 </div>
                 <div class="progress-item">
                     <span>Tractions (reps)</span>
-                    <input type="text" id="prog-tractions" placeholder="5">
-                </div>
-                <div class="progress-item">
-                    <span>Rowing barre (kg)</span>
-                    <input type="text" id="prog-rowing" placeholder="70">
+                    <input type="text" id="prog-tractions" placeholder="5" oninput="autoSave()">
                 </div>
                 <div class="progress-item">
                     <span>RDL (kg)</span>
-                    <input type="text" id="prog-rdl" placeholder="70">
+                    <input type="text" id="prog-rdl" placeholder="70" oninput="autoSave()">
                 </div>
-                <button class="btn btn-primary" style="width: 100%; margin-top: 10px;" onclick="saveProgress()">💾 Sauvegarder charges</button>
             </div>
             
             <div class="workout-section">
-                <h3>📝 Historique séances</h3>
-                <div id="workout-history" style="font-size: 13px; line-height: 1.8;">
-                    <p style="color: #999;">Aucune séance sauvegardée pour le moment</p>
+                <h3>📝 Historique</h3>
+                <div id="workout-history">
+                    <p style="color: #999;">Aucune séance</p>
                 </div>
-                <button class="btn btn-secondary" style="width: 100%; margin-top: 10px;" onclick="clearHistory()">🗑️ Effacer historique</button>
+                <button class="btn btn-secondary" style="width: 100%; margin-top: 10px;" onclick="exportReport()">📧 Exporter rapport 6 séances</button>
             </div>
+        </div>
+    </div>
+
+    <!-- Modal Progression -->
+    <div class="modal" id="progression-modal">
+        <div class="modal-content">
+            <div class="modal-icon" id="modal-icon">🎉</div>
+            <div class="modal-title" id="modal-title">Titre</div>
+            <div class="modal-text" id="modal-text">Message</div>
+            <button class="btn btn-primary" style="width: 100%;" onclick="closeModal()">OK !</button>
         </div>
     </div>
 
@@ -1068,26 +995,238 @@
         // Variables globales
         let timerInterval = null;
         let timeLeft = 0;
+        let sessionTimerInterval = null;
+        let sessionSeconds = 0;
+        let currentWeek = parseInt(localStorage.getItem('currentWeek') || '1');
+        let autoSaveTimeout = null;
+
+        // Initialisation
+        window.onload = function() {
+            updateWeekDisplay();
+            loadAllData();
+            checkPhotoReminders();
+        };
+
+        // Gestion des semaines
+        function updateWeekDisplay() {
+            document.getElementById('week-display').textContent = `SEMAINE ${currentWeek} / 8`;
+            localStorage.setItem('currentWeek', currentWeek);
+            
+            if (currentWeek === 2 || currentWeek === 4 || currentWeek === 6 || currentWeek === 8) {
+                setTimeout(() => {
+                    showModal('📊', 'Temps de mesurer !', `Fin de semaine ${currentWeek} : Prends tes mesures (poids, tour de taille, photos)`);
+                }, 1000);
+            }
+        }
+
+        function changeWeek(delta) {
+            const newWeek = currentWeek + delta;
+            if (newWeek >= 1 && newWeek <= 8) {
+                currentWeek = newWeek;
+                updateWeekDisplay();
+                loadAllData();
+                analyzeProgress();
+            }
+        }
+
+        function resetWeek() {
+            if (confirm('Remettre à Semaine 1 ?')) {
+                currentWeek = 1;
+                updateWeekDisplay();
+                loadAllData();
+            }
+        }
+
+        // Auto-save
+        function autoSave() {
+            clearTimeout(autoSaveTimeout);
+            autoSaveTimeout = setTimeout(() => {
+                const activeTab = document.querySelector('.tab-content.active').id.replace('tab-', '');
+                saveWorkoutData(activeTab);
+                showAutoSaveIndicator();
+            }, 500);
+        }
+
+        function showAutoSaveIndicator() {
+            const indicator = document.getElementById('auto-save-indicator');
+            indicator.classList.add('show');
+            setTimeout(() => {
+                indicator.classList.remove('show');
+            }, 2000);
+        }
+
+        function saveWorkoutData(day) {
+            const data = {
+                date: new Date().toISOString().split('T')[0],
+                week: currentWeek,
+                day: day,
+                exercises: {},
+                notes: document.getElementById('notes-' + day)?.value || ''
+            };
+            
+            const inputs = document.querySelectorAll('#tab-' + day + ' input[type="text"]');
+            inputs.forEach(input => {
+                if (input.value) {
+                    data.exercises[input.id] = input.value;
+                    input.classList.add('auto-saved');
+                    setTimeout(() => input.classList.remove('auto-saved'), 1000);
+                }
+            });
+            
+            localStorage.setItem(`workout-${day}-w${currentWeek}`, JSON.stringify(data));
+            
+            const history = JSON.parse(localStorage.getItem('workoutHistory') || '[]');
+            const existingIndex = history.findIndex(w => w.day === day && w.week === currentWeek);
+            if (existingIndex >= 0) {
+                history[existingIndex] = data;
+            } else {
+                history.push(data);
+            }
+            localStorage.setItem('workoutHistory', JSON.stringify(history));
+        }
+
+        function loadAllData() {
+            ['lundi', 'mercredi', 'vendredi'].forEach(day => {
+                loadWorkoutData(day);
+                loadLastWeekData(day);
+            });
+            loadProgressData();
+        }
+
+        function loadWorkoutData(day) {
+            const saved = localStorage.getItem(`workout-${day}-w${currentWeek}`);
+            if (!saved) return;
+            
+            const data = JSON.parse(saved);
+            Object.keys(data.exercises).forEach(id => {
+                const input = document.getElementById(id);
+                if (input) input.value = data.exercises[id];
+            });
+            
+            const notesArea = document.getElementById('notes-' + day);
+            if (notesArea && data.notes) notesArea.value = data.notes;
+        }
+
+        function loadLastWeekData(day) {
+            if (currentWeek === 1) return;
+            
+            const lastWeek = currentWeek - 1;
+            const saved = localStorage.getItem(`workout-${day}-w${lastWeek}`);
+            
+            const exerciseMap = {
+                'lundi': [
+                    {id: 'lun-incline', display: 'lastweek-lun-incline', keys: ['lun-1a-s1', 'lun-1a-s2', 'lun-1a-s3', 'lun-1a-s4']},
+                    {id: 'lun-rowing', display: 'lastweek-lun-rowing', keys: ['lun-1b-s1', 'lun-1b-s2']}
+                ],
+                'mercredi': [
+                    {id: 'mer-tractions', display: 'lastweek-mer-tractions', keys: ['mer-1-s1', 'mer-1-s2', 'mer-1-s3', 'mer-1-s4', 'mer-1-s5']},
+                    {id: 'mer-rowing', display: 'lastweek-mer-rowing', keys: ['mer-2-s1', 'mer-2-s2']}
+                ],
+                'vendredi': [
+                    {id: 'ven-rdl', display: 'lastweek-ven-rdl', keys: ['ven-1-s1', 'ven-1-s2']},
+                    {id: 'ven-hip', display: 'lastweek-ven-hip', keys: ['ven-2-s1', 'ven-2-s2']}
+                ]
+            };
+            
+            if (!saved) {
+                (exerciseMap[day] || []).forEach(ex => {
+                    const elem = document.getElementById(ex.display);
+                    if (elem) elem.textContent = '💾 Pas de données semaine précédente';
+                });
+                return;
+            }
+            
+            const data = JSON.parse(saved);
+            (exerciseMap[day] || []).forEach(ex => {
+                const values = ex.keys.map(k => data.exercises[k]).filter(v => v);
+                if (values.length > 0) {
+                    const elem = document.getElementById(ex.display);
+                    if (elem) elem.textContent = `💾 S${lastWeek}: ${values.join(', ')}`;
+                    generateSuggestion(ex.id, values);
+                }
+            });
+        }
+
+        function generateSuggestion(exerciseId, lastWeekValues) {
+            const suggestionElem = document.getElementById('suggestion-' + exerciseId);
+            if (!suggestionElem) return;
+            
+            const lastSet = lastWeekValues[lastWeekValues.length - 1];
+            const match = lastSet?.match(/(\d+)×(\d+)/);
+            if (!match) return;
+            
+            const weight = parseInt(match[1]);
+            const reps = parseInt(match[2]);
+            
+            if (reps >= 8) {
+                suggestionElem.innerHTML = `💡 Suggestion: <strong>${weight + 2.5}kg</strong> (dernière série ${reps} reps facile → +2,5kg !)`;
+                suggestionElem.style.background = '#e8f5e9';
+                suggestionElem.style.borderColor = '#51cf66';
+            } else {
+                suggestionElem.innerHTML = `💡 Suggestion: <strong>${weight}kg</strong> (même charge, vise 8 reps série 4)`;
+            }
+        }
+
+        function analyzeProgress() {
+            const exercises = ['lun-incline', 'mer-tractions', 'ven-rdl'];
+            exercises.forEach(id => {
+                const elem = document.getElementById('progress-' + id);
+                if (!elem) return;
+                
+                const currentData = localStorage.getItem(`workout-${id.split('-')[0]}-w${currentWeek}`);
+                const lastData = localStorage.getItem(`workout-${id.split('-')[0]}-w${currentWeek-1}`);
+                
+                if (!currentData || !lastData) {
+                    elem.textContent = '⚪';
+                    return;
+                }
+                
+                elem.textContent = '🟢';
+            });
+        }
+
+        function loadProgressData() {
+            const measures = localStorage.getItem('currentMeasures');
+            if (measures) {
+                const data = JSON.parse(measures);
+                ['poids', 'taille'].forEach(key => {
+                    const elem = document.getElementById('prog-' + key);
+                    if (elem && data[key]) elem.value = data[key];
+                });
+            }
+            
+            const progress = localStorage.getItem('currentProgress');
+            if (progress) {
+                const data = JSON.parse(progress);
+                ['incline', 'tractions', 'rdl'].forEach(key => {
+                    const elem = document.getElementById('prog-' + key);
+                    if (elem && data[key]) elem.value = data[key];
+                });
+            }
+        }
 
         // Gestion des onglets
         function showTab(tabName) {
-            const contents = document.querySelectorAll('.tab-content');
-            contents.forEach(c => c.classList.remove('active'));
-            
-            const tabs = document.querySelectorAll('.tab');
-            tabs.forEach(t => t.classList.remove('active'));
+            document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+            document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
             
             document.getElementById('tab-' + tabName).classList.add('active');
             event.target.classList.add('active');
             
+            if (['lundi', 'mercredi', 'vendredi'].includes(tabName)) {
+                startSessionTimer();
+                loadWorkoutData(tabName);
+                loadLastWeekData(tabName);
+            } else {
+                stopSessionTimer();
+            }
+            
             if (tabName === 'progression') {
                 loadHistory();
-            } else if (tabName !== 'galerie') {
-                loadWorkoutData(tabName);
             }
         }
 
-        // Timer de repos
+        // Timer repos
         function startTimer(seconds) {
             stopTimer();
             timeLeft = seconds;
@@ -1097,10 +1236,17 @@
                 timeLeft--;
                 updateTimerDisplay();
                 
+                if (timeLeft === 10) {
+                    document.getElementById('timer-display').classList.add('warning');
+                }
+                
                 if (timeLeft <= 0) {
                     stopTimer();
-                    playBeep();
-                    alert('⏰ Repos terminé ! Go next série 💪');
+                    playLoudBeep();
+                    if ('vibrate' in navigator) {
+                        navigator.vibrate([500, 200, 500]);
+                    }
+                    showModal('⏰', 'Repos terminé !', 'Go next série ! 💪');
                 }
             }, 1000);
         }
@@ -1112,116 +1258,117 @@
             }
             timeLeft = 0;
             updateTimerDisplay();
+            document.getElementById('timer-display').classList.remove('warning');
         }
 
         function updateTimerDisplay() {
             const minutes = Math.floor(timeLeft / 60);
             const seconds = timeLeft % 60;
-            const display = `${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
-            document.getElementById('timer-display').textContent = display;
+            document.getElementById('timer-display').textContent = 
+                `${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
         }
 
-        function playBeep() {
+        function playLoudBeep() {
             const context = new (window.AudioContext || window.webkitAudioContext)();
-            const oscillator = context.createOscillator();
-            const gainNode = context.createGain();
-            
-            oscillator.connect(gainNode);
-            gainNode.connect(context.destination);
-            
-            oscillator.frequency.value = 800;
-            oscillator.type = 'sine';
-            gainNode.gain.setValueAtTime(0.3, context.currentTime);
-            
-            oscillator.start(context.currentTime);
-            oscillator.stop(context.currentTime + 0.3);
-        }
-
-        // Ouvrir vidéo démo
-        function openDemo(url) {
-            window.open(url, '_blank');
-        }
-
-        // Sauvegarde des séances
-        function saveWorkout(day) {
-            const data = {
-                date: new Date().toISOString().split('T')[0],
-                day: day,
-                exercises: {},
-                notes: document.getElementById('notes-' + day).value
-            };
-            
-            const inputs = document.querySelectorAll('#tab-' + day + ' input[type="text"]');
-            inputs.forEach(input => {
-                if (input.value) {
-                    data.exercises[input.id] = input.value;
-                }
-            });
-            
-            const history = JSON.parse(localStorage.getItem('workoutHistory') || '[]');
-            history.push(data);
-            localStorage.setItem('workoutHistory', JSON.stringify(history));
-            
-            localStorage.setItem('workout-' + day, JSON.stringify(data));
-            
-            alert('✅ Séance ' + day.toUpperCase() + ' sauvegardée !');
-        }
-
-        // Charger les données d'une séance
-        function loadWorkoutData(day) {
-            const saved = localStorage.getItem('workout-' + day);
-            if (!saved) return;
-            
-            const data = JSON.parse(saved);
-            
-            Object.keys(data.exercises).forEach(id => {
-                const input = document.getElementById(id);
-                if (input) {
-                    input.value = data.exercises[id];
-                }
-            });
-            
-            const notesArea = document.getElementById('notes-' + day);
-            if (notesArea && data.notes) {
-                notesArea.value = data.notes;
+            for (let i = 0; i < 3; i++) {
+                setTimeout(() => {
+                    const oscillator = context.createOscillator();
+                    const gainNode = context.createGain();
+                    
+                    oscillator.connect(gainNode);
+                    gainNode.connect(context.destination);
+                    
+                    oscillator.frequency.value = 800;
+                    oscillator.type = 'square';
+                    gainNode.gain.setValueAtTime(0.5, context.currentTime);
+                    
+                    oscillator.start(context.currentTime);
+                    oscillator.stop(context.currentTime + 0.3);
+                }, i * 400);
             }
         }
 
-        // Sauvegarder les mesures
-        function saveMeasures() {
-            const measures = {
-                date: new Date().toISOString().split('T')[0],
-                poids: document.getElementById('prog-poids').value,
-                taille: document.getElementById('prog-taille').value,
-                epaules: document.getElementById('prog-epaules').value,
-                bras: document.getElementById('prog-bras').value
-            };
+        // Timer de séance
+        function startSessionTimer() {
+            stopSessionTimer();
+            sessionSeconds = 0;
+            document.getElementById('session-timer').style.display = 'block';
+            updateSessionTimerDisplay();
             
-            localStorage.setItem('currentMeasures', JSON.stringify(measures));
-            alert('✅ Mesures sauvegardées !');
+            sessionTimerInterval = setInterval(() => {
+                sessionSeconds++;
+                updateSessionTimerDisplay();
+                
+                if (sessionSeconds === 2700) { // 45 min
+                    showModal('⚠️', '45 minutes !', 'Accélère le rythme pour finir en 75 min max');
+                }
+                if (sessionSeconds === 4500) { // 75 min
+                    showModal('🔥', '75 minutes !', 'Séance longue ! Pense à terminer dans 5-10 min');
+                }
+            }, 1000);
         }
 
-        // Sauvegarder la progression
-        function saveProgress() {
-            const progress = {
-                date: new Date().toISOString().split('T')[0],
-                incline: document.getElementById('prog-incline').value,
-                tractions: document.getElementById('prog-tractions').value,
-                rowing: document.getElementById('prog-rowing').value,
-                rdl: document.getElementById('prog-rdl').value
-            };
-            
-            localStorage.setItem('currentProgress', JSON.stringify(progress));
-            alert('✅ Charges sauvegardées !');
+        function stopSessionTimer() {
+            if (sessionTimerInterval) {
+                clearInterval(sessionTimerInterval);
+                sessionTimerInterval = null;
+            }
+            document.getElementById('session-timer').style.display = 'none';
+            sessionSeconds = 0;
         }
 
-        // Charger l'historique
+        function updateSessionTimerDisplay() {
+            const minutes = Math.floor(sessionSeconds / 60);
+            const seconds = sessionSeconds % 60;
+            document.getElementById('session-timer-display').textContent = 
+                `${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')} / 75 min`;
+        }
+
+        // Photos rappels
+        function checkPhotoReminders() {
+            const photoWeeks = [0, 4, 8];
+            const reminderDiv = document.getElementById('photo-reminder');
+            if (!reminderDiv) return;
+            
+            if (photoWeeks.includes(currentWeek)) {
+                const message = currentWeek === 0 ? 'AVANT (face/dos/profil)' :
+                               currentWeek === 4 ? 'MI-PARCOURS - Compare avec S0 !' :
+                               'FINALES - Transformation complète !';
+                reminderDiv.innerHTML = `<div class="warning">📸 S${currentWeek} : Prends tes photos ${message}</div>`;
+            } else {
+                reminderDiv.innerHTML = `<div class="success">✅ Prochaines photos: Semaine ${photoWeeks.find(w => w > currentWeek) || 8}</div>`;
+            }
+        }
+
+        // Export rapport
+        function exportReport() {
+            const history = JSON.parse(localStorage.getItem('workoutHistory') || '[]');
+            const first6 = history.slice(0, 6);
+            
+            let report = `📊 BILAN 6 PREMIÈRES SÉANCES\n\n`;
+            
+            first6.forEach(w => {
+                report += `${w.day.toUpperCase()} S${w.week} (${w.date})\n`;
+                Object.entries(w.exercises).slice(0, 4).forEach(([key, val]) => {
+                    report += `  ${key}: ${val}\n`;
+                });
+                report += `\n`;
+            });
+            
+            report += `💡 RECOMMANDATIONS:\n`;
+            report += `- Analyse en cours...\n`;
+            
+            navigator.clipboard.writeText(report);
+            showModal('📋', 'Rapport copié !', 'Le rapport des 6 séances est dans ton presse-papiers. Colle-le dans un email ou WhatsApp.');
+        }
+
+        // Historique
         function loadHistory() {
             const history = JSON.parse(localStorage.getItem('workoutHistory') || '[]');
             const historyDiv = document.getElementById('workout-history');
             
             if (history.length === 0) {
-                historyDiv.innerHTML = '<p style="color: #999;">Aucune séance sauvegardée</p>';
+                historyDiv.innerHTML = '<p style="color: #999;">Aucune séance</p>';
                 return;
             }
             
@@ -1231,7 +1378,7 @@
             recent.forEach(workout => {
                 html += `
                     <div style="background: white; padding: 10px; margin: 8px 0; border-radius: 8px;">
-                        <strong>${workout.day.toUpperCase()}</strong> - ${workout.date}
+                        <strong>${workout.day.toUpperCase()}</strong> S${workout.week} - ${workout.date}
                         ${workout.notes ? '<br><small>' + workout.notes.substring(0, 50) + '...</small>' : ''}
                     </div>
                 `;
@@ -1240,89 +1387,50 @@
             historyDiv.innerHTML = html;
         }
 
-        // Effacer l'historique
-        function clearHistory() {
-            if (confirm('⚠️ Supprimer tout l\'historique ?')) {
-                localStorage.removeItem('workoutHistory');
-                loadHistory();
-                alert('✅ Historique effacé');
-            }
+        // Modal
+        function showModal(icon, title, text) {
+            document.getElementById('modal-icon').textContent = icon;
+            document.getElementById('modal-title').textContent = title;
+            document.getElementById('modal-text').textContent = text;
+            document.getElementById('progression-modal').classList.add('show');
+        }
+
+        function closeModal() {
+            document.getElementById('progression-modal').classList.remove('show');
         }
 
         // Notifications
         function setupNotifications() {
             if (!('Notification' in window)) {
                 document.getElementById('notif-status').innerHTML = 
-                    '<div class="alert">❌ Notifications non supportées sur ce navigateur</div>';
+                    '<div class="alert">❌ Non supporté</div>';
                 return;
             }
             
             if (Notification.permission === 'granted') {
-                scheduleNotifications();
                 document.getElementById('notif-status').innerHTML = 
-                    '<div class="success">✅ Notifications déjà activées !</div>';
+                    '<div class="success">✅ Déjà activées !</div>';
                 return;
             }
             
-            if (Notification.permission !== 'denied') {
-                Notification.requestPermission().then(permission => {
-                    if (permission === 'granted') {
-                        scheduleNotifications();
-                        document.getElementById('notif-status').innerHTML = 
-                            '<div class="success">✅ Notifications activées ! Tu recevras des rappels Lun/Mer/Ven à 12h30</div>';
-                        
-                        new Notification('💪 Masse Builder', {
-                            body: 'Notifications activées ! Tu seras rappelé les jours d\'entraînement.',
-                            icon: '💪'
-                        });
-                    } else {
-                        document.getElementById('notif-status').innerHTML = 
-                            '<div class="alert">❌ Notifications refusées. Active-les dans les paramètres de ton navigateur.</div>';
-                    }
-                });
-            }
-        }
-
-        function scheduleNotifications() {
-            setInterval(() => {
-                const now = new Date();
-                const day = now.getDay();
-                const hour = now.getHours();
-                const minute = now.getMinutes();
-                
-                if ((day === 1 || day === 3 || day === 5) && hour === 12 && minute === 30) {
-                    const dayName = day === 1 ? 'LUNDI' : day === 3 ? 'MERCREDI' : 'VENDREDI';
-                    new Notification('🔥 TRAINING ' + dayName, {
-                        body: 'C\'est l\'heure ! Déjeuner puis direction la salle 💪',
-                        icon: '💪',
-                        requireInteraction: true
+            Notification.requestPermission().then(permission => {
+                if (permission === 'granted') {
+                    document.getElementById('notif-status').innerHTML = 
+                        '<div class="success">✅ Notifications activées !</div>';
+                    new Notification('💪 Masse Builder v2.0', {
+                        body: 'Notifications activées ! Rappels Lun/Mer/Ven 12h30',
                     });
+                } else {
+                    document.getElementById('notif-status').innerHTML = 
+                        '<div class="alert">❌ Refusées</div>';
                 }
-            }, 60000);
+            });
         }
 
-        // Charger les données au démarrage
-        window.onload = function() {
-            loadWorkoutData('lundi');
-            
-            const measures = localStorage.getItem('currentMeasures');
-            if (measures) {
-                const data = JSON.parse(measures);
-                document.getElementById('prog-poids').value = data.poids || '';
-                document.getElementById('prog-taille').value = data.taille || '';
-                document.getElementById('prog-epaules').value = data.epaules || '';
-                document.getElementById('prog-bras').value = data.bras || '';
-            }
-            
-            const progress = localStorage.getItem('currentProgress');
-            if (progress) {
-                const data = JSON.parse(progress);
-                document.getElementById('prog-incline').value = data.incline || '';
-                document.getElementById('prog-tractions').value = data.tractions || '';
-                document.getElementById('prog-rowing').value = data.rowing || '';
-                document.getElementById('prog-rdl').value = data.rdl || '';
-            }
-        };
+        // Vidéos
+        function openDemo(url) {
+            window.open(url, '_blank');
+        }
     </script>
 </body>
 </html>
