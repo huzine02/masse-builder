@@ -101,13 +101,49 @@
             margin: 10px 0;
             border-radius: 10px;
             box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            position: relative;
+        }
+        
+        .exercise-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 8px;
+            gap: 10px;
         }
         
         .exercise-title {
             font-weight: bold;
             color: #333;
-            margin-bottom: 8px;
             font-size: 15px;
+            flex: 1;
+        }
+        
+        .demo-btn {
+            padding: 6px 12px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 6px;
+            font-size: 11px;
+            font-weight: bold;
+            cursor: pointer;
+            white-space: nowrap;
+            transition: transform 0.2s;
+        }
+        
+        .demo-btn:active {
+            transform: scale(0.95);
+        }
+        
+        .exercise-visual {
+            background: #f0f0f0;
+            border-radius: 8px;
+            padding: 10px;
+            margin: 10px 0;
+            font-size: 12px;
+            line-height: 1.6;
+            border-left: 3px solid #ffa500;
         }
         
         .exercise-details {
@@ -136,6 +172,16 @@
             border-radius: 8px;
             font-size: 12px;
             line-height: 1.5;
+        }
+        
+        .movement-diagram {
+            background: white;
+            border: 2px dashed #667eea;
+            border-radius: 8px;
+            padding: 8px;
+            margin: 8px 0;
+            font-size: 24px;
+            text-align: center;
         }
         
         .sets-tracker {
@@ -300,6 +346,46 @@
             font-size: 13px;
         }
 
+        .exercise-gallery {
+            background: white;
+            border-radius: 10px;
+            padding: 12px;
+            margin-bottom: 15px;
+        }
+
+        .gallery-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 10px;
+            margin-top: 10px;
+        }
+
+        .gallery-item {
+            background: #f8f9ff;
+            border-radius: 8px;
+            padding: 10px;
+            text-align: center;
+            cursor: pointer;
+            transition: transform 0.2s;
+            border: 2px solid transparent;
+        }
+
+        .gallery-item:hover {
+            transform: scale(1.05);
+            border-color: #667eea;
+        }
+
+        .gallery-item-icon {
+            font-size: 40px;
+            margin-bottom: 5px;
+        }
+
+        .gallery-item-name {
+            font-size: 11px;
+            font-weight: bold;
+            color: #667eea;
+        }
+
         ul {
             margin-left: 20px;
             line-height: 1.6;
@@ -316,6 +402,16 @@
             
             .timer-display {
                 font-size: 36px;
+            }
+
+            .exercise-header {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .demo-btn {
+                width: 100%;
+                margin-top: 5px;
             }
         }
     </style>
@@ -336,6 +432,7 @@
             <button class="tab active" onclick="showTab('lundi')">🔴 LUNDI</button>
             <button class="tab" onclick="showTab('mercredi')">🔵 MERCREDI</button>
             <button class="tab" onclick="showTab('vendredi')">🟢 VENDREDI</button>
+            <button class="tab" onclick="showTab('galerie')">🎬 GALERIE</button>
             <button class="tab" onclick="showTab('progression')">📈 PROGR.</button>
         </div>
         
@@ -368,7 +465,10 @@
                 <h3>💪 BLOC 1 - PECS SUPÉRIEURS</h3>
                 
                 <div class="exercise">
-                    <div class="exercise-title">1A. Développé incliné haltères 30°</div>
+                    <div class="exercise-header">
+                        <div class="exercise-title">1A. Développé incliné haltères 30°</div>
+                        <button class="demo-btn" onclick="openDemo('https://www.youtube.com/watch?v=8iPEnn-ltC8')">📹 Voir démo</button>
+                    </div>
                     <div class="exercise-details">
                         <div class="detail-item"><span class="detail-label">Séries:</span> 4x8</div>
                         <div class="detail-item"><span class="detail-label">Charge:</span> 32kg</div>
@@ -376,8 +476,19 @@
                         <div class="detail-item"><span class="detail-label">Repos:</span> 90s</div>
                         <div class="detail-item"><span class="detail-label">RPE:</span> 7-8</div>
                     </div>
+                    <div class="exercise-visual">
+                        <strong>📐 POSITION :</strong><br>
+                        → Banc incliné 30° (pas plus !)<br>
+                        → Pieds ancrés au sol<br>
+                        → Dos plaqué contre banc<br>
+                        → Haltères niveau épaules au départ
+                    </div>
+                    <div class="movement-diagram">
+                        ⬇️ 3s lent vers clavicule → 💥 2s montée explosive → 💪 Squeeze en haut
+                    </div>
                     <div class="exercise-technique">
-                        <strong>🎯 Technique:</strong> Descente LENTE 3s, haltères niveau clavicule, coudes 45°, squeeze pecs en haut.
+                        <strong>🎯 Points clés:</strong> Coudes 45° du corps • Haltères descendent niveau clavicule (pas plus bas) • Contrôle descente 3 secondes • Ne pas cambrer excessivement
+                        <br><strong>⚠️ Alarme épaule:</strong> Si douleur >5/10 → Réduire à 28kg ou remplacer par écartés inclinés
                     </div>
                     <div class="sets-tracker">
                         <div class="set-input">
@@ -400,11 +511,26 @@
                 </div>
                 
                 <div class="exercise">
-                    <div class="exercise-title">1B. Rowing haltère 1 bras</div>
+                    <div class="exercise-header">
+                        <div class="exercise-title">1B. Rowing haltère 1 bras</div>
+                        <button class="demo-btn" onclick="openDemo('https://www.youtube.com/watch?v=roCP6wCXPqo')">📹 Voir démo</button>
+                    </div>
                     <div class="exercise-details">
-                        <div class="detail-item"><span class="detail-label">Séries:</span> 4x10</div>
+                        <div class="detail-item"><span class="detail-label">Séries:</span> 4x10/bras</div>
                         <div class="detail-item"><span class="detail-label">Charge:</span> 18kg</div>
                         <div class="detail-item"><span class="detail-label">Tempo:</span> 2-1-2</div>
+                    </div>
+                    <div class="exercise-visual">
+                        <strong>📐 POSITION :</strong><br>
+                        → Genou + main libre sur banc<br>
+                        → Dos PLAT (parallèle au sol)<br>
+                        → Haltère part du sol
+                    </div>
+                    <div class="movement-diagram">
+                        ⬆️ 2s tirer vers hanche → ⏸️ 1s squeeze → ⬇️ 2s contrôlé
+                    </div>
+                    <div class="exercise-technique">
+                        <strong>🎯 Points clés:</strong> Tirer vers HANCHE (pas épaule) • Coude reste près du corps • Squeeze omoplates 1 seconde en haut • Ne pas tourner le buste
                     </div>
                     <div class="sets-tracker">
                         <div class="set-input">
@@ -431,10 +557,19 @@
                 <h3>🏔️ BLOC 2 - DELTOÏDES 3D</h3>
                 
                 <div class="exercise">
-                    <div class="exercise-title">2A. Développé Arnold</div>
+                    <div class="exercise-header">
+                        <div class="exercise-title">2A. Développé Arnold</div>
+                        <button class="demo-btn" onclick="openDemo('https://www.youtube.com/watch?v=6Z15_WdXmVw')">📹 Voir démo</button>
+                    </div>
                     <div class="exercise-details">
                         <div class="detail-item"><span class="detail-label">4x10</span></div>
                         <div class="detail-item"><span class="detail-label">20kg</span></div>
+                    </div>
+                    <div class="movement-diagram">
+                        🔄 Départ paumes vers toi → 🔄 Pivoter en montant → 🙌 Finir paumes vers avant
+                    </div>
+                    <div class="exercise-technique">
+                        <strong>💡 Pourquoi Arnold ?</strong> Rotation = moins de stress épaule que militaire barre
                     </div>
                     <div class="sets-tracker">
                         <div class="set-input">
@@ -457,15 +592,31 @@
                 </div>
                 
                 <div class="exercise">
-                    <div class="exercise-title">2B. Face pull haute • 4x15 Pile 6</div>
+                    <div class="exercise-header">
+                        <div class="exercise-title">2B. Face pull haute</div>
+                        <button class="demo-btn" onclick="openDemo('https://www.youtube.com/watch?v=rep-qVOkqgk')">📹 Voir démo</button>
+                    </div>
+                    <div class="exercise-details">
+                        <div class="detail-item">4x15 Pile 6</div>
+                    </div>
+                    <div class="movement-diagram">
+                        ⬅️ Tirer vers FRONT (pas poitrine) → 🎯 Coudes niveau oreilles
+                    </div>
                 </div>
                 
                 <div class="exercise">
-                    <div class="exercise-title">3A. Élévations latérales</div>
+                    <div class="exercise-header">
+                        <div class="exercise-title">3A. Élévations latérales</div>
+                        <button class="demo-btn" onclick="openDemo('https://www.youtube.com/watch?v=3VcKaXpzqRo')">📹 Voir démo</button>
+                    </div>
                     <div class="exercise-details">
-                        <div class="detail-item"><span class="detail-label">4x12</span></div>
-                        <div class="detail-item"><span class="detail-label">10kg</span></div>
-                        <div class="detail-item"><span class="detail-label">Tempo 2-1-3</span></div>
+                        <div class="detail-item">4x12 • 10kg • Tempo 2-1-3</div>
+                    </div>
+                    <div class="exercise-visual">
+                        <strong>🔑 ASTUCE CRITIQUE :</strong><br>
+                        → Rotation externe légère (pouces vers haut)<br>
+                        → Descente SUPER LENTE 3 secondes<br>
+                        → PAS de balancement corps
                     </div>
                 </div>
                 
@@ -477,8 +628,8 @@
             <div class="workout-section">
                 <h3>💥 BLOC 3 - TRICEPS</h3>
                 <ul>
-                    <li>Dips assistés: 3x10 (-30kg)</li>
-                    <li>Extension triceps corde: 3x12 Pile 6</li>
+                    <li><strong>Dips assistés:</strong> 3x10 (-30kg) • Buste incliné pour pecs <button class="demo-btn" onclick="openDemo('https://www.youtube.com/watch?v=2z8JmcrW-As')" style="margin-left: 10px;">📹 Démo</button></li>
+                    <li><strong>Extension triceps corde:</strong> 3x12 Pile 6 • Coudes FIXES</li>
                 </ul>
             </div>
             
@@ -487,7 +638,7 @@
                 <p>3 rounds: Band pull-aparts 20 • Wall slides 10 • Hollow hold 15s</p>
             </div>
             
-            <textarea class="notes-area" id="notes-lundi" placeholder="📝 Notes: énergie, douleurs, ressenti..."></textarea>
+            <textarea class="notes-area" id="notes-lundi" placeholder="📝 Notes: énergie /10, douleurs, ressenti..."></textarea>
             <button class="save-btn" onclick="saveWorkout('lundi')">💾 SAUVEGARDER LUNDI</button>
         </div>
         
@@ -509,12 +660,28 @@
                 <h3>💪 BLOC 1 - LARGEUR</h3>
                 
                 <div class="exercise">
-                    <div class="exercise-title">1. Tractions assistées</div>
+                    <div class="exercise-header">
+                        <div class="exercise-title">1. Tractions pronation assistées</div>
+                        <button class="demo-btn" onclick="openDemo('https://www.youtube.com/watch?v=eGo4IYlbE5g')">📹 Voir démo</button>
+                    </div>
                     <div class="exercise-details">
                         <div class="detail-item"><span class="detail-label">5x5</span></div>
                         <div class="detail-item"><span class="detail-label">Élastique moyen</span></div>
                         <div class="detail-item"><span class="detail-label">Tempo 3-0-2</span></div>
                         <div class="detail-item"><span class="detail-label">Repos 2min</span></div>
+                    </div>
+                    <div class="exercise-visual">
+                        <strong>📐 POSITION :</strong><br>
+                        → Prise pronation largeur épaules + 10cm<br>
+                        → Départ bras TENDUS (stretch dorsal)<br>
+                        → Menton passe au-dessus barre
+                    </div>
+                    <div class="movement-diagram">
+                        ⬇️ 3s descente contrôlée → ⬆️ 2s tirer coudes vers BAS → 💪 Poitrine vers barre
+                    </div>
+                    <div class="exercise-technique">
+                        <strong>🎯 Focus mental:</strong> "Je tire mes COUDES vers le bas, pas mes mains vers le haut"
+                        <br><strong>📈 Objectif S8:</strong> Élastique léger ou 6-8 reps
                     </div>
                     <div class="sets-tracker">
                         <div class="set-input">
@@ -541,14 +708,26 @@
                 </div>
                 
                 <div class="exercise">
-                    <div class="exercise-title">2. Rowing barre</div>
+                    <div class="exercise-header">
+                        <div class="exercise-title">2. Rowing barre buste penché</div>
+                        <button class="demo-btn" onclick="openDemo('https://www.youtube.com/watch?v=kBWAon7ItDw')">📹 Voir démo</button>
+                    </div>
                     <div class="exercise-details">
                         <div class="detail-item"><span class="detail-label">4x10</span></div>
                         <div class="detail-item"><span class="detail-label">70kg</span></div>
                         <div class="detail-item"><span class="detail-label">Tempo 3-1-2</span></div>
                     </div>
+                    <div class="exercise-visual">
+                        <strong>📐 POSITION :</strong><br>
+                        → Buste penché 45° (pas horizontal)<br>
+                        → Genoux légèrement fléchis<br>
+                        → Dos NEUTRE (ne pas arrondir)
+                    </div>
+                    <div class="movement-diagram">
+                        ⬆️ Tirer vers NOMBRIL (pas sternum) → ⏸️ Squeeze 1s → ⬇️ 3s contrôlé
+                    </div>
                     <div class="exercise-technique">
-                        Buste 45°, tirer vers NOMBRIL, squeeze 1s
+                        <strong>💡 Charge:</strong> Barre 20kg + 2 disques 25kg = 70kg total
                     </div>
                     <div class="sets-tracker">
                         <div class="set-input">
@@ -574,19 +753,19 @@
             <div class="workout-section">
                 <h3>🏔️ BLOC 2 - ÉPAISSEUR</h3>
                 <ul>
-                    <li>Tirage horizontal neutre: 4x10 Pile 8</li>
-                    <li>Pull-over poulie: 4x12 Pile 6</li>
-                    <li>Face pull: 4x20 Pile 5</li>
-                    <li>Rear delt fly: 4x15 Pile 5</li>
+                    <li><strong>Tirage horizontal neutre:</strong> 4x10 Pile 8 • Squeeze 1s <button class="demo-btn" onclick="openDemo('https://www.youtube.com/watch?v=UCXxvVItLoM')" style="margin-left: 10px;">📹 Démo</button></li>
+                    <li><strong>Pull-over poulie:</strong> 4x12 Pile 6 • Stretch dorsal max <button class="demo-btn" onclick="openDemo('https://www.youtube.com/watch?v=nPyUwnILjqQ')" style="margin-left: 10px;">📹 Démo</button></li>
+                    <li><strong>Face pull:</strong> 4x20 Pile 5</li>
+                    <li><strong>Rear delt fly:</strong> 4x15 Pile 5</li>
                 </ul>
             </div>
             
             <div class="workout-section">
                 <h3>💥 BLOC 3 - TRAPÈZES + BICEPS</h3>
                 <ul>
-                    <li>Shrugs haltères: 3x12 (28kg)</li>
-                    <li>Curl haltères: 3x10 (14kg)</li>
-                    <li>Curl marteau: 3x12 Pile 5</li>
+                    <li><strong>Shrugs haltères:</strong> 3x12 (28kg) • Tirer VERS ARRIÈRE</li>
+                    <li><strong>Curl haltères:</strong> 3x10 (14kg) • Supination complète</li>
+                    <li><strong>Curl marteau:</strong> 3x12 Pile 5</li>
                 </ul>
             </div>
             
@@ -618,15 +797,29 @@
                 <h3>💪 BLOC 1 - CHAÎNE POST</h3>
                 
                 <div class="exercise">
-                    <div class="exercise-title">1. Romanian Deadlift</div>
+                    <div class="exercise-header">
+                        <div class="exercise-title">1. Romanian Deadlift (RDL)</div>
+                        <button class="demo-btn" onclick="openDemo('https://www.youtube.com/watch?v=2SHsk9AzdjA')">📹 Voir démo</button>
+                    </div>
                     <div class="exercise-details">
                         <div class="detail-item"><span class="detail-label">5x8</span></div>
                         <div class="detail-item"><span class="detail-label">70kg</span></div>
                         <div class="detail-item"><span class="detail-label">Tempo 3-0-2</span></div>
                         <div class="detail-item"><span class="detail-label">Repos 2min</span></div>
                     </div>
+                    <div class="exercise-visual">
+                        <strong>📐 PATTERN HINGING :</strong><br>
+                        → Genoux LÉGÈREMENT fléchis (10-15°) FIXES<br>
+                        → Pousser fesses vers l'arrière<br>
+                        → Barre glisse le long des jambes<br>
+                        → Dos reste NEUTRE (pas arrondi)
+                    </div>
+                    <div class="movement-diagram">
+                        ⬇️ 3s descente (stretch ischio) → 🍑 Squeeze fessiers → ⬆️ 2s remontée
+                    </div>
                     <div class="exercise-technique">
-                        <strong>🎯 Focus:</strong> Hinging hanches, stretch ischio, squeeze fessiers en haut
+                        <strong>🎯 Focus mental:</strong> "Je sens mes ischio-jambiers s'étirer comme des élastiques"
+                        <br><strong>⚠️ Stop si:</strong> Douleur lombaires >5/10
                     </div>
                     <div class="sets-tracker">
                         <div class="set-input">
@@ -653,11 +846,28 @@
                 </div>
                 
                 <div class="exercise">
-                    <div class="exercise-title">2. Hip thrust barre</div>
+                    <div class="exercise-header">
+                        <div class="exercise-title">2. Hip thrust barre</div>
+                        <button class="demo-btn" onclick="openDemo('https://www.youtube.com/watch?v=xDmFkJxPzeM')">📹 Voir démo</button>
+                    </div>
                     <div class="exercise-details">
                         <div class="detail-item"><span class="detail-label">4x12</span></div>
                         <div class="detail-item"><span class="detail-label">80kg</span></div>
                         <div class="detail-item"><span class="detail-label">Tempo 2-1-2</span></div>
+                    </div>
+                    <div class="exercise-visual">
+                        <strong>📐 POSITION :</strong><br>
+                        → Omoplates sur banc<br>
+                        → Pieds 50cm du banc<br>
+                        → Barre sur pli des hanches (pad ou serviette)<br>
+                        → Position haute: hanches ALIGNÉES genoux-épaules
+                    </div>
+                    <div class="movement-diagram">
+                        ⬆️ Pousser talons → 🍑 Squeeze FESSIERS 1s → ⬇️ Contrôler descente
+                    </div>
+                    <div class="exercise-technique">
+                        <strong>💡 Pourquoi ?</strong> Correction APT (bassin) + Fessiers puissants
+                        <br><strong>❌ NE PAS:</strong> Cambrer (hyperextension lombaire)
                     </div>
                     <div class="sets-tracker">
                         <div class="set-input">
@@ -683,28 +893,107 @@
             <div class="workout-section">
                 <h3>🏔️ BLOC 2 - QUADRICEPS</h3>
                 <ul>
-                    <li>Goblet squat: 4x12 (32kg)</li>
-                    <li>Presse: 4x12 (120kg) ⚠️ Si douleur genou → Leg extension</li>
+                    <li><strong>Goblet squat:</strong> 4x12 (32kg) • Profondeur complète <button class="demo-btn" onclick="openDemo('https://www.youtube.com/watch?v=MeIiIdhvXT4')" style="margin-left: 10px;">📹 Démo</button></li>
+                    <li><strong>Presse:</strong> 4x12 (120kg) • Pieds hauts, amplitude max</li>
+                    <li><strong>⚠️ Si douleur genou >4/10:</strong> Remplacer par Leg extension 4x15</li>
                 </ul>
             </div>
             
             <div class="workout-section">
                 <h3>💥 BLOC 3 - ISCHIO + STAB</h3>
                 <ul>
-                    <li>Fentes bulgares: 3x8/jambe (18kg)</li>
-                    <li>Leg curl: 4x12 Pile 6 (tempo 2-1-3)</li>
-                    <li>Abduction: 3x20 Pile 6</li>
-                    <li>Mollets: 4x15 (80kg)</li>
+                    <li><strong>Fentes bulgares:</strong> 3x8/jambe (18kg) <button class="demo-btn" onclick="openDemo('https://www.youtube.com/watch?v=2C-uNgKwPLE')" style="margin-left: 10px;">📹 Démo</button></li>
+                    <li><strong>Leg curl:</strong> 4x12 Pile 6 • Tempo 2-1-3 (descente LENTE)</li>
+                    <li><strong>Abduction:</strong> 3x20 Pile 6 • Moyen fessier</li>
+                    <li><strong>Mollets:</strong> 4x15 (80kg) • Pause 1s en haut</li>
                 </ul>
             </div>
             
             <div class="workout-section">
                 <h3>✨ FINISHER CORE</h3>
-                <p>3 rounds: Bird dog 8/côté • Copenhagen plank 15s • Bear crawl 15m</p>
+                <p>3 rounds: Bird dog 8/côté (hold 5s) • Copenhagen plank 15s • Bear crawl 15m</p>
             </div>
             
             <textarea class="notes-area" id="notes-vendredi" placeholder="📝 Notes (douleur genou ?)..."></textarea>
             <button class="save-btn" onclick="saveWorkout('vendredi')">💾 SAUVEGARDER VENDREDI</button>
+        </div>
+        
+        <!-- GALERIE EXERCICES -->
+        <div id="tab-galerie" class="tab-content">
+            <h2 style="color: #667eea; margin-bottom: 12px; font-size: 20px;">🎬 GALERIE EXERCICES</h2>
+            
+            <div class="exercise-gallery">
+                <h3 style="color: #667eea; margin-bottom: 10px;">📚 Bibliothèque complète</h3>
+                <p style="font-size: 13px; color: #666; margin-bottom: 10px;">Clique sur un exercice pour voir la vidéo démo</p>
+                
+                <div class="gallery-grid">
+                    <div class="gallery-item" onclick="openDemo('https://www.youtube.com/watch?v=8iPEnn-ltC8')">
+                        <div class="gallery-item-icon">💪</div>
+                        <div class="gallery-item-name">Développé incliné HB</div>
+                    </div>
+                    <div class="gallery-item" onclick="openDemo('https://www.youtube.com/watch?v=roCP6wCXPqo')">
+                        <div class="gallery-item-icon">🔙</div>
+                        <div class="gallery-item-name">Rowing 1 bras</div>
+                    </div>
+                    <div class="gallery-item" onclick="openDemo('https://www.youtube.com/watch?v=6Z15_WdXmVw')">
+                        <div class="gallery-item-icon">🏔️</div>
+                        <div class="gallery-item-name">Développé Arnold</div>
+                    </div>
+                    <div class="gallery-item" onclick="openDemo('https://www.youtube.com/watch?v=rep-qVOkqgk')">
+                        <div class="gallery-item-icon">👁️</div>
+                        <div class="gallery-item-name">Face pull</div>
+                    </div>
+                    <div class="gallery-item" onclick="openDemo('https://www.youtube.com/watch?v=3VcKaXpzqRo')">
+                        <div class="gallery-item-icon">🦅</div>
+                        <div class="gallery-item-name">Élévations latérales</div>
+                    </div>
+                    <div class="gallery-item" onclick="openDemo('https://www.youtube.com/watch?v=2z8JmcrW-As')">
+                        <div class="gallery-item-icon">💥</div>
+                        <div class="gallery-item-name">Dips</div>
+                    </div>
+                    <div class="gallery-item" onclick="openDemo('https://www.youtube.com/watch?v=eGo4IYlbE5g')">
+                        <div class="gallery-item-icon">🎯</div>
+                        <div class="gallery-item-name">Tractions</div>
+                    </div>
+                    <div class="gallery-item" onclick="openDemo('https://www.youtube.com/watch?v=kBWAon7ItDw')">
+                        <div class="gallery-item-icon">📐</div>
+                        <div class="gallery-item-name">Rowing barre</div>
+                    </div>
+                    <div class="gallery-item" onclick="openDemo('https://www.youtube.com/watch?v=UCXxvVItLoM')">
+                        <div class="gallery-item-icon">🔄</div>
+                        <div class="gallery-item-name">Tirage horizontal</div>
+                    </div>
+                    <div class="gallery-item" onclick="openDemo('https://www.youtube.com/watch?v=nPyUwnILjqQ')">
+                        <div class="gallery-item-icon">🌊</div>
+                        <div class="gallery-item-name">Pull-over</div>
+                    </div>
+                    <div class="gallery-item" onclick="openDemo('https://www.youtube.com/watch?v=2SHsk9AzdjA')">
+                        <div class="gallery-item-icon">🦵</div>
+                        <div class="gallery-item-name">Romanian DL</div>
+                    </div>
+                    <div class="gallery-item" onclick="openDemo('https://www.youtube.com/watch?v=xDmFkJxPzeM')">
+                        <div class="gallery-item-icon">🍑</div>
+                        <div class="gallery-item-name">Hip thrust</div>
+                    </div>
+                    <div class="gallery-item" onclick="openDemo('https://www.youtube.com/watch?v=MeIiIdhvXT4')">
+                        <div class="gallery-item-icon">🏋️</div>
+                        <div class="gallery-item-name">Goblet squat</div>
+                    </div>
+                    <div class="gallery-item" onclick="openDemo('https://www.youtube.com/watch?v=2C-uNgKwPLE')">
+                        <div class="gallery-item-icon">🚶</div>
+                        <div class="gallery-item-name">Fentes bulgares</div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="workout-section">
+                <h3>🎓 Ressources additionnelles</h3>
+                <ul style="line-height: 2;">
+                    <li><strong>Chaîne YouTube recommandée:</strong> <a href="https://www.youtube.com/@JeffNippard" target="_blank" style="color: #667eea;">Jeff Nippard</a> (science-based)</li>
+                    <li><strong>Form check:</strong> <a href="https://www.youtube.com/@athleanx" target="_blank" style="color: #667eea;">Athlean-X</a> (corrections techniques)</li>
+                    <li><strong>Mobilité:</strong> <a href="https://www.youtube.com/@TheReadyState" target="_blank" style="color: #667eea;">The Ready State</a></li>
+                </ul>
+            </div>
         </div>
         
         <!-- PROGRESSION -->
@@ -782,22 +1071,18 @@
 
         // Gestion des onglets
         function showTab(tabName) {
-            // Cacher tous les contenus
             const contents = document.querySelectorAll('.tab-content');
             contents.forEach(c => c.classList.remove('active'));
             
-            // Désactiver tous les boutons
             const tabs = document.querySelectorAll('.tab');
             tabs.forEach(t => t.classList.remove('active'));
             
-            // Activer l'onglet sélectionné
             document.getElementById('tab-' + tabName).classList.add('active');
             event.target.classList.add('active');
             
-            // Charger les données sauvegardées
             if (tabName === 'progression') {
                 loadHistory();
-            } else {
+            } else if (tabName !== 'galerie') {
                 loadWorkoutData(tabName);
             }
         }
@@ -815,7 +1100,7 @@
                 if (timeLeft <= 0) {
                     stopTimer();
                     playBeep();
-                    alert('⏰ Repos terminé !');
+                    alert('⏰ Repos terminé ! Go next série 💪');
                 }
             }, 1000);
         }
@@ -837,7 +1122,6 @@
         }
 
         function playBeep() {
-            // Son simple du navigateur
             const context = new (window.AudioContext || window.webkitAudioContext)();
             const oscillator = context.createOscillator();
             const gainNode = context.createGain();
@@ -853,6 +1137,11 @@
             oscillator.stop(context.currentTime + 0.3);
         }
 
+        // Ouvrir vidéo démo
+        function openDemo(url) {
+            window.open(url, '_blank');
+        }
+
         // Sauvegarde des séances
         function saveWorkout(day) {
             const data = {
@@ -862,7 +1151,6 @@
                 notes: document.getElementById('notes-' + day).value
             };
             
-            // Sauvegarder tous les inputs de séries
             const inputs = document.querySelectorAll('#tab-' + day + ' input[type="text"]');
             inputs.forEach(input => {
                 if (input.value) {
@@ -870,12 +1158,10 @@
                 }
             });
             
-            // Sauvegarder dans localStorage
             const history = JSON.parse(localStorage.getItem('workoutHistory') || '[]');
             history.push(data);
             localStorage.setItem('workoutHistory', JSON.stringify(history));
             
-            // Sauvegarder les données actuelles
             localStorage.setItem('workout-' + day, JSON.stringify(data));
             
             alert('✅ Séance ' + day.toUpperCase() + ' sauvegardée !');
@@ -888,7 +1174,6 @@
             
             const data = JSON.parse(saved);
             
-            // Restaurer les valeurs des inputs
             Object.keys(data.exercises).forEach(id => {
                 const input = document.getElementById(id);
                 if (input) {
@@ -896,7 +1181,6 @@
                 }
             });
             
-            // Restaurer les notes
             const notesArea = document.getElementById('notes-' + day);
             if (notesArea && data.notes) {
                 notesArea.value = data.notes;
@@ -941,7 +1225,6 @@
                 return;
             }
             
-            // Afficher les 10 dernières séances
             const recent = history.slice(-10).reverse();
             let html = '';
             
@@ -988,7 +1271,6 @@
                         document.getElementById('notif-status').innerHTML = 
                             '<div class="success">✅ Notifications activées ! Tu recevras des rappels Lun/Mer/Ven à 12h30</div>';
                         
-                        // Test notification
                         new Notification('💪 Masse Builder', {
                             body: 'Notifications activées ! Tu seras rappelé les jours d\'entraînement.',
                             icon: '💪'
@@ -1002,14 +1284,12 @@
         }
 
         function scheduleNotifications() {
-            // Programmer les notifications (simulation - dans une vraie app il faudrait un service worker)
             setInterval(() => {
                 const now = new Date();
-                const day = now.getDay(); // 0=Dimanche, 1=Lundi, etc.
+                const day = now.getDay();
                 const hour = now.getHours();
                 const minute = now.getMinutes();
                 
-                // Lundi=1, Mercredi=3, Vendredi=5 à 12h30
                 if ((day === 1 || day === 3 || day === 5) && hour === 12 && minute === 30) {
                     const dayName = day === 1 ? 'LUNDI' : day === 3 ? 'MERCREDI' : 'VENDREDI';
                     new Notification('🔥 TRAINING ' + dayName, {
@@ -1018,14 +1298,13 @@
                         requireInteraction: true
                     });
                 }
-            }, 60000); // Vérifier chaque minute
+            }, 60000);
         }
 
         // Charger les données au démarrage
         window.onload = function() {
             loadWorkoutData('lundi');
             
-            // Charger les mesures et progression
             const measures = localStorage.getItem('currentMeasures');
             if (measures) {
                 const data = JSON.parse(measures);
