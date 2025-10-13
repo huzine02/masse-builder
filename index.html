@@ -1,0 +1,676 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Masse Builder 8 Semaines</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+            color: #333;
+        }
+        
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            padding: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+        }
+        
+        h1 {
+            text-align: center;
+            color: #667eea;
+            margin-bottom: 10px;
+            font-size: 28px;
+        }
+        
+        .header-info {
+            text-align: center;
+            color: #666;
+            margin-bottom: 20px;
+            font-size: 14px;
+        }
+        
+        .tabs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+        
+        .tab {
+            flex: 1;
+            min-width: 120px;
+            padding: 12px;
+            background: #f0f0f0;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s;
+        }
+        
+        .tab.active {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+        }
+        
+        .tab-content {
+            display: none;
+        }
+        
+        .tab-content.active {
+            display: block;
+            animation: fadeIn 0.4s;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .workout-section {
+            background: #f8f9ff;
+            border-radius: 15px;
+            padding: 15px;
+            margin-bottom: 15px;
+            border-left: 5px solid #667eea;
+        }
+        
+        .workout-section h3 {
+            color: #667eea;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .exercise {
+            background: white;
+            padding: 12px;
+            margin: 10px 0;
+            border-radius: 10px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+        
+        .exercise-title {
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 8px;
+            font-size: 16px;
+        }
+        
+        .exercise-details {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+            gap: 8px;
+            margin: 8px 0;
+            font-size: 13px;
+        }
+        
+        .detail-item {
+            background: #f0f0f0;
+            padding: 6px 10px;
+            border-radius: 6px;
+        }
+        
+        .detail-label {
+            font-weight: bold;
+            color: #667eea;
+        }
+        
+        .exercise-technique {
+            margin-top: 10px;
+            padding: 10px;
+            background: #fff9e6;
+            border-radius: 8px;
+            font-size: 13px;
+            line-height: 1.5;
+        }
+        
+        .sets-tracker {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(80px, 1fr));
+            gap: 8px;
+            margin-top: 10px;
+        }
+        
+        .set-input {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+        
+        .set-input label {
+            font-size: 11px;
+            font-weight: bold;
+            color: #666;
+        }
+        
+        .set-input input {
+            padding: 6px;
+            border: 2px solid #e0e0e0;
+            border-radius: 6px;
+            font-size: 14px;
+            text-align: center;
+        }
+        
+        .set-input input:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+        
+        .timer {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 15px;
+            border-radius: 15px;
+            text-align: center;
+            margin: 20px 0;
+        }
+        
+        .timer-display {
+            font-size: 48px;
+            font-weight: bold;
+            margin: 10px 0;
+            font-variant-numeric: tabular-nums;
+        }
+        
+        .timer-controls {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+        
+        .btn {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 8px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-size: 14px;
+        }
+        
+        .btn-primary {
+            background: white;
+            color: #667eea;
+        }
+        
+        .btn-primary:hover {
+            transform: scale(1.05);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+        }
+        
+        .btn-secondary {
+            background: rgba(255,255,255,0.2);
+            color: white;
+            border: 2px solid white;
+        }
+        
+        .progress-section {
+            background: #f8f9ff;
+            padding: 15px;
+            border-radius: 15px;
+            margin-bottom: 15px;
+        }
+        
+        .progress-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px;
+            background: white;
+            margin: 8px 0;
+            border-radius: 8px;
+        }
+        
+        .progress-item input {
+            width: 80px;
+            padding: 6px;
+            border: 2px solid #e0e0e0;
+            border-radius: 6px;
+            text-align: center;
+        }
+        
+        .notification-setup {
+            background: #fff3cd;
+            border: 2px solid #ffc107;
+            border-radius: 10px;
+            padding: 15px;
+            margin-bottom: 20px;
+        }
+        
+        .alert {
+            background: #ff6b6b;
+            color: white;
+            padding: 12px;
+            border-radius: 8px;
+            margin: 10px 0;
+            font-weight: bold;
+        }
+        
+        .success {
+            background: #51cf66;
+            color: white;
+            padding: 12px;
+            border-radius: 8px;
+            margin: 10px 0;
+            font-weight: bold;
+        }
+        
+        .notes-area {
+            width: 100%;
+            min-height: 100px;
+            padding: 12px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-family: inherit;
+            font-size: 14px;
+            margin-top: 10px;
+        }
+        
+        .save-btn {
+            width: 100%;
+            padding: 15px;
+            background: linear-gradient(135deg, #51cf66 0%, #37b24d 100%);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-weight: bold;
+            font-size: 16px;
+            cursor: pointer;
+            margin-top: 15px;
+        }
+        
+        .save-btn:active {
+            transform: scale(0.98);
+        }
+
+        .warmup {
+            background: #fff4e6;
+            border-left-color: #ffa500;
+        }
+
+        .icon {
+            font-size: 20px;
+        }
+
+        @media (max-width: 600px) {
+            .container {
+                padding: 15px;
+            }
+            
+            h1 {
+                font-size: 24px;
+            }
+            
+            .timer-display {
+                font-size: 36px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>💪 PROGRAMME MASSE BUILDER</h1>
+        <div class="header-info">8 semaines • 3 séances/semaine • Homme 45 ans</div>
+        
+        <div class="notification-setup">
+            <h3>🔔 Activer les rappels navigateur</h3>
+            <p style="margin: 10px 0; font-size: 14px;">Clique sur le bouton pour recevoir des notifications les jours d'entraînement</p>
+            <button class="btn btn-primary" onclick="setupNotifications()">✅ Activer les notifications</button>
+            <div id="notif-status" style="margin-top: 10px;"></div>
+        </div>
+        
+        <div class="tabs">
+            <button class="tab active" onclick="showTab('lundi')">🔴 LUNDI</button>
+            <button class="tab" onclick="showTab('mercredi')">🔵 MERCREDI</button>
+            <button class="tab" onclick="showTab('vendredi')">🟢 VENDREDI</button>
+            <button class="tab" onclick="showTab('progression')">📈 PROGRESSION</button>
+        </div>
+        
+        <!-- TIMER REPOS -->
+        <div class="timer">
+            <div style="font-size: 14px; margin-bottom: 5px;">⏱️ TIMER REPOS</div>
+            <div class="timer-display" id="timer-display">00:00</div>
+            <div class="timer-controls">
+                <button class="btn btn-secondary" onclick="startTimer(60)">60s</button>
+                <button class="btn btn-secondary" onclick="startTimer(90)">90s</button>
+                <button class="btn btn-secondary" onclick="startTimer(120)">2min</button>
+                <button class="btn btn-primary" onclick="stopTimer()">⏹ Stop</button>
+            </div>
+        </div>
+        
+        <!-- LUNDI -->
+        <div id="tab-lundi" class="tab-content active">
+            <h2 style="color: #667eea; margin-bottom: 15px;">🔴 LUNDI - POUSSÉE + DELTOÏDES</h2>
+            <p style="margin-bottom: 15px; color: #666;"><strong>Durée:</strong> 75 min | <strong>Horaire:</strong> 13h30-14h45</p>
+            
+            <div class="workout-section warmup">
+                <h3><span class="icon">🔥</span> ÉCHAUFFEMENT (15 min)</h3>
+                <div class="exercise">
+                    <div class="exercise-title">1. Vélo léger</div>
+                    <div class="exercise-details">
+                        <div class="detail-item"><span class="detail-label">Durée:</span> 3 min</div>
+                        <div class="detail-item"><span class="detail-label">FC:</span> 120-130 bpm</div>
+                    </div>
+                </div>
+                <div class="exercise">
+                    <div class="exercise-title">2. Foam roll thoracique</div>
+                    <div class="exercise-details">
+                        <div class="detail-item"><span class="detail-label">Durée:</span> 2 min</div>
+                    </div>
+                </div>
+                <div class="exercise">
+                    <div class="exercise-title">3. Band pull-aparts</div>
+                    <div class="exercise-details">
+                        <div class="detail-item"><span class="detail-label">Séries:</span> 2 x 20</div>
+                    </div>
+                </div>
+                <div class="exercise">
+                    <div class="exercise-title">4. Rotations externes câble</div>
+                    <div class="exercise-details">
+                        <div class="detail-item"><span class="detail-label">Séries:</span> 2 x 15/bras</div>
+                        <div class="detail-item"><span class="detail-label">Charge:</span> Pile 1-2</div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="workout-section">
+                <h3><span class="icon">💪</span> BLOC 1 - PECTORAUX SUPÉRIEURS</h3>
+                
+                <div class="exercise">
+                    <div class="exercise-title">1A. Développé incliné haltères 30°</div>
+                    <div class="exercise-details">
+                        <div class="detail-item"><span class="detail-label">Séries:</span> 4 x 8</div>
+                        <div class="detail-item"><span class="detail-label">Charge S1:</span> 32kg</div>
+                        <div class="detail-item"><span class="detail-label">Tempo:</span> 3-0-2</div>
+                        <div class="detail-item"><span class="detail-label">Repos:</span> 90s</div>
+                        <div class="detail-item"><span class="detail-label">RPE:</span> 7-8/10</div>
+                    </div>
+                    <div class="exercise-technique">
+                        <strong>🎯 Technique:</strong> Banc 30°. Descente LENTE 3s jusqu'à clavicule. Coudes 45°. Squeeze pecs en haut.
+                        <br><strong>⚠️ Si douleur épaule >5/10:</strong> Réduire à 28kg ou remplacer par écartés inclinés.
+                    </div>
+                    <div class="sets-tracker">
+                        <div class="set-input">
+                            <label>S1 (kg x reps)</label>
+                            <input type="text" id="lundi-1a-s1" placeholder="32x8">
+                        </div>
+                        <div class="set-input">
+                            <label>S2</label>
+                            <input type="text" id="lundi-1a-s2" placeholder="32x8">
+                        </div>
+                        <div class="set-input">
+                            <label>S3</label>
+                            <input type="text" id="lundi-1a-s3" placeholder="32x7">
+                        </div>
+                        <div class="set-input">
+                            <label>S4</label>
+                            <input type="text" id="lundi-1a-s4" placeholder="32x6">
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="exercise">
+                    <div class="exercise-title">1B. Rowing haltère 1 bras (Superset)</div>
+                    <div class="exercise-details">
+                        <div class="detail-item"><span class="detail-label">Séries:</span> 4 x 10/bras</div>
+                        <div class="detail-item"><span class="detail-label">Charge S1:</span> 18kg</div>
+                        <div class="detail-item"><span class="detail-label">Tempo:</span> 2-1-2</div>
+                        <div class="detail-item"><span class="detail-label">Repos:</span> 60s</div>
+                    </div>
+                    <div class="exercise-technique">
+                        <strong>🎯 Technique:</strong> Genou sur banc. Tirer vers hanche (pas épaule). SQUEEZE 1s en haut.
+                    </div>
+                    <div class="sets-tracker">
+                        <div class="set-input">
+                            <label>S1 (D/G)</label>
+                            <input type="text" id="lundi-1b-s1" placeholder="18x10/10">
+                        </div>
+                        <div class="set-input">
+                            <label>S2</label>
+                            <input type="text" id="lundi-1b-s2">
+                        </div>
+                        <div class="set-input">
+                            <label>S3</label>
+                            <input type="text" id="lundi-1b-s3">
+                        </div>
+                        <div class="set-input">
+                            <label>S4</label>
+                            <input type="text" id="lundi-1b-s4">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="workout-section">
+                <h3><span class="icon">🏔️</span> BLOC 2 - DELTOÏDES 3D</h3>
+                
+                <div class="exercise">
+                    <div class="exercise-title">2A. Développé Arnold assis</div>
+                    <div class="exercise-details">
+                        <div class="detail-item"><span class="detail-label">Séries:</span> 4 x 10</div>
+                        <div class="detail-item"><span class="detail-label">Charge S1:</span> 20kg</div>
+                        <div class="detail-item"><span class="detail-label">Tempo:</span> 2-0-2</div>
+                        <div class="detail-item"><span class="detail-label">Repos:</span> 75s</div>
+                    </div>
+                    <div class="exercise-technique">
+                        <strong>🎯 Technique:</strong> Départ paumes vers toi. Pivoter vers avant en montant. Protège épaule mieux que militaire.
+                    </div>
+                    <div class="sets-tracker">
+                        <div class="set-input">
+                            <label>S1</label>
+                            <input type="text" id="lundi-2a-s1" placeholder="20x10">
+                        </div>
+                        <div class="set-input">
+                            <label>S2</label>
+                            <input type="text" id="lundi-2a-s2">
+                        </div>
+                        <div class="set-input">
+                            <label>S3</label>
+                            <input type="text" id="lundi-2a-s3">
+                        </div>
+                        <div class="set-input">
+                            <label>S4</label>
+                            <input type="text" id="lundi-2a-s4">
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="exercise">
+                    <div class="exercise-title">2B. Face pull haute corde</div>
+                    <div class="exercise-details">
+                        <div class="detail-item"><span class="detail-label">Séries:</span> 4 x 15</div>
+                        <div class="detail-item"><span class="detail-label">Charge:</span> Pile 6</div>
+                        <div class="detail-item"><span class="detail-label">Repos:</span> 45s</div>
+                    </div>
+                </div>
+                
+                <div class="exercise">
+                    <div class="exercise-title">3A. Élévations latérales haltères</div>
+                    <div class="exercise-details">
+                        <div class="detail-item"><span class="detail-label">Séries:</span> 4 x 12</div>
+                        <div class="detail-item"><span class="detail-label">Charge S1:</span> 10kg</div>
+                        <div class="detail-item"><span class="detail-label">Tempo:</span> 2-1-3</div>
+                    </div>
+                    <div class="exercise-technique">
+                        <strong>🎯 CRITIQUE:</strong> Rotation externe légère (pouces vers haut). Descente LENTE 3s. Pas de balancement.
+                    </div>
+                </div>
+                
+                <div class="exercise">
+                    <div class="exercise-title">3B. Oiseau poulie basse penché</div>
+                    <div class="exercise-details">
+                        <div class="detail-item"><span class="detail-label">Séries:</span> 4 x 15</div>
+                        <div class="detail-item"><span class="detail-label">Charge:</span> Pile 4</div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="workout-section">
+                <h3><span class="icon">💥</span> BLOC 3 - TRICEPS</h3>
+                
+                <div class="exercise">
+                    <div class="exercise-title">4. Dips assistés</div>
+                    <div class="exercise-details">
+                        <div class="detail-item"><span class="detail-label">Séries:</span> 3 x 10</div>
+                        <div class="detail-item"><span class="detail-label">Assistance:</span> -30kg</div>
+                        <div class="detail-item"><span class="detail-label">Tempo:</span> 3-0-2</div>
+                    </div>
+                </div>
+                
+                <div class="exercise">
+                    <div class="exercise-title">5. Extension triceps corde</div>
+                    <div class="exercise-details">
+                        <div class="detail-item"><span class="detail-label">Séries:</span> 3 x 12</div>
+                        <div class="detail-item"><span class="detail-label">Charge:</span> Pile 6</div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="workout-section">
+                <h3><span class="icon">✨</span> FINISHER POSTURAL (3 min)</h3>
+                <p>3 rounds sans repos:</p>
+                <ul style="margin-left: 20px; margin-top: 10px;">
+                    <li>Band pull-aparts: 20 reps</li>
+                    <li>Scapular wall slides: 10 reps</li>
+                    <li>Hollow body hold: 15s</li>
+                </ul>
+            </div>
+            
+            <textarea class="notes-area" id="notes-lundi" placeholder="📝 Notes séance (énergie, douleurs, ressenti...)"></textarea>
+            <button class="save-btn" onclick="saveWorkout('lundi')">💾 SAUVEGARDER SÉANCE</button>
+        </div>
+        
+        <!-- MERCREDI -->
+        <div id="tab-mercredi" class="tab-content">
+            <h2 style="color: #667eea; margin-bottom: 15px;">🔵 MERCREDI - TRACTION + DOS</h2>
+            <p style="margin-bottom: 15px; color: #666;"><strong>Durée:</strong> 75 min | <strong>Horaire:</strong> 13h30-14h45</p>
+            
+            <div class="workout-section warmup">
+                <h3><span class="icon">🔥</span> ÉCHAUFFEMENT (13 min)</h3>
+                <div class="exercise">
+                    <div class="exercise-title">1. Rameur</div>
+                    <div class="exercise-details">
+                        <div class="detail-item"><span class="detail-label">Durée:</span> 3 min</div>
+                        <div class="detail-item"><span class="detail-label">FC:</span> 120-130 bpm</div>
+                    </div>
+                </div>
+                <div class="exercise">
+                    <div class="exercise-title">2. Dead hang barre</div>
+                    <div class="exercise-details">
+                        <div class="detail-item"><span class="detail-label">Séries:</span> 2 x 20s</div>
+                    </div>
+                    <div class="exercise-technique">Décompression épaules, respiration profonde</div>
+                </div>
+                <div class="exercise">
+                    <div class="exercise-title">3. Scapular pull-ups</div>
+                    <div class="exercise-details">
+                        <div class="detail-item"><span class="detail-label">Séries:</span> 3 x 8</div>
+                    </div>
+                    <div class="exercise-technique">Juste rétraction omoplates, sans plier coudes</div>
+                </div>
+                <div class="exercise">
+                    <div class="exercise-title">4. Band dislocations</div>
+                    <div class="exercise-details">
+                        <div class="detail-item"><span class="detail-label">Séries:</span> 2 x 15</div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="workout-section">
+                <h3><span class="icon">💪</span> BLOC 1 - LARGEUR DORSALE</h3>
+                
+                <div class="exercise">
+                    <div class="exercise-title">1. Tractions pronation assistées</div>
+                    <div class="exercise-details">
+                        <div class="detail-item"><span class="detail-label">Séries:</span> 5 x 5</div>
+                        <div class="detail-item"><span class="detail-label">Assistance:</span> Élastique moyen</div>
+                        <div class="detail-item"><span class="detail-label">Tempo:</span> 3-0-2</div>
+                        <div class="detail-item"><span class="detail-label">Repos:</span> 120s</div>
+                        <div class="detail-item"><span class="detail-label">RPE:</span> 7-9/10</div>
+                    </div>
+                    <div class="exercise-technique">
+                        <strong>🎯 CRITIQUE:</strong> Descente LENTE 3s. Départ bras tendus (stretch dorsal). Tirer coudes vers BAS. Menton passe barre.
+                        <br><strong>📈 Objectif S8:</strong> Élastique léger ou 6-8 reps
+                    </div>
+                    <div class="sets-tracker">
+                        <div class="set-input">
+                            <label>S1</label>
+                            <input type="text" id="mercredi-1-s1" placeholder="5">
+                        </div>
+                        <div class="set-input">
+                            <label>S2</label>
+                            <input type="text" id="mercredi-1-s2">
+                        </div>
+                        <div class="set-input">
+                            <label>S3</label>
+                            <input type="text" id="mercredi-1-s3">
+                        </div>
+                        <div class="set-input">
+                            <label>S4</label>
+                            <input type="text" id="mercredi-1-s4">
+                        </div>
+                        <div class="set-input">
+                            <label>S5</label>
+                            <input type="text" id="mercredi-1-s5">
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="exercise">
+                    <div class="exercise-title">2. Rowing barre buste penché</div>
+                    <div class="exercise-details">
+                        <div class="detail-item"><span class="detail-label">Séries:</span> 4 x 10</div>
+                        <div class="detail-item"><span class="detail-label">Charge S1:</span> 70kg</div>
+                        <div class="detail-item"><span class="detail-label">Tempo:</span> 3-1-2</div>
+                        <div class="detail-item"><span class="detail-label">Repos:</span> 90s</div>
+                    </div>
+                    <div class="exercise-technique">
+                        <strong>🎯 Technique:</strong> Buste 45°. Tirer vers NOMBRIL (pas sternum). Coudes près du corps. SQUEEZE omoplates 1s.
+                        <br><strong>Charge:</strong> Barre 20kg + 2x25kg disques = 70kg
+                    </div>
+                    <div class="sets-tracker">
+                        <div class="set-input">
+                            <label>S1</label>
+                            <input type="text" id="mercredi-2-s1" placeholder="70x10">
+                        </div>
+                        <div class="set-input">
+                            <label>S2</label>
+                            <input type="text" id="mercredi-2-s2">
+                        </div>
+                        <div class="set-input">
+                            <label>S3</label>
+                            <input type="text" id="mercredi-2-s3">
+                        </div>
+                        <div class="set-input">
+                            <label>S4</label>
+                            <input type="text" id="mercredi-2-s4">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="workout-section">
+                <h3><span class="icon">🏔️</span> BLOC 2 - ÉPAISSEUR + DELTOÏDE POST</h3>
+                
+                <div class="exercise">
+                    <div class="exercise-title">3A. Tirage horizontal prise neutre</div>
+                    <div class="exercise-details">
+                        <div class="detail-item"><span class
