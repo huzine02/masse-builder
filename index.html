@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Masse Builder v2.5</title>
+    <title>Masse Builder v3.0 Final</title>
     <style>
         * {margin: 0; padding: 0; box-sizing: border-box;}
         body {font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); min-height: 100vh; padding: 15px; color: #333;}
@@ -49,6 +49,12 @@
         .demo-btn:active {transform: scale(0.95);}
         .last-week-data {background: #e8f5e9; border-left: 3px solid #51cf66; padding: 8px; margin: 8px 0; border-radius: 6px; font-size: 12px;}
         .suggested-weight {background: #fff9e6; border-left: 3px solid #ffc107; padding: 8px; margin: 8px 0; border-radius: 6px; font-size: 12px; font-weight: bold;}
+        .performance-analysis {padding: 8px; margin: 8px 0; border-radius: 6px; font-size: 12px; font-weight: bold; display: none;}
+        .performance-analysis.perfect {background: #e8f5e9; border-left: 3px solid #51cf66;}
+        .performance-analysis.easy {background: #fff9e6; border-left: 3px solid #ffc107;}
+        .performance-analysis.good {background: #ffe8cc; border-left: 3px solid #ff9800;}
+        .performance-analysis.hard {background: #ffebee; border-left: 3px solid #f44336;}
+        .performance-analysis.too_hard {background: #f5f5f5; border-left: 3px solid #424242;}
         .exercise-visual {background: #f0f0f0; border-radius: 8px; padding: 10px; margin: 10px 0; font-size: 12px; line-height: 1.6; border-left: 3px solid #ffa500;}
         .exercise-details {display: grid; grid-template-columns: repeat(auto-fit, minmax(100px, 1fr)); gap: 6px; margin: 8px 0; font-size: 12px;}
         .detail-item {background: #f0f0f0; padding: 5px 8px; border-radius: 6px;}
@@ -56,9 +62,11 @@
         .movement-diagram {background: white; border: 2px dashed #667eea; border-radius: 8px; padding: 8px; margin: 8px 0; font-size: 24px; text-align: center;}
         .sets-tracker {display: grid; grid-template-columns: repeat(auto-fit, minmax(70px, 1fr)); gap: 6px; margin-top: 10px;}
         .set-input label {font-size: 10px; font-weight: bold; color: #666; display: block; margin-bottom: 3px;}
-        .set-input input {width: 100%; padding: 6px; border: 2px solid #e0e0e0; border-radius: 6px; font-size: 13px; text-align: center; transition: border-color 0.3s;}
+        .set-input input {width: 100%; padding: 6px; border: 2px solid #e0e0e0; border-radius: 6px; font-size: 13px; text-align: center; transition: all 0.3s;}
         .set-input input:focus {outline: none; border-color: #667eea;}
-        .set-input input.auto-saved {border-color: #51cf66; background: #f0fff4;}
+        .set-input input.input-red {border-color: #ff6b6b; background: #fff5f5;}
+        .set-input input.input-yellow {border-color: #ffc107; background: #fffbf0;}
+        .set-input input.input-green {border-color: #51cf66; background: #f0fff4;}
         .timer {background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 15px; border-radius: 15px; text-align: center; margin: 15px 0;}
         .timer-display {font-size: 42px; font-weight: bold; margin: 10px 0; font-variant-numeric: tabular-nums;}
         .timer-display.warning {color: #ffc107; animation: pulse 1s infinite;}
@@ -67,7 +75,9 @@
         .btn {padding: 10px 16px; border: none; border-radius: 8px; font-weight: bold; cursor: pointer; transition: all 0.3s; font-size: 13px;}
         .btn-primary {background: white; color: #667eea;}
         .btn-primary:hover {transform: scale(1.05);}
+        .btn-primary:disabled {opacity: 0.5; cursor: not-allowed;}
         .btn-secondary {background: rgba(255,255,255,0.2); color: white; border: 2px solid white;}
+        .btn-success {background: #51cf66; color: white;}
         .notification-setup {background: #fff3cd; border: 2px solid #ffc107; border-radius: 10px; padding: 12px; margin-bottom: 15px; font-size: 13px;}
         .notification-setup h3 {font-size: 16px; margin-bottom: 8px;}
         .alert {background: #ff6b6b; color: white; padding: 10px; border-radius: 8px; margin: 8px 0; font-size: 13px;}
@@ -77,14 +87,34 @@
         .warmup {background: #fff4e6; border-left-color: #ffa500;}
         .progress-item {display: flex; justify-content: space-between; align-items: center; padding: 10px; background: white; margin: 8px 0; border-radius: 8px; font-size: 13px;}
         .progress-item input {width: 80px; padding: 6px; border: 2px solid #e0e0e0; border-radius: 6px; text-align: center; font-size: 13px;}
+        .progression-table {width: 100%; border-collapse: collapse; margin: 15px 0; font-size: 12px;}
+        .progression-table th {background: #667eea; color: white; padding: 8px; text-align: left; font-size: 11px;}
+        .progression-table td {padding: 8px; border-bottom: 1px solid #e0e0e0;}
+        .progression-table tr:hover {background: #f8f9ff;}
+        .week-badge {display: inline-block; padding: 2px 8px; border-radius: 12px; font-size: 10px; font-weight: bold;}
+        .week-badge.current {background: #667eea; color: white;}
+        .week-badge.completed {background: #51cf66; color: white;}
+        .week-badge.future {background: #e0e0e0; color: #666;}
         ul {margin-left: 20px; line-height: 1.6;}
-        .modal {display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); z-index: 2000; justify-content: center; align-items: center;}
+        .modal {display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); z-index: 2000; justify-content: center; align-items: center; overflow-y: auto; padding: 20px;}
         .modal.show {display: flex;}
-        .modal-content {background: white; padding: 30px; border-radius: 20px; max-width: 400px; text-align: center; animation: modalPop 0.3s;}
+        .modal-content {background: white; padding: 30px; border-radius: 20px; max-width: 500px; width: 100%; max-height: 90vh; overflow-y: auto; animation: modalPop 0.3s;}
         @keyframes modalPop {from {transform: scale(0.8); opacity: 0;} to {transform: scale(1); opacity: 1;}}
-        .modal-icon {font-size: 60px; margin-bottom: 15px;}
-        .modal-title {font-size: 22px; font-weight: bold; color: #667eea; margin-bottom: 10px;}
-        .modal-text {font-size: 15px; color: #666; margin-bottom: 20px; line-height: 1.5;}
+        .modal-icon {font-size: 60px; margin-bottom: 15px; text-align: center;}
+        .modal-title {font-size: 22px; font-weight: bold; color: #667eea; margin-bottom: 15px; text-align: center;}
+        .modal-text {font-size: 15px; color: #666; margin-bottom: 20px; line-height: 1.5; text-align: center;}
+        .feedback-field {margin-bottom: 20px;}
+        .feedback-field label {display: block; font-weight: bold; color: #333; margin-bottom: 8px; font-size: 14px;}
+        .slider-container {display: flex; align-items: center; gap: 10px;}
+        .slider {flex: 1; height: 6px; border-radius: 3px; background: #e0e0e0; outline: none; -webkit-appearance: none;}
+        .slider::-webkit-slider-thumb {-webkit-appearance: none; appearance: none; width: 20px; height: 20px; border-radius: 50%; background: #667eea; cursor: pointer;}
+        .slider::-moz-range-thumb {width: 20px; height: 20px; border-radius: 50%; background: #667eea; cursor: pointer; border: none;}
+        .slider-value {font-weight: bold; color: #667eea; min-width: 35px; text-align: center;}
+        .feedback-textarea {width: 100%; min-height: 100px; padding: 10px; border: 2px solid #e0e0e0; border-radius: 8px; font-family: inherit; font-size: 13px; resize: vertical;}
+        .char-counter {font-size: 11px; color: #999; margin-top: 5px; text-align: right;}
+        .char-counter.valid {color: #51cf66;}
+        .char-counter.invalid {color: #ff6b6b;}
+        .export-buttons {display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 10px; margin-top: 15px;}
         @media (max-width: 600px) {
             .container {padding: 12px;}
             h1 {font-size: 22px;}
@@ -92,6 +122,7 @@
             .exercise-header {flex-direction: column; align-items: flex-start;}
             .demo-btn {width: 100%; margin-top: 5px;}
             .auto-save-indicator {top: 10px; right: 10px; font-size: 11px; padding: 6px 12px;}
+            .export-buttons {grid-template-columns: 1fr;}
         }
     </style>
 </head>
@@ -99,7 +130,7 @@
     <div class="auto-save-indicator" id="auto-save-indicator">✅ Sauvegardé</div>
     <div class="container">
         <h1>💪 MASSE BUILDER</h1>
-        <div style="text-align: center;"><span class="version-badge">v2.5 • Photos • Export Coach • Notifications</span></div>
+        <div style="text-align: center;"><span class="version-badge">v3.0 FINAL • Timer Amélioré • Progression 8S • Export IA</span></div>
         <div class="header-info">8 semaines • 3 séances/semaine</div>
 
         <div class="week-tracker">
@@ -119,6 +150,7 @@
                 <button class="btn btn-secondary" onclick="pauseSessionTimer()" id="pause-session-btn">⏸ Pause</button>
                 <button class="btn btn-primary" onclick="endSession()">✅ Terminer & Exporter</button>
             </div>
+            <div style="font-size: 11px; margin-top: 8px; color: #666;">💡 Le timer continue même si tu changes d'app (si autorisé)</div>
         </div>
         
         <div class="notification-setup">
@@ -132,7 +164,8 @@
             <button class="tab active" onclick="showTab('lundi')">🔴 LUN</button>
             <button class="tab" onclick="showTab('mercredi')">🔵 MER</button>
             <button class="tab" onclick="showTab('vendredi')">🟢 VEN</button>
-            <button class="tab" onclick="showTab('progression')">📈 PROGR.</button>
+            <button class="tab" onclick="showTab('progression')">📊 SUIVI</button>
+            <button class="tab" onclick="showTab('evolution')">📈 8 SEM</button>
         </div>
         
         <div class="timer">
@@ -169,7 +202,7 @@
                         <button class="demo-btn" onclick="openDemo('https://www.youtube.com/watch?v=8iPEnn-ltC8')">📹 Démo</button>
                     </div>
                     <div class="last-week-data" id="lastweek-lun-incline">💾 Semaine dernière: Chargement...</div>
-                    <div class="suggested-weight" id="suggestion-lun-incline">💡 Suggestion: 32kg (S1 baseline)</div>
+                    <div class="performance-analysis" id="analysis-lun-1a"></div>
                     <div class="exercise-details">
                         <div class="detail-item"><span class="detail-label">Séries:</span> 4x8</div>
                         <div class="detail-item"><span class="detail-label">Charge S1:</span> 32kg</div>
@@ -180,10 +213,10 @@
                     <div class="exercise-visual"><strong>📐 POSITION:</strong> Banc 30° • Pieds au sol • Dos plaqué • Haltères niveau épaules</div>
                     <div class="movement-diagram">⬇️ 3s lent → 💥 2s montée → 💪 Squeeze</div>
                     <div class="sets-tracker">
-                        <div class="set-input"><label>S1 (kg×reps)</label><input type="text" id="lun-1a-s1" placeholder="32×8" oninput="autoSave()"></div>
-                        <div class="set-input"><label>S2</label><input type="text" id="lun-1a-s2" oninput="autoSave()"></div>
-                        <div class="set-input"><label>S3</label><input type="text" id="lun-1a-s3" oninput="autoSave()"></div>
-                        <div class="set-input"><label>S4</label><input type="text" id="lun-1a-s4" oninput="autoSave()"></div>
+                        <div class="set-input"><label>S1 (kg×reps)</label><input type="text" id="lun-1a-s1" data-exercise="lun-1a" data-target="8" placeholder="32×8" oninput="handleInput(this)"></div>
+                        <div class="set-input"><label>S2</label><input type="text" id="lun-1a-s2" data-exercise="lun-1a" data-target="8" oninput="handleInput(this)"></div>
+                        <div class="set-input"><label>S3</label><input type="text" id="lun-1a-s3" data-exercise="lun-1a" data-target="8" oninput="handleInput(this)"></div>
+                        <div class="set-input"><label>S4</label><input type="text" id="lun-1a-s4" data-exercise="lun-1a" data-target="8" oninput="handleInput(this)"></div>
                     </div>
                 </div>
 
@@ -193,6 +226,7 @@
                         <button class="demo-btn" onclick="openDemo('https://www.youtube.com/watch?v=roCP6wCXPqo')">📹 Démo</button>
                     </div>
                     <div class="last-week-data" id="lastweek-lun-rowing">💾 Semaine dernière: Chargement...</div>
+                    <div class="performance-analysis" id="analysis-lun-1b"></div>
                     <div class="exercise-details">
                         <div class="detail-item"><span class="detail-label">Séries:</span> 4x10/bras</div>
                         <div class="detail-item"><span class="detail-label">Charge S1:</span> 18kg</div>
@@ -200,10 +234,10 @@
                         <div class="detail-item"><span class="detail-label">Repos:</span> 60s</div>
                     </div>
                     <div class="sets-tracker">
-                        <div class="set-input"><label>S1 (D/G)</label><input type="text" id="lun-1b-s1" placeholder="18×10/10" oninput="autoSave()"></div>
-                        <div class="set-input"><label>S2</label><input type="text" id="lun-1b-s2" oninput="autoSave()"></div>
-                        <div class="set-input"><label>S3</label><input type="text" id="lun-1b-s3" oninput="autoSave()"></div>
-                        <div class="set-input"><label>S4</label><input type="text" id="lun-1b-s4" oninput="autoSave()"></div>
+                        <div class="set-input"><label>S1 (D/G)</label><input type="text" id="lun-1b-s1" data-exercise="lun-1b" data-target="10" placeholder="18×10/10" oninput="handleInput(this)"></div>
+                        <div class="set-input"><label>S2</label><input type="text" id="lun-1b-s2" data-exercise="lun-1b" data-target="10" oninput="handleInput(this)"></div>
+                        <div class="set-input"><label>S3</label><input type="text" id="lun-1b-s3" data-exercise="lun-1b" data-target="10" oninput="handleInput(this)"></div>
+                        <div class="set-input"><label>S4</label><input type="text" id="lun-1b-s4" data-exercise="lun-1b" data-target="10" oninput="handleInput(this)"></div>
                     </div>
                 </div>
             </div>
@@ -216,6 +250,7 @@
                         <div class="exercise-title">2A. Développé Arnold</div>
                         <button class="demo-btn" onclick="openDemo('https://www.youtube.com/watch?v=6Z15_WdXmVw')">📹 Démo</button>
                     </div>
+                    <div class="performance-analysis" id="analysis-lun-2a"></div>
                     <div class="exercise-details">
                         <div class="detail-item"><span class="detail-label">Séries:</span> 4x10</div>
                         <div class="detail-item"><span class="detail-label">Charge S1:</span> 20kg</div>
@@ -224,10 +259,10 @@
                     </div>
                     <div class="movement-diagram">🔄 Paumes vers toi → 🔄 Pivoter → 🙌 Finir devant</div>
                     <div class="sets-tracker">
-                        <div class="set-input"><label>S1</label><input type="text" id="lun-2a-s1" placeholder="20×10" oninput="autoSave()"></div>
-                        <div class="set-input"><label>S2</label><input type="text" id="lun-2a-s2" oninput="autoSave()"></div>
-                        <div class="set-input"><label>S3</label><input type="text" id="lun-2a-s3" oninput="autoSave()"></div>
-                        <div class="set-input"><label>S4</label><input type="text" id="lun-2a-s4" oninput="autoSave()"></div>
+                        <div class="set-input"><label>S1</label><input type="text" id="lun-2a-s1" data-exercise="lun-2a" data-target="10" placeholder="20×10" oninput="handleInput(this)"></div>
+                        <div class="set-input"><label>S2</label><input type="text" id="lun-2a-s2" data-exercise="lun-2a" data-target="10" oninput="handleInput(this)"></div>
+                        <div class="set-input"><label>S3</label><input type="text" id="lun-2a-s3" data-exercise="lun-2a" data-target="10" oninput="handleInput(this)"></div>
+                        <div class="set-input"><label>S4</label><input type="text" id="lun-2a-s4" data-exercise="lun-2a" data-target="10" oninput="handleInput(this)"></div>
                     </div>
                 </div>
                 
@@ -236,6 +271,7 @@
                         <div class="exercise-title">2B. Face pull haute</div>
                         <button class="demo-btn" onclick="openDemo('https://www.youtube.com/watch?v=rep-qVOkqgk')">📹 Démo</button>
                     </div>
+                    <div class="performance-analysis" id="analysis-lun-2b"></div>
                     <div class="exercise-details">
                         <div class="detail-item"><span class="detail-label">Séries:</span> 4x15</div>
                         <div class="detail-item"><span class="detail-label">Charge S1:</span> Pile 6</div>
@@ -243,10 +279,10 @@
                         <div class="detail-item"><span class="detail-label">Repos:</span> 45s</div>
                     </div>
                     <div class="sets-tracker">
-                        <div class="set-input"><label>S1</label><input type="text" id="lun-2b-s1" placeholder="P6×15" oninput="autoSave()"></div>
-                        <div class="set-input"><label>S2</label><input type="text" id="lun-2b-s2" oninput="autoSave()"></div>
-                        <div class="set-input"><label>S3</label><input type="text" id="lun-2b-s3" oninput="autoSave()"></div>
-                        <div class="set-input"><label>S4</label><input type="text" id="lun-2b-s4" oninput="autoSave()"></div>
+                        <div class="set-input"><label>S1</label><input type="text" id="lun-2b-s1" data-exercise="lun-2b" data-target="15" placeholder="P6×15" oninput="handleInput(this)"></div>
+                        <div class="set-input"><label>S2</label><input type="text" id="lun-2b-s2" data-exercise="lun-2b" data-target="15" oninput="handleInput(this)"></div>
+                        <div class="set-input"><label>S3</label><input type="text" id="lun-2b-s3" data-exercise="lun-2b" data-target="15" oninput="handleInput(this)"></div>
+                        <div class="set-input"><label>S4</label><input type="text" id="lun-2b-s4" data-exercise="lun-2b" data-target="15" oninput="handleInput(this)"></div>
                     </div>
                 </div>
             </div>
@@ -259,6 +295,7 @@
                         <div class="exercise-title">3A. Élévations latérales</div>
                         <button class="demo-btn" onclick="openDemo('https://www.youtube.com/watch?v=3VcKaXpzqRo')">📹 Démo</button>
                     </div>
+                    <div class="performance-analysis" id="analysis-lun-3a"></div>
                     <div class="exercise-details">
                         <div class="detail-item"><span class="detail-label">Séries:</span> 4x12</div>
                         <div class="detail-item"><span class="detail-label">Charge S1:</span> 10kg</div>
@@ -267,10 +304,10 @@
                     </div>
                     <div class="exercise-visual"><strong>🔑 ASTUCE:</strong> Rotation externe légère • Descente LENTE 3s</div>
                     <div class="sets-tracker">
-                        <div class="set-input"><label>S1</label><input type="text" id="lun-3a-s1" placeholder="10×12" oninput="autoSave()"></div>
-                        <div class="set-input"><label>S2</label><input type="text" id="lun-3a-s2" oninput="autoSave()"></div>
-                        <div class="set-input"><label>S3</label><input type="text" id="lun-3a-s3" oninput="autoSave()"></div>
-                        <div class="set-input"><label>S4</label><input type="text" id="lun-3a-s4" oninput="autoSave()"></div>
+                        <div class="set-input"><label>S1</label><input type="text" id="lun-3a-s1" data-exercise="lun-3a" data-target="12" placeholder="10×12" oninput="handleInput(this)"></div>
+                        <div class="set-input"><label>S2</label><input type="text" id="lun-3a-s2" data-exercise="lun-3a" data-target="12" oninput="handleInput(this)"></div>
+                        <div class="set-input"><label>S3</label><input type="text" id="lun-3a-s3" data-exercise="lun-3a" data-target="12" oninput="handleInput(this)"></div>
+                        <div class="set-input"><label>S4</label><input type="text" id="lun-3a-s4" data-exercise="lun-3a" data-target="12" oninput="handleInput(this)"></div>
                     </div>
                 </div>
                 
@@ -279,6 +316,7 @@
                         <div class="exercise-title">3B. Oiseau poulie</div>
                         <button class="demo-btn" onclick="openDemo('https://www.youtube.com/watch?v=tpvqJ2YZV_k')">📹 Démo</button>
                     </div>
+                    <div class="performance-analysis" id="analysis-lun-3b"></div>
                     <div class="exercise-details">
                         <div class="detail-item"><span class="detail-label">Séries:</span> 4x15</div>
                         <div class="detail-item"><span class="detail-label">Charge S1:</span> Pile 4</div>
@@ -286,10 +324,10 @@
                         <div class="detail-item"><span class="detail-label">Repos:</span> 45s</div>
                     </div>
                     <div class="sets-tracker">
-                        <div class="set-input"><label>S1</label><input type="text" id="lun-3b-s1" placeholder="P4×15" oninput="autoSave()"></div>
-                        <div class="set-input"><label>S2</label><input type="text" id="lun-3b-s2" oninput="autoSave()"></div>
-                        <div class="set-input"><label>S3</label><input type="text" id="lun-3b-s3" oninput="autoSave()"></div>
-                        <div class="set-input"><label>S4</label><input type="text" id="lun-3b-s4" oninput="autoSave()"></div>
+                        <div class="set-input"><label>S1</label><input type="text" id="lun-3b-s1" data-exercise="lun-3b" data-target="15" placeholder="P4×15" oninput="handleInput(this)"></div>
+                        <div class="set-input"><label>S2</label><input type="text" id="lun-3b-s2" data-exercise="lun-3b" data-target="15" oninput="handleInput(this)"></div>
+                        <div class="set-input"><label>S3</label><input type="text" id="lun-3b-s3" data-exercise="lun-3b" data-target="15" oninput="handleInput(this)"></div>
+                        <div class="set-input"><label>S4</label><input type="text" id="lun-3b-s4" data-exercise="lun-3b" data-target="15" oninput="handleInput(this)"></div>
                     </div>
                 </div>
                 
@@ -298,6 +336,7 @@
                         <div class="exercise-title">4A. Dips assistés</div>
                         <button class="demo-btn" onclick="openDemo('https://www.youtube.com/watch?v=2z8JmcrW-As')">📹 Démo</button>
                     </div>
+                    <div class="performance-analysis" id="analysis-lun-4a"></div>
                     <div class="exercise-details">
                         <div class="detail-item"><span class="detail-label">Séries:</span> 3x10</div>
                         <div class="detail-item"><span class="detail-label">Assistance:</span> -30kg</div>
@@ -305,9 +344,9 @@
                         <div class="detail-item"><span class="detail-label">Repos:</span> 60s</div>
                     </div>
                     <div class="sets-tracker">
-                        <div class="set-input"><label>S1</label><input type="text" id="lun-4a-s1" placeholder="-30×10" oninput="autoSave()"></div>
-                        <div class="set-input"><label>S2</label><input type="text" id="lun-4a-s2" oninput="autoSave()"></div>
-                        <div class="set-input"><label>S3</label><input type="text" id="lun-4a-s3" oninput="autoSave()"></div>
+                        <div class="set-input"><label>S1</label><input type="text" id="lun-4a-s1" data-exercise="lun-4a" data-target="10" placeholder="-30×10" oninput="handleInput(this)"></div>
+                        <div class="set-input"><label>S2</label><input type="text" id="lun-4a-s2" data-exercise="lun-4a" data-target="10" oninput="handleInput(this)"></div>
+                        <div class="set-input"><label>S3</label><input type="text" id="lun-4a-s3" data-exercise="lun-4a" data-target="10" oninput="handleInput(this)"></div>
                     </div>
                 </div>
                 
@@ -316,6 +355,7 @@
                         <div class="exercise-title">4B. Extension triceps poulie</div>
                         <button class="demo-btn" onclick="openDemo('https://www.youtube.com/watch?v=kiuVA0gs3EI')">📹 Démo</button>
                     </div>
+                    <div class="performance-analysis" id="analysis-lun-4b"></div>
                     <div class="exercise-details">
                         <div class="detail-item"><span class="detail-label">Séries:</span> 3x12</div>
                         <div class="detail-item"><span class="detail-label">Charge S1:</span> Pile 6</div>
@@ -323,9 +363,9 @@
                         <div class="detail-item"><span class="detail-label">Repos:</span> 45s</div>
                     </div>
                     <div class="sets-tracker">
-                        <div class="set-input"><label>S1</label><input type="text" id="lun-4b-s1" placeholder="P6×12" oninput="autoSave()"></div>
-                        <div class="set-input"><label>S2</label><input type="text" id="lun-4b-s2" oninput="autoSave()"></div>
-                        <div class="set-input"><label>S3</label><input type="text" id="lun-4b-s3" oninput="autoSave()"></div>
+                        <div class="set-input"><label>S1</label><input type="text" id="lun-4b-s1" data-exercise="lun-4b" data-target="12" placeholder="P6×12" oninput="handleInput(this)"></div>
+                        <div class="set-input"><label>S2</label><input type="text" id="lun-4b-s2" data-exercise="lun-4b" data-target="12" oninput="handleInput(this)"></div>
+                        <div class="set-input"><label>S3</label><input type="text" id="lun-4b-s3" data-exercise="lun-4b" data-target="12" oninput="handleInput(this)"></div>
                     </div>
                 </div>
             </div>
@@ -355,6 +395,7 @@
                         <button class="demo-btn" onclick="openDemo('https://www.youtube.com/watch?v=eGo4IYlbE5g')">📹 Démo</button>
                     </div>
                     <div class="last-week-data" id="lastweek-mer-tractions">💾 Semaine dernière: Chargement...</div>
+                    <div class="performance-analysis" id="analysis-mer-1"></div>
                     <div class="exercise-details">
                         <div class="detail-item"><span class="detail-label">Séries:</span> 5x5</div>
                         <div class="detail-item"><span class="detail-label">Assistance:</span> Variable</div>
@@ -363,11 +404,11 @@
                     </div>
                     <div class="movement-diagram">⬇️ 3s descente → ⬆️ 2s coudes vers BAS</div>
                     <div class="sets-tracker">
-                        <div class="set-input"><label>S1</label><input type="text" id="mer-1-s1" placeholder="5" oninput="autoSave()"></div>
-                        <div class="set-input"><label>S2</label><input type="text" id="mer-1-s2" oninput="autoSave()"></div>
-                        <div class="set-input"><label>S3</label><input type="text" id="mer-1-s3" oninput="autoSave()"></div>
-                        <div class="set-input"><label>S4</label><input type="text" id="mer-1-s4" oninput="autoSave()"></div>
-                        <div class="set-input"><label>S5</label><input type="text" id="mer-1-s5" oninput="autoSave()"></div>
+                        <div class="set-input"><label>S1</label><input type="text" id="mer-1-s1" data-exercise="mer-1" data-target="5" placeholder="5" oninput="handleInput(this)"></div>
+                        <div class="set-input"><label>S2</label><input type="text" id="mer-1-s2" data-exercise="mer-1" data-target="5" oninput="handleInput(this)"></div>
+                        <div class="set-input"><label>S3</label><input type="text" id="mer-1-s3" data-exercise="mer-1" data-target="5" oninput="handleInput(this)"></div>
+                        <div class="set-input"><label>S4</label><input type="text" id="mer-1-s4" data-exercise="mer-1" data-target="5" oninput="handleInput(this)"></div>
+                        <div class="set-input"><label>S5</label><input type="text" id="mer-1-s5" data-exercise="mer-1" data-target="5" oninput="handleInput(this)"></div>
                     </div>
                 </div>
                 
@@ -377,6 +418,7 @@
                         <button class="demo-btn" onclick="openDemo('https://www.youtube.com/watch?v=kBWAon7ItDw')">📹 Démo</button>
                     </div>
                     <div class="last-week-data" id="lastweek-mer-rowing">💾 Semaine dernière: Chargement...</div>
+                    <div class="performance-analysis" id="analysis-mer-2"></div>
                     <div class="exercise-details">
                         <div class="detail-item"><span class="detail-label">Séries:</span> 4x10</div>
                         <div class="detail-item"><span class="detail-label">Charge S1:</span> 70kg</div>
@@ -384,10 +426,10 @@
                         <div class="detail-item"><span class="detail-label">Repos:</span> 90s</div>
                     </div>
                     <div class="sets-tracker">
-                        <div class="set-input"><label>S1</label><input type="text" id="mer-2-s1" placeholder="70×10" oninput="autoSave()"></div>
-                        <div class="set-input"><label>S2</label><input type="text" id="mer-2-s2" oninput="autoSave()"></div>
-                        <div class="set-input"><label>S3</label><input type="text" id="mer-2-s3" oninput="autoSave()"></div>
-                        <div class="set-input"><label>S4</label><input type="text" id="mer-2-s4" oninput="autoSave()"></div>
+                        <div class="set-input"><label>S1</label><input type="text" id="mer-2-s1" data-exercise="mer-2" data-target="10" placeholder="70×10" oninput="handleInput(this)"></div>
+                        <div class="set-input"><label>S2</label><input type="text" id="mer-2-s2" data-exercise="mer-2" data-target="10" oninput="handleInput(this)"></div>
+                        <div class="set-input"><label>S3</label><input type="text" id="mer-2-s3" data-exercise="mer-2" data-target="10" oninput="handleInput(this)"></div>
+                        <div class="set-input"><label>S4</label><input type="text" id="mer-2-s4" data-exercise="mer-2" data-target="10" oninput="handleInput(this)"></div>
                     </div>
                 </div>
             </div>
@@ -400,6 +442,7 @@
                         <div class="exercise-title">3. Tirage horizontal poulie</div>
                         <button class="demo-btn" onclick="openDemo('https://www.youtube.com/watch?v=GZbfZ033f74')">📹 Démo</button>
                     </div>
+                    <div class="performance-analysis" id="analysis-mer-3"></div>
                     <div class="exercise-details">
                         <div class="detail-item"><span class="detail-label">Séries:</span> 4x10</div>
                         <div class="detail-item"><span class="detail-label">Charge S1:</span> Pile 8</div>
@@ -407,10 +450,10 @@
                         <div class="detail-item"><span class="detail-label">Repos:</span> 60s</div>
                     </div>
                     <div class="sets-tracker">
-                        <div class="set-input"><label>S1</label><input type="text" id="mer-3-s1" placeholder="P8×10" oninput="autoSave()"></div>
-                        <div class="set-input"><label>S2</label><input type="text" id="mer-3-s2" oninput="autoSave()"></div>
-                        <div class="set-input"><label>S3</label><input type="text" id="mer-3-s3" oninput="autoSave()"></div>
-                        <div class="set-input"><label>S4</label><input type="text" id="mer-3-s4" oninput="autoSave()"></div>
+                        <div class="set-input"><label>S1</label><input type="text" id="mer-3-s1" data-exercise="mer-3" data-target="10" placeholder="P8×10" oninput="handleInput(this)"></div>
+                        <div class="set-input"><label>S2</label><input type="text" id="mer-3-s2" data-exercise="mer-3" data-target="10" oninput="handleInput(this)"></div>
+                        <div class="set-input"><label>S3</label><input type="text" id="mer-3-s3" data-exercise="mer-3" data-target="10" oninput="handleInput(this)"></div>
+                        <div class="set-input"><label>S4</label><input type="text" id="mer-3-s4" data-exercise="mer-3" data-target="10" oninput="handleInput(this)"></div>
                     </div>
                 </div>
                 
@@ -419,6 +462,7 @@
                         <div class="exercise-title">4. Pull-over poulie</div>
                         <button class="demo-btn" onclick="openDemo('https://www.youtube.com/watch?v=J_kUApWkpCs')">📹 Démo</button>
                     </div>
+                    <div class="performance-analysis" id="analysis-mer-4"></div>
                     <div class="exercise-details">
                         <div class="detail-item"><span class="detail-label">Séries:</span> 4x12</div>
                         <div class="detail-item"><span class="detail-label">Charge S1:</span> Pile 6</div>
@@ -426,10 +470,10 @@
                         <div class="detail-item"><span class="detail-label">Repos:</span> 60s</div>
                     </div>
                     <div class="sets-tracker">
-                        <div class="set-input"><label>S1</label><input type="text" id="mer-4-s1" placeholder="P6×12" oninput="autoSave()"></div>
-                        <div class="set-input"><label>S2</label><input type="text" id="mer-4-s2" oninput="autoSave()"></div>
-                        <div class="set-input"><label>S3</label><input type="text" id="mer-4-s3" oninput="autoSave()"></div>
-                        <div class="set-input"><label>S4</label><input type="text" id="mer-4-s4" oninput="autoSave()"></div>
+                        <div class="set-input"><label>S1</label><input type="text" id="mer-4-s1" data-exercise="mer-4" data-target="12" placeholder="P6×12" oninput="handleInput(this)"></div>
+                        <div class="set-input"><label>S2</label><input type="text" id="mer-4-s2" data-exercise="mer-4" data-target="12" oninput="handleInput(this)"></div>
+                        <div class="set-input"><label>S3</label><input type="text" id="mer-4-s3" data-exercise="mer-4" data-target="12" oninput="handleInput(this)"></div>
+                        <div class="set-input"><label>S4</label><input type="text" id="mer-4-s4" data-exercise="mer-4" data-target="12" oninput="handleInput(this)"></div>
                     </div>
                 </div>
             </div>
@@ -442,6 +486,7 @@
                         <div class="exercise-title">5. Face pull</div>
                         <button class="demo-btn" onclick="openDemo('https://www.youtube.com/watch?v=rep-qVOkqgk')">📹 Démo</button>
                     </div>
+                    <div class="performance-analysis" id="analysis-mer-5"></div>
                     <div class="exercise-details">
                         <div class="detail-item"><span class="detail-label">Séries:</span> 4x20</div>
                         <div class="detail-item"><span class="detail-label">Charge S1:</span> Pile 5</div>
@@ -449,10 +494,10 @@
                         <div class="detail-item"><span class="detail-label">Repos:</span> 45s</div>
                     </div>
                     <div class="sets-tracker">
-                        <div class="set-input"><label>S1</label><input type="text" id="mer-5-s1" placeholder="P5×20" oninput="autoSave()"></div>
-                        <div class="set-input"><label>S2</label><input type="text" id="mer-5-s2" oninput="autoSave()"></div>
-                        <div class="set-input"><label>S3</label><input type="text" id="mer-5-s3" oninput="autoSave()"></div>
-                        <div class="set-input"><label>S4</label><input type="text" id="mer-5-s4" oninput="autoSave()"></div>
+                        <div class="set-input"><label>S1</label><input type="text" id="mer-5-s1" data-exercise="mer-5" data-target="20" placeholder="P5×20" oninput="handleInput(this)"></div>
+                        <div class="set-input"><label>S2</label><input type="text" id="mer-5-s2" data-exercise="mer-5" data-target="20" oninput="handleInput(this)"></div>
+                        <div class="set-input"><label>S3</label><input type="text" id="mer-5-s3" data-exercise="mer-5" data-target="20" oninput="handleInput(this)"></div>
+                        <div class="set-input"><label>S4</label><input type="text" id="mer-5-s4" data-exercise="mer-5" data-target="20" oninput="handleInput(this)"></div>
                     </div>
                 </div>
                 
@@ -461,6 +506,7 @@
                         <div class="exercise-title">6. Rear delt fly machine</div>
                         <button class="demo-btn" onclick="openDemo('https://www.youtube.com/watch?v=YyF6dMyRbS0')">📹 Démo</button>
                     </div>
+                    <div class="performance-analysis" id="analysis-mer-6"></div>
                     <div class="exercise-details">
                         <div class="detail-item"><span class="detail-label">Séries:</span> 4x15</div>
                         <div class="detail-item"><span class="detail-label">Charge S1:</span> Pile 5</div>
@@ -468,10 +514,10 @@
                         <div class="detail-item"><span class="detail-label">Repos:</span> 45s</div>
                     </div>
                     <div class="sets-tracker">
-                        <div class="set-input"><label>S1</label><input type="text" id="mer-6-s1" placeholder="P5×15" oninput="autoSave()"></div>
-                        <div class="set-input"><label>S2</label><input type="text" id="mer-6-s2" oninput="autoSave()"></div>
-                        <div class="set-input"><label>S3</label><input type="text" id="mer-6-s3" oninput="autoSave()"></div>
-                        <div class="set-input"><label>S4</label><input type="text" id="mer-6-s4" oninput="autoSave()"></div>
+                        <div class="set-input"><label>S1</label><input type="text" id="mer-6-s1" data-exercise="mer-6" data-target="15" placeholder="P5×15" oninput="handleInput(this)"></div>
+                        <div class="set-input"><label>S2</label><input type="text" id="mer-6-s2" data-exercise="mer-6" data-target="15" oninput="handleInput(this)"></div>
+                        <div class="set-input"><label>S3</label><input type="text" id="mer-6-s3" data-exercise="mer-6" data-target="15" oninput="handleInput(this)"></div>
+                        <div class="set-input"><label>S4</label><input type="text" id="mer-6-s4" data-exercise="mer-6" data-target="15" oninput="handleInput(this)"></div>
                     </div>
                 </div>
                 
@@ -480,6 +526,7 @@
                         <div class="exercise-title">7. Shrugs haltères</div>
                         <button class="demo-btn" onclick="openDemo('https://www.youtube.com/watch?v=g6qbq4Lf1FI')">📹 Démo</button>
                     </div>
+                    <div class="performance-analysis" id="analysis-mer-7"></div>
                     <div class="exercise-details">
                         <div class="detail-item"><span class="detail-label">Séries:</span> 3x12</div>
                         <div class="detail-item"><span class="detail-label">Charge S1:</span> 28kg</div>
@@ -487,9 +534,9 @@
                         <div class="detail-item"><span class="detail-label">Repos:</span> 45s</div>
                     </div>
                     <div class="sets-tracker">
-                        <div class="set-input"><label>S1</label><input type="text" id="mer-7-s1" placeholder="28×12" oninput="autoSave()"></div>
-                        <div class="set-input"><label>S2</label><input type="text" id="mer-7-s2" oninput="autoSave()"></div>
-                        <div class="set-input"><label>S3</label><input type="text" id="mer-7-s3" oninput="autoSave()"></div>
+                        <div class="set-input"><label>S1</label><input type="text" id="mer-7-s1" data-exercise="mer-7" data-target="12" placeholder="28×12" oninput="handleInput(this)"></div>
+                        <div class="set-input"><label>S2</label><input type="text" id="mer-7-s2" data-exercise="mer-7" data-target="12" oninput="handleInput(this)"></div>
+                        <div class="set-input"><label>S3</label><input type="text" id="mer-7-s3" data-exercise="mer-7" data-target="12" oninput="handleInput(this)"></div>
                     </div>
                 </div>
                 
@@ -498,6 +545,7 @@
                         <div class="exercise-title">8. Curl haltères banc incliné</div>
                         <button class="demo-btn" onclick="openDemo('https://www.youtube.com/watch?v=soxrZlIl35U')">📹 Démo</button>
                     </div>
+                    <div class="performance-analysis" id="analysis-mer-8"></div>
                     <div class="exercise-details">
                         <div class="detail-item"><span class="detail-label">Séries:</span> 3x10</div>
                         <div class="detail-item"><span class="detail-label">Charge S1:</span> 14kg</div>
@@ -505,9 +553,9 @@
                         <div class="detail-item"><span class="detail-label">Repos:</span> 45s</div>
                     </div>
                     <div class="sets-tracker">
-                        <div class="set-input"><label>S1</label><input type="text" id="mer-8-s1" placeholder="14×10" oninput="autoSave()"></div>
-                        <div class="set-input"><label>S2</label><input type="text" id="mer-8-s2" oninput="autoSave()"></div>
-                        <div class="set-input"><label>S3</label><input type="text" id="mer-8-s3" oninput="autoSave()"></div>
+                        <div class="set-input"><label>S1</label><input type="text" id="mer-8-s1" data-exercise="mer-8" data-target="10" placeholder="14×10" oninput="handleInput(this)"></div>
+                        <div class="set-input"><label>S2</label><input type="text" id="mer-8-s2" data-exercise="mer-8" data-target="10" oninput="handleInput(this)"></div>
+                        <div class="set-input"><label>S3</label><input type="text" id="mer-8-s3" data-exercise="mer-8" data-target="10" oninput="handleInput(this)"></div>
                     </div>
                 </div>
             </div>
@@ -538,6 +586,7 @@
                         <button class="demo-btn" onclick="openDemo('https://www.youtube.com/watch?v=2SHsk9AzdjA')">📹 Démo</button>
                     </div>
                     <div class="last-week-data" id="lastweek-ven-rdl">💾 Semaine dernière: Chargement...</div>
+                    <div class="performance-analysis" id="analysis-ven-1"></div>
                     <div class="exercise-details">
                         <div class="detail-item"><span class="detail-label">Séries:</span> 5x8</div>
                         <div class="detail-item"><span class="detail-label">Charge S1:</span> 70kg</div>
@@ -547,11 +596,11 @@
                     </div>
                     <div class="movement-diagram">⬇️ 3s stretch ischio → 🍑 Squeeze fessiers → ⬆️ 2s</div>
                     <div class="sets-tracker">
-                        <div class="set-input"><label>S1</label><input type="text" id="ven-1-s1" placeholder="70×8" oninput="autoSave()"></div>
-                        <div class="set-input"><label>S2</label><input type="text" id="ven-1-s2" oninput="autoSave()"></div>
-                        <div class="set-input"><label>S3</label><input type="text" id="ven-1-s3" oninput="autoSave()"></div>
-                        <div class="set-input"><label>S4</label><input type="text" id="ven-1-s4" oninput="autoSave()"></div>
-                        <div class="set-input"><label>S5</label><input type="text" id="ven-1-s5" oninput="autoSave()"></div>
+                        <div class="set-input"><label>S1</label><input type="text" id="ven-1-s1" data-exercise="ven-1" data-target="8" placeholder="70×8" oninput="handleInput(this)"></div>
+                        <div class="set-input"><label>S2</label><input type="text" id="ven-1-s2" data-exercise="ven-1" data-target="8" oninput="handleInput(this)"></div>
+                        <div class="set-input"><label>S3</label><input type="text" id="ven-1-s3" data-exercise="ven-1" data-target="8" oninput="handleInput(this)"></div>
+                        <div class="set-input"><label>S4</label><input type="text" id="ven-1-s4" data-exercise="ven-1" data-target="8" oninput="handleInput(this)"></div>
+                        <div class="set-input"><label>S5</label><input type="text" id="ven-1-s5" data-exercise="ven-1" data-target="8" oninput="handleInput(this)"></div>
                     </div>
                 </div>
                 
@@ -561,6 +610,7 @@
                         <button class="demo-btn" onclick="openDemo('https://www.youtube.com/watch?v=xDmFkJxPzeM')">📹 Démo</button>
                     </div>
                     <div class="last-week-data" id="lastweek-ven-hip">💾 Semaine dernière: Chargement...</div>
+                    <div class="performance-analysis" id="analysis-ven-2"></div>
                     <div class="exercise-details">
                         <div class="detail-item"><span class="detail-label">Séries:</span> 4x12</div>
                         <div class="detail-item"><span class="detail-label">Charge S1:</span> 80kg</div>
@@ -568,10 +618,10 @@
                         <div class="detail-item"><span class="detail-label">Repos:</span> 90s</div>
                     </div>
                     <div class="sets-tracker">
-                        <div class="set-input"><label>S1</label><input type="text" id="ven-2-s1" placeholder="80×12" oninput="autoSave()"></div>
-                        <div class="set-input"><label>S2</label><input type="text" id="ven-2-s2" oninput="autoSave()"></div>
-                        <div class="set-input"><label>S3</label><input type="text" id="ven-2-s3" oninput="autoSave()"></div>
-                        <div class="set-input"><label>S4</label><input type="text" id="ven-2-s4" oninput="autoSave()"></div>
+                        <div class="set-input"><label>S1</label><input type="text" id="ven-2-s1" data-exercise="ven-2" data-target="12" placeholder="80×12" oninput="handleInput(this)"></div>
+                        <div class="set-input"><label>S2</label><input type="text" id="ven-2-s2" data-exercise="ven-2" data-target="12" oninput="handleInput(this)"></div>
+                        <div class="set-input"><label>S3</label><input type="text" id="ven-2-s3" data-exercise="ven-2" data-target="12" oninput="handleInput(this)"></div>
+                        <div class="set-input"><label>S4</label><input type="text" id="ven-2-s4" data-exercise="ven-2" data-target="12" oninput="handleInput(this)"></div>
                     </div>
                 </div>
             </div>
@@ -584,6 +634,7 @@
                         <div class="exercise-title">3. Goblet squat</div>
                         <button class="demo-btn" onclick="openDemo('https://www.youtube.com/watch?v=MeIiIdhvXT4')">📹 Démo</button>
                     </div>
+                    <div class="performance-analysis" id="analysis-ven-3"></div>
                     <div class="exercise-details">
                         <div class="detail-item"><span class="detail-label">Séries:</span> 4x12</div>
                         <div class="detail-item"><span class="detail-label">Charge S1:</span> 32kg</div>
@@ -591,10 +642,10 @@
                         <div class="detail-item"><span class="detail-label">Repos:</span> 60s</div>
                     </div>
                     <div class="sets-tracker">
-                        <div class="set-input"><label>S1</label><input type="text" id="ven-3-s1" placeholder="32×12" oninput="autoSave()"></div>
-                        <div class="set-input"><label>S2</label><input type="text" id="ven-3-s2" oninput="autoSave()"></div>
-                        <div class="set-input"><label>S3</label><input type="text" id="ven-3-s3" oninput="autoSave()"></div>
-                        <div class="set-input"><label>S4</label><input type="text" id="ven-3-s4" oninput="autoSave()"></div>
+                        <div class="set-input"><label>S1</label><input type="text" id="ven-3-s1" data-exercise="ven-3" data-target="12" placeholder="32×12" oninput="handleInput(this)"></div>
+                        <div class="set-input"><label>S2</label><input type="text" id="ven-3-s2" data-exercise="ven-3" data-target="12" oninput="handleInput(this)"></div>
+                        <div class="set-input"><label>S3</label><input type="text" id="ven-3-s3" data-exercise="ven-3" data-target="12" oninput="handleInput(this)"></div>
+                        <div class="set-input"><label>S4</label><input type="text" id="ven-3-s4" data-exercise="ven-3" data-target="12" oninput="handleInput(this)"></div>
                     </div>
                 </div>
                 
@@ -603,6 +654,7 @@
                         <div class="exercise-title">4. Presse à cuisses</div>
                         <button class="demo-btn" onclick="openDemo('https://www.youtube.com/watch?v=IZxyjW7MPJQ')">📹 Démo</button>
                     </div>
+                    <div class="performance-analysis" id="analysis-ven-4"></div>
                     <div class="exercise-details">
                         <div class="detail-item"><span class="detail-label">Séries:</span> 4x12</div>
                         <div class="detail-item"><span class="detail-label">Charge S1:</span> 120kg</div>
@@ -610,10 +662,10 @@
                         <div class="detail-item"><span class="detail-label">Repos:</span> 60s</div>
                     </div>
                     <div class="sets-tracker">
-                        <div class="set-input"><label>S1</label><input type="text" id="ven-4-s1" placeholder="120×12" oninput="autoSave()"></div>
-                        <div class="set-input"><label>S2</label><input type="text" id="ven-4-s2" oninput="autoSave()"></div>
-                        <div class="set-input"><label>S3</label><input type="text" id="ven-4-s3" oninput="autoSave()"></div>
-                        <div class="set-input"><label>S4</label><input type="text" id="ven-4-s4" oninput="autoSave()"></div>
+                        <div class="set-input"><label>S1</label><input type="text" id="ven-4-s1" data-exercise="ven-4" data-target="12" placeholder="120×12" oninput="handleInput(this)"></div>
+                        <div class="set-input"><label>S2</label><input type="text" id="ven-4-s2" data-exercise="ven-4" data-target="12" oninput="handleInput(this)"></div>
+                        <div class="set-input"><label>S3</label><input type="text" id="ven-4-s3" data-exercise="ven-4" data-target="12" oninput="handleInput(this)"></div>
+                        <div class="set-input"><label>S4</label><input type="text" id="ven-4-s4" data-exercise="ven-4" data-target="12" oninput="handleInput(this)"></div>
                     </div>
                 </div>
             </div>
@@ -626,6 +678,7 @@
                         <div class="exercise-title">5. Fentes bulgares</div>
                         <button class="demo-btn" onclick="openDemo('https://www.youtube.com/watch?v=2C-uNgKwPLE')">📹 Démo</button>
                     </div>
+                    <div class="performance-analysis" id="analysis-ven-5"></div>
                     <div class="exercise-details">
                         <div class="detail-item"><span class="detail-label">Séries:</span> 3x8/jambe</div>
                         <div class="detail-item"><span class="detail-label">Charge S1:</span> 18kg</div>
@@ -633,9 +686,9 @@
                         <div class="detail-item"><span class="detail-label">Repos:</span> 60s</div>
                     </div>
                     <div class="sets-tracker">
-                        <div class="set-input"><label>S1 (D/G)</label><input type="text" id="ven-5-s1" placeholder="18×8/8" oninput="autoSave()"></div>
-                        <div class="set-input"><label>S2</label><input type="text" id="ven-5-s2" oninput="autoSave()"></div>
-                        <div class="set-input"><label>S3</label><input type="text" id="ven-5-s3" oninput="autoSave()"></div>
+                        <div class="set-input"><label>S1 (D/G)</label><input type="text" id="ven-5-s1" data-exercise="ven-5" data-target="8" placeholder="18×8/8" oninput="handleInput(this)"></div>
+                        <div class="set-input"><label>S2</label><input type="text" id="ven-5-s2" data-exercise="ven-5" data-target="8" oninput="handleInput(this)"></div>
+                        <div class="set-input"><label>S3</label><input type="text" id="ven-5-s3" data-exercise="ven-5" data-target="8" oninput="handleInput(this)"></div>
                     </div>
                 </div>
                 
@@ -644,6 +697,7 @@
                         <div class="exercise-title">6. Leg curl allongé</div>
                         <button class="demo-btn" onclick="openDemo('https://www.youtube.com/watch?v=ELOCsoDSmrg')">📹 Démo</button>
                     </div>
+                    <div class="performance-analysis" id="analysis-ven-6"></div>
                     <div class="exercise-details">
                         <div class="detail-item"><span class="detail-label">Séries:</span> 4x12</div>
                         <div class="detail-item"><span class="detail-label">Charge S1:</span> Pile 6</div>
@@ -651,10 +705,10 @@
                         <div class="detail-item"><span class="detail-label">Repos:</span> 45s</div>
                     </div>
                     <div class="sets-tracker">
-                        <div class="set-input"><label>S1</label><input type="text" id="ven-6-s1" placeholder="P6×12" oninput="autoSave()"></div>
-                        <div class="set-input"><label>S2</label><input type="text" id="ven-6-s2" oninput="autoSave()"></div>
-                        <div class="set-input"><label>S3</label><input type="text" id="ven-6-s3" oninput="autoSave()"></div>
-                        <div class="set-input"><label>S4</label><input type="text" id="ven-6-s4" oninput="autoSave()"></div>
+                        <div class="set-input"><label>S1</label><input type="text" id="ven-6-s1" data-exercise="ven-6" data-target="12" placeholder="P6×12" oninput="handleInput(this)"></div>
+                        <div class="set-input"><label>S2</label><input type="text" id="ven-6-s2" data-exercise="ven-6" data-target="12" oninput="handleInput(this)"></div>
+                        <div class="set-input"><label>S3</label><input type="text" id="ven-6-s3" data-exercise="ven-6" data-target="12" oninput="handleInput(this)"></div>
+                        <div class="set-input"><label>S4</label><input type="text" id="ven-6-s4" data-exercise="ven-6" data-target="12" oninput="handleInput(this)"></div>
                     </div>
                 </div>
                 
@@ -663,6 +717,7 @@
                         <div class="exercise-title">7. Mollets presse</div>
                         <button class="demo-btn" onclick="openDemo('https://www.youtube.com/watch?v=JbyjNymZOJo')">📹 Démo</button>
                     </div>
+                    <div class="performance-analysis" id="analysis-ven-7"></div>
                     <div class="exercise-details">
                         <div class="detail-item"><span class="detail-label">Séries:</span> 4x15</div>
                         <div class="detail-item"><span class="detail-label">Charge S1:</span> 80kg</div>
@@ -670,10 +725,10 @@
                         <div class="detail-item"><span class="detail-label">Repos:</span> 45s</div>
                     </div>
                     <div class="sets-tracker">
-                        <div class="set-input"><label>S1</label><input type="text" id="ven-7-s1" placeholder="80×15" oninput="autoSave()"></div>
-                        <div class="set-input"><label>S2</label><input type="text" id="ven-7-s2" oninput="autoSave()"></div>
-                        <div class="set-input"><label>S3</label><input type="text" id="ven-7-s3" oninput="autoSave()"></div>
-                        <div class="set-input"><label>S4</label><input type="text" id="ven-7-s4" oninput="autoSave()"></div>
+                        <div class="set-input"><label>S1</label><input type="text" id="ven-7-s1" data-exercise="ven-7" data-target="15" placeholder="80×15" oninput="handleInput(this)"></div>
+                        <div class="set-input"><label>S2</label><input type="text" id="ven-7-s2" data-exercise="ven-7" data-target="15" oninput="handleInput(this)"></div>
+                        <div class="set-input"><label>S3</label><input type="text" id="ven-7-s3" data-exercise="ven-7" data-target="15" oninput="handleInput(this)"></div>
+                        <div class="set-input"><label>S4</label><input type="text" id="ven-7-s4" data-exercise="ven-7" data-target="15" oninput="handleInput(this)"></div>
                     </div>
                 </div>
             </div>
@@ -681,9 +736,9 @@
             <textarea class="notes-area" id="notes-vendredi" placeholder="📝 Notes (genou ?)..." oninput="autoSave()"></textarea>
         </div>
         
-        <!-- PROGRESSION -->
+        <!-- SUIVI PROGRESSION -->
         <div id="tab-progression" class="tab-content">
-            <h2 style="color: #667eea; margin-bottom: 12px; font-size: 20px;">📈 PROGRESSION</h2>
+            <h2 style="color: #667eea; margin-bottom: 12px; font-size: 20px;">📊 SUIVI</h2>
             
             <div class="workout-section">
                 <h3>📸 SUIVI PHOTOS</h3>
@@ -709,6 +764,10 @@
                         </div>
                     </div>
                     <input type="file" id="photo-input" accept="image/*" capture="environment" style="display: none;" onchange="handlePhotoUpload()">
+                    
+                    <div class="export-buttons">
+                        <button class="btn btn-success" onclick="analyzePhotosWithAI()">🤖 Analyser avec IA</button>
+                    </div>
                 </div>
                 
                 <div class="photo-upload-section" style="margin-top: 20px;">
@@ -735,11 +794,75 @@
             <div class="workout-section">
                 <h3>📝 Historique</h3>
                 <div id="workout-history"><p style="color: #999;">Aucune séance</p></div>
-                <button class="btn btn-secondary" style="width: 100%; margin-top: 10px;" onclick="exportReport()">📧 Exporter rapport complet</button>
+                <div class="export-buttons" style="margin-top: 15px;">
+                    <button class="btn btn-secondary" onclick="exportReport()">📋 Copier rapport</button>
+                    <button class="btn btn-secondary" onclick="emailCoach()">📧 Email coach</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- ÉVOLUTION 8 SEMAINES -->
+        <div id="tab-evolution" class="tab-content">
+            <h2 style="color: #667eea; margin-bottom: 12px; font-size: 20px;">📈 PROGRESSION 8 SEMAINES</h2>
+            
+            <div class="workout-section">
+                <h3>🎯 Vue d'ensemble</h3>
+                <div id="week-overview" style="display: flex; gap: 8px; justify-content: center; flex-wrap: wrap; margin: 15px 0;">
+                    <!-- Généré dynamiquement -->
+                </div>
+            </div>
+
+            <div class="workout-section">
+                <h3>💪 Développé Incliné (4x8)</h3>
+                <table class="progression-table" id="table-incline">
+                    <thead>
+                        <tr><th>Semaine</th><th>S1</th><th>S2</th><th>S3</th><th>S4</th><th>Moyenne</th><th>Statut</th></tr>
+                    </thead>
+                    <tbody>
+                        <!-- Généré dynamiquement -->
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="workout-section">
+                <h3>🏋️ Romanian Deadlift (5x8)</h3>
+                <table class="progression-table" id="table-rdl">
+                    <thead>
+                        <tr><th>Semaine</th><th>S1</th><th>S2</th><th>S3</th><th>S4</th><th>S5</th><th>Moyenne</th><th>Statut</th></tr>
+                    </thead>
+                    <tbody>
+                        <!-- Généré dynamiquement -->
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="workout-section">
+                <h3>💪 Tractions Assistées (5x5)</h3>
+                <table class="progression-table" id="table-tractions">
+                    <thead>
+                        <tr><th>Semaine</th><th>S1</th><th>S2</th><th>S3</th><th>S4</th><th>S5</th><th>Total</th><th>Statut</th></tr>
+                    </thead>
+                    <tbody>
+                        <!-- Généré dynamiquement -->
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="workout-section">
+                <h3>📊 Évolution Corporelle</h3>
+                <table class="progression-table" id="table-body">
+                    <thead>
+                        <tr><th>Semaine</th><th>Poids (kg)</th><th>Δ vs S0</th><th>Tour taille (cm)</th><th>Δ vs S0</th></tr>
+                    </thead>
+                    <tbody>
+                        <!-- Généré dynamiquement -->
+                    </tbody>
+                </table>
             </div>
         </div>
     </div>
 
+    <!-- Modal simple de progression -->
     <div class="modal" id="progression-modal">
         <div class="modal-content">
             <div class="modal-icon" id="modal-icon">🎉</div>
@@ -749,8 +872,530 @@
         </div>
     </div>
 
+    <!-- Modal de feedback -->
+    <div class="modal" id="feedback-modal">
+        <div class="modal-content">
+            <div class="modal-icon">📊</div>
+            <div class="modal-title">Feedback Séance</div>
+            
+            <div class="feedback-field">
+                <label>Énergie pré-workout</label>
+                <div class="slider-container">
+                    <input type="range" class="slider" id="energie" min="1" max="10" value="5" oninput="updateSliderValue('energie')">
+                    <span class="slider-value" id="energie-value">5/10</span>
+                </div>
+            </div>
+            
+            <div class="feedback-field">
+                <label>Qualité sommeil</label>
+                <div class="slider-container">
+                    <input type="range" class="slider" id="sommeil" min="1" max="10" value="5" oninput="updateSliderValue('sommeil')">
+                    <span class="slider-value" id="sommeil-value">5/10</span>
+                </div>
+            </div>
+            
+            <div class="feedback-field">
+                <label>Congestion musculaire</label>
+                <div class="slider-container">
+                    <input type="range" class="slider" id="congestion" min="1" max="10" value="5" oninput="updateSliderValue('congestion')">
+                    <span class="slider-value" id="congestion-value">5/10</span>
+                </div>
+            </div>
+            
+            <div class="feedback-field">
+                <label>Douleurs articulaires</label>
+                <div class="slider-container">
+                    <input type="range" class="slider" id="douleurs" min="0" max="10" value="0" oninput="updateSliderValue('douleurs')">
+                    <span class="slider-value" id="douleurs-value">0/10</span>
+                </div>
+            </div>
+            
+            <div class="feedback-field">
+                <label>RPE global séance</label>
+                <div class="slider-container">
+                    <input type="range" class="slider" id="rpe" min="1" max="10" value="5" oninput="updateSliderValue('rpe')">
+                    <span class="slider-value" id="rpe-value">5/10</span>
+                </div>
+            </div>
+            
+            <div class="feedback-field">
+                <label>Notes (min. 20 caractères)</label>
+                <textarea class="feedback-textarea" id="feedback-notes" placeholder="Excellente séance, bonne congestion..." oninput="updateCharCounter()"></textarea>
+                <div class="char-counter" id="char-counter">0/20 caractères</div>
+            </div>
+            
+            <div class="export-buttons">
+                <button class="btn btn-secondary" onclick="closeFeedbackModal()">Annuler</button>
+                <button class="btn btn-primary" id="generate-report-btn" onclick="copyReport()" disabled>📋 Copier</button>
+                <button class="btn btn-success" id="open-chatgpt-btn" onclick="openChatGPT()" disabled>🤖 ChatGPT</button>
+                <button class="btn btn-secondary" id="email-report-btn" onclick="emailReport()" disabled>📧 Email</button>
+            </div>
+        </div>
+    </div>
+
     <script>
-let timerInterval=null,timeLeft=0,sessionTimerInterval=null,sessionSeconds=0,sessionPaused=false;let currentWeek=parseInt(localStorage.getItem('currentWeek')||'1'),autoSaveTimeout=null,currentPhotoType='';window.onload=function(){updateWeekDisplay();loadAllData();checkPhotoReminders();loadPhotos();updatePhotoComparison()};function updateWeekDisplay(){document.getElementById('week-display').textContent=`SEMAINE ${currentWeek} / 8`;localStorage.setItem('currentWeek',currentWeek);if(currentWeek===2||currentWeek===4||currentWeek===6||currentWeek===8){setTimeout(()=>showModal('📊','Temps de mesurer !',`Fin de semaine ${currentWeek} : Prends tes mesures (poids, tour de taille, photos)`),1000)}loadPhotos();updatePhotoComparison()}function changeWeek(delta){const newWeek=currentWeek+delta;if(newWeek>=1&&newWeek<=8){currentWeek=newWeek;updateWeekDisplay();loadAllData();analyzeProgress();checkPhotoReminders()}}function resetWeek(){if(confirm('Remettre à Semaine 1 ?')){currentWeek=1;updateWeekDisplay();loadAllData();checkPhotoReminders()}}function autoSave(){clearTimeout(autoSaveTimeout);autoSaveTimeout=setTimeout(()=>{const activeTab=document.querySelector('.tab-content.active').id.replace('tab-','');saveWorkoutData(activeTab);showAutoSaveIndicator()},500)}function showAutoSaveIndicator(){const indicator=document.getElementById('auto-save-indicator');indicator.classList.add('show');setTimeout(()=>indicator.classList.remove('show'),2000)}function saveWorkoutData(day){const data={date:new Date().toISOString().split('T')[0],week:currentWeek,day:day,exercises:{},notes:document.getElementById('notes-'+day)?.value||''};const inputs=document.querySelectorAll('#tab-'+day+' input[type="text"]');inputs.forEach(input=>{if(input.value){data.exercises[input.id]=input.value;input.classList.add('auto-saved');setTimeout(()=>input.classList.remove('auto-saved'),1000)}});localStorage.setItem(`workout-${day}-w${currentWeek}`,JSON.stringify(data));const history=JSON.parse(localStorage.getItem('workoutHistory')||'[]');const existingIndex=history.findIndex(w=>w.day===day&&w.week===currentWeek);if(existingIndex>=0)history[existingIndex]=data;else history.push(data);localStorage.setItem('workoutHistory',JSON.stringify(history))}function loadAllData(){['lundi','mercredi','vendredi'].forEach(day=>{loadWorkoutData(day);loadLastWeekData(day)});loadProgressData()}function loadWorkoutData(day){const saved=localStorage.getItem(`workout-${day}-w${currentWeek}`);if(!saved)return;const data=JSON.parse(saved);Object.keys(data.exercises).forEach(id=>{const input=document.getElementById(id);if(input)input.value=data.exercises[id]});const notesArea=document.getElementById('notes-'+day);if(notesArea&&data.notes)notesArea.value=data.notes}function loadLastWeekData(day){if(currentWeek===1)return;const lastWeek=currentWeek-1;const saved=localStorage.getItem(`workout-${day}-w${lastWeek}`);const exerciseMap={'lundi':[{id:'lun-incline',display:'lastweek-lun-incline',keys:['lun-1a-s1','lun-1a-s2','lun-1a-s3','lun-1a-s4']},{id:'lun-rowing',display:'lastweek-lun-rowing',keys:['lun-1b-s1','lun-1b-s2']}],'mercredi':[{id:'mer-tractions',display:'lastweek-mer-tractions',keys:['mer-1-s1','mer-1-s2','mer-1-s3','mer-1-s4','mer-1-s5']},{id:'mer-rowing',display:'lastweek-mer-rowing',keys:['mer-2-s1','mer-2-s2']}],'vendredi':[{id:'ven-rdl',display:'lastweek-ven-rdl',keys:['ven-1-s1','ven-1-s2']},{id:'ven-hip',display:'lastweek-ven-hip',keys:['ven-2-s1','ven-2-s2']}]};if(!saved){(exerciseMap[day]||[]).forEach(ex=>{const elem=document.getElementById(ex.display);if(elem)elem.textContent='💾 Pas de données semaine précédente'});return}const data=JSON.parse(saved);(exerciseMap[day]||[]).forEach(ex=>{const values=ex.keys.map(k=>data.exercises[k]).filter(v=>v);if(values.length>0){const elem=document.getElementById(ex.display);if(elem)elem.textContent=`💾 S${lastWeek}: ${values.join(', ')}`;generateSuggestion(ex.id,values)}})}function generateSuggestion(exerciseId,lastWeekValues){const suggestionElem=document.getElementById('suggestion-'+exerciseId);if(!suggestionElem)return;const lastSet=lastWeekValues[lastWeekValues.length-1];const match=lastSet?.match(/(\d+)×(\d+)/);if(!match)return;const weight=parseInt(match[1]),reps=parseInt(match[2]);if(reps>=8){suggestionElem.innerHTML=`💡 Suggestion: <strong>${weight+2.5}kg</strong> (dernière série ${reps} reps facile → +2,5kg !)`;suggestionElem.style.background='#e8f5e9';suggestionElem.style.borderColor='#51cf66'}else{suggestionElem.innerHTML=`💡 Suggestion: <strong>${weight}kg</strong> (même charge, vise 8 reps série 4)`}}function analyzeProgress(){const exercises=['lun-incline','mer-tractions','ven-rdl'];exercises.forEach(id=>{const elem=document.getElementById('progress-'+id);if(!elem)return;const currentData=localStorage.getItem(`workout-${id.split('-')[0]}-w${currentWeek}`);const lastData=localStorage.getItem(`workout-${id.split('-')[0]}-w${currentWeek-1}`);if(!currentData||!lastData){elem.textContent='⚪';return}elem.textContent='🟢'})}function loadProgressData(){const measures=localStorage.getItem('currentMeasures');if(measures){const data=JSON.parse(measures);['poids','taille'].forEach(key=>{const elem=document.getElementById('prog-'+key);if(elem&&data[key])elem.value=data[key]})}const progress=localStorage.getItem('currentProgress');if(progress){const data=JSON.parse(progress);['incline','tractions','rdl'].forEach(key=>{const elem=document.getElementById('prog-'+key);if(elem&&data[key])elem.value=data[key]})}}function saveProgressData(){const measures={poids:document.getElementById('prog-poids')?.value||'',taille:document.getElementById('prog-taille')?.value||''};localStorage.setItem('currentMeasures',JSON.stringify(measures));const progress={incline:document.getElementById('prog-incline')?.value||'',tractions:document.getElementById('prog-tractions')?.value||'',rdl:document.getElementById('prog-rdl')?.value||''};localStorage.setItem('currentProgress',JSON.stringify(progress));showAutoSaveIndicator()}function showTab(tabName){document.querySelectorAll('.tab-content').forEach(c=>c.classList.remove('active'));document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));document.getElementById('tab-'+tabName).classList.add('active');event.target.classList.add('active');if(['lundi','mercredi','vendredi'].includes(tabName)){startSessionTimer();loadWorkoutData(tabName);loadLastWeekData(tabName)}else stopSessionTimer();if(tabName==='progression')loadHistory()}function startTimer(seconds){stopTimer();timeLeft=seconds;updateTimerDisplay();timerInterval=setInterval(()=>{timeLeft--;updateTimerDisplay();if(timeLeft===10)document.getElementById('timer-display').classList.add('warning');if(timeLeft<=0){stopTimer();playLoudBeep();if('vibrate'in navigator)navigator.vibrate([500,200,500]);if(Notification.permission==='granted')new Notification('⏰ Repos terminé !',{body:'Go next série ! 💪',icon:'⏰',requireInteraction:false});showModal('⏰','Repos terminé !','Go next série ! 💪')}},1000)}function stopTimer(){if(timerInterval){clearInterval(timerInterval);timerInterval=null}timeLeft=0;updateTimerDisplay();document.getElementById('timer-display').classList.remove('warning')}function updateTimerDisplay(){const minutes=Math.floor(timeLeft/60),seconds=timeLeft%60;document.getElementById('timer-display').textContent=`${String(minutes).padStart(2,'0')}:${String(seconds).padStart(2,'0')}`}function playLoudBeep(){const context=new(window.AudioContext||window.webkitAudioContext)();for(let i=0;i<3;i++){setTimeout(()=>{const oscillator=context.createOscillator(),gainNode=context.createGain();oscillator.connect(gainNode);gainNode.connect(context.destination);oscillator.frequency.value=800;oscillator.type='square';gainNode.gain.setValueAtTime(0.5,context.currentTime);oscillator.start(context.currentTime);oscillator.stop(context.currentTime+0.3)},i*400)}}function startSessionTimer(){if(!sessionPaused){stopSessionTimer();sessionSeconds=0}sessionPaused=false;document.getElementById('session-timer').style.display='block';document.getElementById('pause-session-btn').textContent='⏸ Pause';updateSessionTimerDisplay();sessionTimerInterval=setInterval(()=>{sessionSeconds++;updateSessionTimerDisplay();if(sessionSeconds===2700){showModal('⚠️','45 minutes !','Accélère le rythme pour finir en 75 min max');if(Notification.permission==='granted')new Notification('⚠️ 45 minutes écoulées',{body:'Accélère le rythme pour finir en 75 min max',icon:'⚠️'})}if(sessionSeconds===4500){showModal('🔥','75 minutes !','Séance longue ! Pense à terminer dans 5-10 min');if(Notification.permission==='granted')new Notification('🔥 75 minutes !',{body:'Séance longue ! Termine rapidement',icon:'🔥'})}},1000)}function pauseSessionTimer(){if(sessionTimerInterval){clearInterval(sessionTimerInterval);sessionTimerInterval=null;sessionPaused=true;document.getElementById('pause-session-btn').textContent='▶️ Reprendre'}else if(sessionPaused)startSessionTimer()}function stopSessionTimer(){if(sessionTimerInterval){clearInterval(sessionTimerInterval);sessionTimerInterval=null}document.getElementById('session-timer').style.display='none';sessionSeconds=0;sessionPaused=false}function updateSessionTimerDisplay(){const minutes=Math.floor(sessionSeconds/60),seconds=sessionSeconds%60;document.getElementById('session-timer-display').textContent=`${String(minutes).padStart(2,'0')}:${String(seconds).padStart(2,'0')} / 75 min`}function endSession(){const activeTab=document.querySelector('.tab-content.active').id.replace('tab-','');if(!['lundi','mercredi','vendredi'].includes(activeTab))return;const duration=Math.floor(sessionSeconds/60),report=generateSessionReport(activeTab,duration);navigator.clipboard.writeText(report).then(()=>{showModal('✅','Séance terminée !',`Durée: ${duration} min\n\nRapport copié ! Envoie-le à ton coach.`);stopSessionTimer()})}function generateSessionReport(day,duration){const data=JSON.parse(localStorage.getItem(`workout-${day}-w${currentWeek}`)||'{}');const dayNames={lundi:'LUNDI',mercredi:'MERCREDI',vendredi:'VENDREDI'};let report=`🏋️ SÉANCE ${dayNames[day]} - SEMAINE ${currentWeek}\n📅 Date: ${new Date().toLocaleDateString('fr-FR')}\n⏱️ Durée: ${duration} minutes\n\n📊 EXERCICES RÉALISÉS:\n`;const exercises=Object.entries(data.exercises||{});if(exercises.length===0)report+=`(Aucune donnée enregistrée)\n\n`;else exercises.forEach(([key,value])=>{const cleanKey=key.replace(/lun-|mer-|ven-/g,'').toUpperCase();report+=`  ${cleanKey}: ${value}\n`});report+=`\n📝 NOTES:\n${data.notes||'(Aucune note)'}\n\n💪 SENSATIONS:\n- Énergie: __/10\n- Congestion: __/10\n- Douleurs: __/10\n\n🎯 PROCHAIN OBJECTIF:\n- (À compléter avec coach)\n`;return report}function checkPhotoReminders(){const photoWeeks=[0,4,8],reminderDiv=document.getElementById('photo-reminder'),currentPhotoWeekSpan=document.getElementById('current-photo-week');if(!reminderDiv)return;if(currentPhotoWeekSpan)currentPhotoWeekSpan.textContent=currentWeek;if(photoWeeks.includes(currentWeek)){const message=currentWeek===0?'AVANT (face/dos/profil)':currentWeek===4?'MI-PARCOURS - Compare avec S0 !':'FINALES - Transformation complète !';reminderDiv.innerHTML=`<div class="warning">📸 S${currentWeek} : Prends tes photos ${message}</div>`}else reminderDiv.innerHTML=`<div class="success">✅ Prochaines photos: Semaine ${photoWeeks.find(w=>w>currentWeek)||8}</div>`}function uploadPhoto(type){currentPhotoType=type;document.getElementById('photo-input').click()}function handlePhotoUpload(){const file=document.getElementById('photo-input').files[0];if(!file)return;const reader=new FileReader();reader.onload=function(e){const img=new Image();img.onload=function(){const canvas=document.createElement('canvas'),maxSize=800;let width=img.width,height=img.height;if(width>height){if(width>maxSize){height*=maxSize/width;width=maxSize}}else{if(height>maxSize){width*=maxSize/height;height=maxSize}}canvas.width=width;canvas.height=height;const ctx=canvas.getContext('2d');ctx.drawImage(img,0,0,width,height);const compressedData=canvas.toDataURL('image/jpeg',0.7);savePhoto(currentPhotoType,compressedData)};img.src=e.target.result};reader.readAsDataURL(file)}function savePhoto(type,dataUrl){const key=`photo-w${currentWeek}-${type}`;localStorage.setItem(key,dataUrl);const imgElement=document.getElementById(`photo-${type}`),placeholder=document.getElementById(`placeholder-${type}`),photoItem=imgElement.parentElement;imgElement.src=dataUrl;imgElement.style.display='block';placeholder.style.display='none';photoItem.classList.add('has-photo');showAutoSaveIndicator();updatePhotoComparison()}function deletePhoto(type,event){event.stopPropagation();if(!confirm('Supprimer cette photo ?'))return;const key=`photo-w${currentWeek}-${type}`;localStorage.removeItem(key);const imgElement=document.getElementById(`photo-${type}`),placeholder=document.getElementById(`placeholder-${type}`),photoItem=imgElement.parentElement;imgElement.style.display='none';placeholder.style.display='flex';photoItem.classList.remove('has-photo');updatePhotoComparison()}function loadPhotos(){['face','dos','profil'].forEach(type=>{const key=`photo-w${currentWeek}-${type}`,dataUrl=localStorage.getItem(key);const imgElement=document.getElementById(`photo-${type}`),placeholder=document.getElementById(`placeholder-${type}`),photoItem=imgElement.parentElement;if(dataUrl){imgElement.src=dataUrl;imgElement.style.display='block';placeholder.style.display='none';photoItem.classList.add('has-photo')}else{imgElement.style.display='none';placeholder.style.display='flex';photoItem.classList.remove('has-photo')}})}function updatePhotoComparison(){const comparisonDiv=document.getElementById('photo-comparison');if(!comparisonDiv)return;const weeks=[0,1,4,8];const hasAnyPhotos=weeks.some(w=>localStorage.getItem(`photo-w${w}-face`)||localStorage.getItem(`photo-w${w}-dos`)||localStorage.getItem(`photo-w${w}-profil`));if(!hasAnyPhotos){comparisonDiv.innerHTML='<p style="color: #999; text-align: center;">Prends tes premières photos pour voir ta progression !</p>';return}let html='';weeks.forEach(week=>{const hasFace=localStorage.getItem(`photo-w${week}-face`),hasDos=localStorage.getItem(`photo-w${week}-dos`),hasProfil=localStorage.getItem(`photo-w${week}-profil`);if(hasFace||hasDos||hasProfil){html+=`<div class="comparison-week"><h4>S${week}</h4><div class="comparison-photos">`;['face','dos','profil'].forEach(type=>{const photoKey=`photo-w${week}-${type}`,photoData=localStorage.getItem(photoKey);if(photoData)html+=`<div class="comparison-photo"><img src="${photoData}"></div>`;else html+=`<div class="comparison-photo" style="background: #e0e0e0;"></div>`});html+=`</div></div>`}});comparisonDiv.innerHTML=html}function exportReport(){const history=JSON.parse(localStorage.getItem('workoutHistory')||'[]'),measures=JSON.parse(localStorage.getItem('currentMeasures')||'{}');let report=`📊 BILAN PROGRAMME MASSE BUILDER\n📅 Date: ${new Date().toLocaleDateString('fr-FR')}\n🗓️ Semaine actuelle: ${currentWeek}/8\n\n━━━━━━━━━━━━━━━━━━━━━━━━━━\n📏 MESURES ACTUELLES\n━━━━━━━━━━━━━━━━━━━━━━━━━━\nPoids: ${measures.poids||'?'} kg\nTour taille: ${measures.taille||'?'} cm\n\n`;if(history.length>0){report+=`━━━━━━━━━━━━━━━━━━━━━━━━━━\n🏋️ HISTORIQUE SÉANCES (${history.length} total)\n━━━━━━━━━━━━━━━━━━━━━━━━━━\n`;const recent=history.slice(-6).reverse();recent.forEach((w,i)=>{report+=`\n${i+1}. ${w.day.toUpperCase()} S${w.week} - ${w.date}\n`;const exercises=Object.entries(w.exercises).slice(0,6);exercises.forEach(([key,val])=>report+=`   ${key}: ${val}\n`);if(w.notes)report+=`   📝 ${w.notes.substring(0,80)}\n`})}report+=`\n━━━━━━━━━━━━━━━━━━━━━━━━━━\n💡 POUR LE COACH\n━━━━━━━━━━━━━━━━━━━━━━━━━━\nPoints à discuter:\n- Progression charges: ___\n- Niveau fatigue: ___/10\n- Douleurs/inconforts: ___\n- Objectif prochain cycle: ___\n\n`;navigator.clipboard.writeText(report);showModal('📋','Rapport copié !','Le rapport complet est dans ton presse-papiers. Colle-le dans un email ou WhatsApp pour ton coach.')}function loadHistory(){const history=JSON.parse(localStorage.getItem('workoutHistory')||'[]'),historyDiv=document.getElementById('workout-history');if(history.length===0){historyDiv.innerHTML='<p style="color: #999;">Aucune séance</p>';return}const recent=history.slice(-10).reverse();let html='';recent.forEach(workout=>{html+=`<div style="background: white; padding: 10px; margin: 8px 0; border-radius: 8px;"><strong>${workout.day.toUpperCase()}</strong> S${workout.week} - ${workout.date}${workout.notes?'<br><small>'+workout.notes.substring(0,50)+'...</small>':''}</div>`});historyDiv.innerHTML=html}function showModal(icon,title,text){document.getElementById('modal-icon').textContent=icon;document.getElementById('modal-title').textContent=title;document.getElementById('modal-text').textContent=text;document.getElementById('progression-modal').classList.add('show')}function closeModal(){document.getElementById('progression-modal').classList.remove('show')}function setupNotifications(){if(!('Notification'in window)){document.getElementById('notif-status').innerHTML='<div class="alert">❌ Non supporté</div>';return}if(Notification.permission==='granted'){document.getElementById('notif-status').innerHTML='<div class="success">✅ Déjà activées !</div>';return}Notification.requestPermission().then(permission=>{if(permission==='granted'){document.getElementById('notif-status').innerHTML='<div class="success">✅ Notifications activées !</div>';new Notification('💪 Masse Builder v2.5',{body:'Notifications activées !'})}else document.getElementById('notif-status').innerHTML='<div class="alert">❌ Refusées</div>'})}function openDemo(url){window.open(url,'_blank')}
+let timerInterval=null,timeLeft=0,sessionTimerInterval=null,sessionSeconds=0,sessionPaused=false,sessionStartTime=null;
+let currentWeek=parseInt(localStorage.getItem('currentWeek')||'1'),autoSaveTimeout=null,currentPhotoType='',wakeLock=null;
+let inputStates={};
+let generatedReport='';
+
+const baselineProgram={
+    'lun-1a':{weight:32,reps:8},'lun-1b':{weight:18,reps:10},'lun-2a':{weight:20,reps:10},'lun-2b':{weight:'P6',reps:15},
+    'lun-3a':{weight:10,reps:12},'lun-3b':{weight:'P4',reps:15},'lun-4a':{weight:-30,reps:10},'lun-4b':{weight:'P6',reps:12},
+    'mer-1':{weight:'',reps:5},'mer-2':{weight:70,reps:10},'mer-3':{weight:'P8',reps:10},'mer-4':{weight:'P6',reps:12},
+    'mer-5':{weight:'P5',reps:20},'mer-6':{weight:'P5',reps:15},'mer-7':{weight:28,reps:12},'mer-8':{weight:14,reps:10},
+    'ven-1':{weight:70,reps:8},'ven-2':{weight:80,reps:12},'ven-3':{weight:32,reps:12},'ven-4':{weight:120,reps:12},
+    'ven-5':{weight:18,reps:8},'ven-6':{weight:'P6',reps:12},'ven-7':{weight:80,reps:15}
+};
+
+window.onload=function(){updateWeekDisplay();loadAllData();checkPhotoReminders();loadPhotos();updatePhotoComparison();validateFeedbackForm();requestWakeLock()};
+
+async function requestWakeLock(){try{if('wakeLock'in navigator){wakeLock=await navigator.wakeLock.request('screen');wakeLock.addEventListener('release',()=>{console.log('Wake Lock released')});console.log('Wake Lock active')}}catch(err){console.log('Wake Lock not supported:',err)}}
+
+function updateWeekDisplay(){
+    document.getElementById('week-display').textContent=`SEMAINE ${currentWeek} / 8`;
+    localStorage.setItem('currentWeek',currentWeek);
+    if(currentWeek===2||currentWeek===4||currentWeek===6||currentWeek===8){
+        setTimeout(()=>showModal('📊','Temps de mesurer !',`Fin de semaine ${currentWeek} : Prends tes mesures (poids, tour de taille, photos)`),1000)
+    }
+    loadPhotos();updatePhotoComparison();
+    document.getElementById('current-photo-week').textContent=currentWeek;
+}
+
+function changeWeek(delta){const newWeek=currentWeek+delta;if(newWeek>=1&&newWeek<=8){currentWeek=newWeek;updateWeekDisplay();loadAllData();checkPhotoReminders();generate8WeeksView()}}
+function resetWeek(){if(confirm('Remettre à Semaine 1 ?')){currentWeek=1;updateWeekDisplay();loadAllData();checkPhotoReminders();generate8WeeksView()}}
+
+function prefillInputs(day){
+    const inputs=document.querySelectorAll(`#tab-${day} input[type="text"][data-exercise]`);
+    inputs.forEach(input=>{
+        const exerciseId=input.dataset.exercise,inputId=input.id;
+        const saved=localStorage.getItem(`workout-${day}-w${currentWeek}`);
+        if(saved){
+            const data=JSON.parse(saved);
+            if(data.exercises&&data.exercises[inputId]){
+                input.value=data.exercises[inputId];setInputState(input,'green');
+                inputStates[inputId]={isPrefilled:false,isModified:false,isSaved:true,originalValue:data.exercises[inputId]};
+                return;
+            }
+        }
+        let prefillValue=null;
+        if(currentWeek===1){const baseline=baselineProgram[exerciseId];if(baseline){prefillValue=baseline.weight?`${baseline.weight}×${baseline.reps}`:`${baseline.reps}`}}
+        else{
+            const lastWeek=currentWeek-1,lastWeekData=localStorage.getItem(`workout-${day}-w${lastWeek}`);
+            if(lastWeekData){const data=JSON.parse(lastWeekData);if(data.exercises&&data.exercises[inputId]){prefillValue=data.exercises[inputId]}}
+            else if(baselineProgram[exerciseId]){const baseline=baselineProgram[exerciseId];prefillValue=baseline.weight?`${baseline.weight}×${baseline.reps}`:`${baseline.reps}`}
+        }
+        if(prefillValue){input.value=prefillValue;input.placeholder=prefillValue;setInputState(input,'red');inputStates[inputId]={isPrefilled:true,isModified:false,isSaved:false,originalValue:prefillValue}}
+    });
+}
+
+function setInputState(input,state){input.classList.remove('input-red','input-yellow','input-green');input.classList.add(`input-${state}`)}
+
+function handleInput(input){
+    const inputId=input.id,currentValue=input.value;
+    if(!inputStates[inputId]){inputStates[inputId]={isPrefilled:false,isModified:false,isSaved:false,originalValue:''}}
+    const state=inputStates[inputId];
+    if(state.isPrefilled&&currentValue!==state.originalValue){state.isModified=true;state.isPrefilled=false;setInputState(input,'yellow')}
+    else if(!state.isPrefilled&&currentValue){state.isModified=true;setInputState(input,'yellow')}
+    autoSave();analyzeExercisePerformance(input.dataset.exercise);
+}
+
+function analyzeExercisePerformance(exerciseId){
+    const inputs=document.querySelectorAll(`input[data-exercise="${exerciseId}"]`);
+    const series=[];let targetReps=8;
+    inputs.forEach(input=>{
+        if(input.value){const match=input.value.match(/(\d+)×(\d+)|^(\d+)$/);if(match){const reps=match[2]?parseInt(match[2]):parseInt(match[3]);series.push({reps:reps})}}
+        targetReps=parseInt(input.dataset.target)||8;
+    });
+    if(series.length===0)return;
+    const totalSeries=series.length,successfulSeries=series.filter(s=>s.reps>=targetReps).length,failedSeries=totalSeries-successfulSeries;
+    const allPerfect=series.every(s=>s.reps>=targetReps+2),allTarget=series.every(s=>s.reps===targetReps);
+    let emoji,message,adjustment,cssClass;
+    if(allPerfect){emoji='🟢';adjustment='+5kg';message='Excellent ! Toutes séries au-delà de l\'objectif, augmente la charge';cssClass='perfect'}
+    else if(allTarget){emoji='🟡';adjustment='+2.5kg';message='Toutes séries réussies pile-poil, progression possible';cssClass='easy'}
+    else if(failedSeries<=1){emoji='🟠';adjustment='Maintien';message='Dernière série difficile, consolide avant d\'augmenter';cssClass='good'}
+    else if(failedSeries===2){emoji='🔴';adjustment='-2.5kg';message='Trop difficile, réduis légèrement la charge';cssClass='hard'}
+    else{emoji='⚫';adjustment='-5kg';message='Charge trop élevée, baisse significativement';cssClass='too_hard'}
+    const analysisDiv=document.getElementById(`analysis-${exerciseId}`);
+    if(analysisDiv){analysisDiv.innerHTML=`${emoji} ${message} (Ajustement: <strong>${adjustment}</strong>)`;analysisDiv.className='performance-analysis '+cssClass;analysisDiv.style.display='block'}
+}
+
+function autoSave(){
+    clearTimeout(autoSaveTimeout);
+    autoSaveTimeout=setTimeout(()=>{
+        const activeTab=document.querySelector('.tab-content.active').id.replace('tab-','');
+        if(['lundi','mercredi','vendredi'].includes(activeTab)){
+            saveWorkoutData(activeTab);showAutoSaveIndicator();
+            const inputs=document.querySelectorAll(`#tab-${activeTab} input[type="text"][data-exercise]`);
+            inputs.forEach(input=>{if(input.value&&inputStates[input.id]){inputStates[input.id].isSaved=true;inputStates[input.id].isModified=false;setInputState(input,'green')}});
+        }
+    },1500);
+}
+
+function showAutoSaveIndicator(){const indicator=document.getElementById('auto-save-indicator');indicator.classList.add('show');setTimeout(()=>indicator.classList.remove('show'),2000)}
+
+function saveWorkoutData(day){
+    const data={date:new Date().toISOString().split('T')[0],week:currentWeek,day:day,exercises:{},notes:document.getElementById('notes-'+day)?.value||''};
+    const inputs=document.querySelectorAll('#tab-'+day+' input[type="text"]');
+    inputs.forEach(input=>{if(input.value){data.exercises[input.id]=input.value}});
+    localStorage.setItem(`workout-${day}-w${currentWeek}`,JSON.stringify(data));
+    const history=JSON.parse(localStorage.getItem('workoutHistory')||'[]');
+    const existingIndex=history.findIndex(w=>w.day===day&&w.week===currentWeek);
+    if(existingIndex>=0)history[existingIndex]=data;else history.push(data);
+    localStorage.setItem('workoutHistory',JSON.stringify(history));
+}
+
+function loadAllData(){['lundi','mercredi','vendredi'].forEach(day=>{prefillInputs(day);loadLastWeekData(day)});loadProgressData();generate8WeeksView()}
+
+function loadLastWeekData(day){
+    if(currentWeek===1)return;
+    const lastWeek=currentWeek-1,saved=localStorage.getItem(`workout-${day}-w${lastWeek}`);
+    const exerciseMap={
+        'lundi':[{id:'lun-incline',display:'lastweek-lun-incline',keys:['lun-1a-s1','lun-1a-s2','lun-1a-s3','lun-1a-s4']},{id:'lun-rowing',display:'lastweek-lun-rowing',keys:['lun-1b-s1','lun-1b-s2']}],
+        'mercredi':[{id:'mer-tractions',display:'lastweek-mer-tractions',keys:['mer-1-s1','mer-1-s2','mer-1-s3','mer-1-s4','mer-1-s5']},{id:'mer-rowing',display:'lastweek-mer-rowing',keys:['mer-2-s1','mer-2-s2']}],
+        'vendredi':[{id:'ven-rdl',display:'lastweek-ven-rdl',keys:['ven-1-s1','ven-1-s2']},{id:'ven-hip',display:'lastweek-ven-hip',keys:['ven-2-s1','ven-2-s2']}]
+    };
+    if(!saved){(exerciseMap[day]||[]).forEach(ex=>{const elem=document.getElementById(ex.display);if(elem)elem.textContent='💾 Pas de données semaine précédente'});return}
+    const data=JSON.parse(saved);
+    (exerciseMap[day]||[]).forEach(ex=>{const values=ex.keys.map(k=>data.exercises[k]).filter(v=>v);if(values.length>0){const elem=document.getElementById(ex.display);if(elem)elem.textContent=`💾 S${lastWeek}: ${values.join(', ')}`}});
+}
+
+function loadProgressData(){
+    const measures=localStorage.getItem('currentMeasures');
+    if(measures){const data=JSON.parse(measures);['poids','taille'].forEach(key=>{const elem=document.getElementById('prog-'+key);if(elem&&data[key])elem.value=data[key]})}
+    const progress=localStorage.getItem('currentProgress');
+    if(progress){const data=JSON.parse(progress);['incline','tractions','rdl'].forEach(key=>{const elem=document.getElementById('prog-'+key);if(elem&&data[key])elem.value=data[key]})}
+}
+
+function saveProgressData(){
+    const measures={poids:document.getElementById('prog-poids')?.value||'',taille:document.getElementById('prog-taille')?.value||''};
+    localStorage.setItem('currentMeasures',JSON.stringify(measures));
+    const progress={incline:document.getElementById('prog-incline')?.value||'',tractions:document.getElementById('prog-tractions')?.value||'',rdl:document.getElementById('prog-rdl')?.value||''};
+    localStorage.setItem('currentProgress',JSON.stringify(progress));
+    showAutoSaveIndicator();generate8WeeksView();
+}
+
+function showTab(tabName){
+    document.querySelectorAll('.tab-content').forEach(c=>c.classList.remove('active'));
+    document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
+    document.getElementById('tab-'+tabName).classList.add('active');
+    event.target.classList.add('active');
+    if(['lundi','mercredi','vendredi'].includes(tabName)){startSessionTimer();prefillInputs(tabName)}else stopSessionTimer();
+    if(tabName==='progression')loadHistory();
+    if(tabName==='evolution')generate8WeeksView();
+}
+
+function startTimer(seconds){
+    stopTimer();timeLeft=seconds;updateTimerDisplay();
+    timerInterval=setInterval(()=>{
+        timeLeft--;updateTimerDisplay();
+        if(timeLeft===10)document.getElementById('timer-display').classList.add('warning');
+        if(timeLeft<=0){stopTimer();playLoudBeep();if('vibrate'in navigator)navigator.vibrate([500,200,500]);if(Notification.permission==='granted')new Notification('⏰ Repos terminé !',{body:'Go next série ! 💪'});showModal('⏰','Repos terminé !','Go next série ! 💪')}
+    },1000);
+}
+
+function stopTimer(){if(timerInterval){clearInterval(timerInterval);timerInterval=null}timeLeft=0;updateTimerDisplay();document.getElementById('timer-display').classList.remove('warning')}
+function updateTimerDisplay(){const minutes=Math.floor(timeLeft/60),seconds=timeLeft%60;document.getElementById('timer-display').textContent=`${String(minutes).padStart(2,'0')}:${String(seconds).padStart(2,'0')}`}
+
+function playLoudBeep(){
+    const context=new(window.AudioContext||window.webkitAudioContext)();
+    for(let i=0;i<3;i++){
+        setTimeout(()=>{
+            const oscillator=context.createOscillator(),gainNode=context.createGain();
+            oscillator.connect(gainNode);gainNode.connect(context.destination);
+            oscillator.frequency.value=800;oscillator.type='square';gainNode.gain.setValueAtTime(0.5,context.currentTime);
+            oscillator.start(context.currentTime);oscillator.stop(context.currentTime+0.3);
+        },i*400);
+    }
+}
+
+function startSessionTimer(){
+    if(!sessionPaused){stopSessionTimer();sessionSeconds=0;sessionStartTime=Date.now()}
+    else{sessionStartTime=Date.now()-(sessionSeconds*1000)}
+    sessionPaused=false;document.getElementById('session-timer').style.display='block';
+    document.getElementById('pause-session-btn').textContent='⏸ Pause';
+    sessionTimerInterval=setInterval(()=>{
+        sessionSeconds=Math.floor((Date.now()-sessionStartTime)/1000);
+        updateSessionTimerDisplay();
+        if(sessionSeconds===2700&&!sessionPaused){showModal('⚠️','45 minutes !','Accélère le rythme');if(Notification.permission==='granted')new Notification('⚠️ 45min',{body:'Accélère'})}
+        if(sessionSeconds===4500&&!sessionPaused){showModal('🔥','75 minutes !','Termine rapidement');if(Notification.permission==='granted')new Notification('🔥 75min',{body:'Termine vite'})}
+    },1000);
+}
+
+function pauseSessionTimer(){
+    if(sessionTimerInterval){clearInterval(sessionTimerInterval);sessionTimerInterval=null;sessionPaused=true;document.getElementById('pause-session-btn').textContent='▶️ Reprendre'}
+    else if(sessionPaused)startSessionTimer();
+}
+
+function stopSessionTimer(){if(sessionTimerInterval){clearInterval(sessionTimerInterval);sessionTimerInterval=null}document.getElementById('session-timer').style.display='none';sessionSeconds=0;sessionPaused=false;sessionStartTime=null}
+function updateSessionTimerDisplay(){const minutes=Math.floor(sessionSeconds/60),seconds=sessionSeconds%60;document.getElementById('session-timer-display').textContent=`${String(minutes).padStart(2,'0')}:${String(seconds).padStart(2,'0')}`}
+
+function endSession(){const activeTab=document.querySelector('.tab-content.active').id.replace('tab-','');if(!['lundi','mercredi','vendredi'].includes(activeTab))return;document.getElementById('feedback-modal').classList.add('show')}
+function closeFeedbackModal(){document.getElementById('feedback-modal').classList.remove('show')}
+
+function updateSliderValue(sliderId){const slider=document.getElementById(sliderId);const valueSpan=document.getElementById(sliderId+'-value');valueSpan.textContent=slider.value+'/10';validateFeedbackForm()}
+
+function updateCharCounter(){
+    const textarea=document.getElementById('feedback-notes'),counter=document.getElementById('char-counter'),length=textarea.value.length;
+    counter.textContent=`${length}/20 caractères`;
+    if(length>=20){counter.classList.add('valid');counter.classList.remove('invalid')}else{counter.classList.add('invalid');counter.classList.remove('valid')}
+    validateFeedbackForm();
+}
+
+function validateFeedbackForm(){
+    const notesLength=document.getElementById('feedback-notes').value.length;
+    const isValid=notesLength>=20;
+    document.getElementById('generate-report-btn').disabled=!isValid;
+    document.getElementById('open-chatgpt-btn').disabled=!isValid;
+    document.getElementById('email-report-btn').disabled=!isValid;
+}
+
+function generateStructuredReport(day,duration,feedback){
+    const dayNames={'lundi':'LUNDI - POUSSÉE','mercredi':'MERCREDI - TRACTION','vendredi':'VENDREDI - JAMBES'};
+    const data=JSON.parse(localStorage.getItem(`workout-${day}-w${currentWeek}`)||'{}');
+    let report=`🏋️ RAPPORT SÉANCE STRUCTURÉ - MASSE BUILDER
+═══════════════════════════════════════════
+
+📅 DATE: ${new Date().toLocaleDateString('fr-FR')}
+📍 SEMAINE: ${currentWeek}/8
+🎯 SÉANCE: ${dayNames[day]||day.toUpperCase()}
+⏱️ DURÉE: ${duration} minutes
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+📊 CHARGES RÉALISÉES PAR EXERCICE
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+`;
+    if(data.exercises){Object.entries(data.exercises).forEach(([key,value])=>{const cleanKey=key.replace(/lun-|mer-|ven-/g,'').toUpperCase();report+=`${cleanKey}: ${value}\n`})}
+    report+=`
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+💭 DONNÉES SUBJECTIVES
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Énergie pré-workout: ${feedback.energie}/10
+Qualité sommeil: ${feedback.sommeil}/10
+Congestion musculaire: ${feedback.congestion}/10
+Douleurs articulaires: ${feedback.douleurs}/10
+RPE global séance: ${feedback.rpe}/10
+
+Notes: ${feedback.notes}
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+🔮 PROMPT ANALYSE IA
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+"Analyse ce rapport de séance musculation:
+- Identifie patterns de progression/stagnation
+- Détecte déséquilibres potentiels
+- Suggère ajustements charges/volume
+- Repère signaux surentraînement
+- Recommande focus semaine prochaine"
+`;
+    return report;
+}
+
+function copyReport(){
+    const activeTab=document.querySelector('.tab-content.active').id.replace('tab-','');
+    const duration=Math.floor(sessionSeconds/60);
+    const feedback={energie:document.getElementById('energie').value,sommeil:document.getElementById('sommeil').value,congestion:document.getElementById('congestion').value,douleurs:document.getElementById('douleurs').value,rpe:document.getElementById('rpe').value,notes:document.getElementById('feedback-notes').value};
+    generatedReport=generateStructuredReport(activeTab,duration,feedback);
+    navigator.clipboard.writeText(generatedReport).then(()=>{alert('✅ Rapport copié !');closeFeedbackModal();stopSessionTimer()});
+}
+
+function openChatGPT(){
+    const activeTab=document.querySelector('.tab-content.active').id.replace('tab-','');
+    const duration=Math.floor(sessionSeconds/60);
+    const feedback={energie:document.getElementById('energie').value,sommeil:document.getElementById('sommeil').value,congestion:document.getElementById('congestion').value,douleurs:document.getElementById('douleurs').value,rpe:document.getElementById('rpe').value,notes:document.getElementById('feedback-notes').value};
+    generatedReport=generateStructuredReport(activeTab,duration,feedback);
+    const url=`https://chatgpt.com/?q=${encodeURIComponent(generatedReport)}`;
+    window.open(url,'_blank');
+    closeFeedbackModal();stopSessionTimer();
+}
+
+function emailReport(){
+    const activeTab=document.querySelector('.tab-content.active').id.replace('tab-','');
+    const duration=Math.floor(sessionSeconds/60);
+    const feedback={energie:document.getElementById('energie').value,sommeil:document.getElementById('sommeil').value,congestion:document.getElementById('congestion').value,douleurs:document.getElementById('douleurs').value,rpe:document.getElementById('rpe').value,notes:document.getElementById('feedback-notes').value};
+    generatedReport=generateStructuredReport(activeTab,duration,feedback);
+    const mailto=`mailto:coach@email.com?subject=Rapport Séance S${currentWeek}&body=${encodeURIComponent(generatedReport)}`;
+    window.open(mailto);
+    closeFeedbackModal();stopSessionTimer();
+}
+
+function checkPhotoReminders(){
+    const photoWeeks=[0,4,8],reminderDiv=document.getElementById('photo-reminder');
+    if(!reminderDiv)return;
+    if(photoWeeks.includes(currentWeek)){
+        const message=currentWeek===0?'AVANT (face/dos/profil)':currentWeek===4?'MI-PARCOURS':'FINALES';
+        reminderDiv.innerHTML=`<div class="warning">📸 S${currentWeek} : Prends tes photos ${message}</div>`;
+    }else reminderDiv.innerHTML=`<div class="success">✅ Prochaines photos: Semaine ${photoWeeks.find(w=>w>currentWeek)||8}</div>`;
+}
+
+function uploadPhoto(type){currentPhotoType=type;document.getElementById('photo-input').click()}
+
+function handlePhotoUpload(){
+    const file=document.getElementById('photo-input').files[0];
+    if(!file)return;
+    const reader=new FileReader();
+    reader.onload=function(e){
+        const img=new Image();
+        img.onload=function(){
+            const canvas=document.createElement('canvas'),maxSize=800;
+            let width=img.width,height=img.height;
+            if(width>height){if(width>maxSize){height*=maxSize/width;width=maxSize}}else{if(height>maxSize){width*=maxSize/height;height=maxSize}}
+            canvas.width=width;canvas.height=height;
+            const ctx=canvas.getContext('2d');ctx.drawImage(img,0,0,width,height);
+            const compressedData=canvas.toDataURL('image/jpeg',0.7);
+            savePhoto(currentPhotoType,compressedData);
+        };img.src=e.target.result;
+    };reader.readAsDataURL(file);
+}
+
+function savePhoto(type,dataUrl){
+    const key=`photo-w${currentWeek}-${type}`;localStorage.setItem(key,dataUrl);
+    const imgElement=document.getElementById(`photo-${type}`),placeholder=document.getElementById(`placeholder-${type}`),photoItem=imgElement.parentElement;
+    imgElement.src=dataUrl;imgElement.style.display='block';placeholder.style.display='none';photoItem.classList.add('has-photo');
+    showAutoSaveIndicator();updatePhotoComparison();
+}
+
+function deletePhoto(type,event){
+    event.stopPropagation();if(!confirm('Supprimer ?'))return;
+    const key=`photo-w${currentWeek}-${type}`;localStorage.removeItem(key);
+    const imgElement=document.getElementById(`photo-${type}`),placeholder=document.getElementById(`placeholder-${type}`),photoItem=imgElement.parentElement;
+    imgElement.style.display='none';placeholder.style.display='flex';photoItem.classList.remove('has-photo');
+    updatePhotoComparison();
+}
+
+function loadPhotos(){
+    ['face','dos','profil'].forEach(type=>{
+        const key=`photo-w${currentWeek}-${type}`,dataUrl=localStorage.getItem(key);
+        const imgElement=document.getElementById(`photo-${type}`),placeholder=document.getElementById(`placeholder-${type}`),photoItem=imgElement.parentElement;
+        if(dataUrl){imgElement.src=dataUrl;imgElement.style.display='block';placeholder.style.display='none';photoItem.classList.add('has-photo')}
+        else{imgElement.style.display='none';placeholder.style.display='flex';photoItem.classList.remove('has-photo')}
+    });
+}
+
+function updatePhotoComparison(){
+    const comparisonDiv=document.getElementById('photo-comparison');
+    if(!comparisonDiv)return;
+    const weeks=[0,1,4,8];
+    const hasAnyPhotos=weeks.some(w=>localStorage.getItem(`photo-w${w}-face`)||localStorage.getItem(`photo-w${w}-dos`)||localStorage.getItem(`photo-w${w}-profil`));
+    if(!hasAnyPhotos){comparisonDiv.innerHTML='<p style="color: #999; text-align: center;">Prends tes premières photos !</p>';return}
+    let html='';
+    weeks.forEach(week=>{
+        const hasFace=localStorage.getItem(`photo-w${week}-face`),hasDos=localStorage.getItem(`photo-w${week}-dos`),hasProfil=localStorage.getItem(`photo-w${week}-profil`);
+        if(hasFace||hasDos||hasProfil){
+            html+=`<div class="comparison-week"><h4>S${week}</h4><div class="comparison-photos">`;
+            ['face','dos','profil'].forEach(type=>{
+                const photoKey=`photo-w${week}-${type}`,photoData=localStorage.getItem(photoKey);
+                if(photoData)html+=`<div class="comparison-photo"><img src="${photoData}"></div>`;
+                else html+=`<div class="comparison-photo" style="background: #e0e0e0;"></div>`;
+            });
+            html+=`</div></div>`;
+        }
+    });
+    comparisonDiv.innerHTML=html;
+}
+
+function analyzePhotosWithAI(){
+    const photos=[];
+    ['face','dos','profil'].forEach(type=>{
+        const photoData=localStorage.getItem(`photo-w${currentWeek}-${type}`);
+        if(photoData)photos.push({type:type,data:photoData});
+    });
+    if(photos.length===0){alert('❌ Aucune photo à analyser');return}
+    const prompt=`Analyse ces photos de progression musculation (Semaine ${currentWeek}/8):\n\n- Identifie points forts et retards musculaires\n- Évalue symétrie et proportions\n- Suggère ajustements programme`;
+    window.open('https://chatgpt.com/?model=gpt-4o','_blank');
+    navigator.clipboard.writeText(prompt);
+    alert('✅ Prompt copié !\n\nColle-le dans ChatGPT Vision et uploade tes photos pour analyse.');
+}
+
+function exportReport(){
+    const history=JSON.parse(localStorage.getItem('workoutHistory')||'[]'),measures=JSON.parse(localStorage.getItem('currentMeasures')||'{}');
+    let report=`📊 BILAN MASSE BUILDER\n📅 ${new Date().toLocaleDateString('fr-FR')}\n🗓️ Semaine: ${currentWeek}/8\n\n━━━━━━━━━━━━━━━━━━━━━━━━━━\n📏 MESURES\n━━━━━━━━━━━━━━━━━━━━━━━━━━\nPoids: ${measures.poids||'?'} kg\nTaille: ${measures.taille||'?'} cm\n\n`;
+    if(history.length>0){report+=`━━━━━━━━━━━━━━━━━━━━━━━━━━\n🏋️ HISTORIQUE (${history.length})\n━━━━━━━━━━━━━━━━━━━━━━━━━━\n`;const recent=history.slice(-6).reverse();recent.forEach((w,i)=>{report+=`\n${i+1}. ${w.day.toUpperCase()} S${w.week} - ${w.date}\n`;const exercises=Object.entries(w.exercises).slice(0,6);exercises.forEach(([key,val])=>report+=`   ${key}: ${val}\n`);if(w.notes)report+=`   📝 ${w.notes.substring(0,80)}\n`})}
+    navigator.clipboard.writeText(report);showModal('📋','Rapport copié !','Colle-le pour ton coach');
+}
+
+function emailCoach(){const report=exportReport();const mailto=`mailto:coach@email.com?subject=Bilan S${currentWeek}&body=${encodeURIComponent(report)}`;window.open(mailto)}
+
+function loadHistory(){
+    const history=JSON.parse(localStorage.getItem('workoutHistory')||'[]'),historyDiv=document.getElementById('workout-history');
+    if(history.length===0){historyDiv.innerHTML='<p style="color: #999;">Aucune séance</p>';return}
+    const recent=history.slice(-10).reverse();let html='';
+    recent.forEach(workout=>{html+=`<div style="background: white; padding: 10px; margin: 8px 0; border-radius: 8px;"><strong>${workout.day.toUpperCase()}</strong> S${workout.week} - ${workout.date}${workout.notes?'<br><small>'+workout.notes.substring(0,50)+'...</small>':''}</div>`});
+    historyDiv.innerHTML=html;
+}
+
+function generate8WeeksView(){
+    const overview=document.getElementById('week-overview');
+    if(!overview)return;
+    let html='';
+    for(let w=1;w<=8;w++){
+        const badge=w<currentWeek?'completed':w===currentWeek?'current':'future';
+        html+=`<span class="week-badge ${badge}">S${w}</span>`;
+    }
+    overview.innerHTML=html;
+    
+    generateExerciseTable('incline','lundi',['lun-1a-s1','lun-1a-s2','lun-1a-s3','lun-1a-s4']);
+    generateExerciseTable('rdl','vendredi',['ven-1-s1','ven-1-s2','ven-1-s3','ven-1-s4','ven-1-s5']);
+    generateExerciseTable('tractions','mercredi',['mer-1-s1','mer-1-s2','mer-1-s3','mer-1-s4','mer-1-s5']);
+    generateBodyTable();
+}
+
+function generateExerciseTable(name,day,keys){
+    const table=document.getElementById(`table-${name}`);
+    if(!table)return;
+    const tbody=table.querySelector('tbody');
+    tbody.innerHTML='';
+    for(let w=1;w<=8;w++){
+        const data=localStorage.getItem(`workout-${day}-w${w}`);
+        if(data){
+            const workout=JSON.parse(data);
+            let row='<tr><td>S'+w+'</td>';
+            keys.forEach(key=>{row+=`<td>${workout.exercises[key]||'-'}</td>`});
+            row+='<td>-</td><td>-</td></tr>';
+            tbody.innerHTML+=row;
+        }
+    }
+}
+
+function generateBodyTable(){
+    const table=document.getElementById('table-body');
+    if(!table)return;
+    const tbody=table.querySelector('tbody');
+    tbody.innerHTML='';
+    let baseWeight=null,baseTaille=null;
+    for(let w=1;w<=8;w++){
+        const saved=localStorage.getItem(`measures-w${w}`);
+        if(saved){
+            const m=JSON.parse(saved);
+            if(w===1){baseWeight=parseFloat(m.poids)||null;baseTaille=parseFloat(m.taille)||null}
+            const deltaW=baseWeight?(parseFloat(m.poids)-baseWeight).toFixed(1):'-';
+            const deltaT=baseTaille?(parseFloat(m.taille)-baseTaille).toFixed(1):'-';
+            tbody.innerHTML+=`<tr><td>S${w}</td><td>${m.poids||'-'}</td><td>${deltaW}</td><td>${m.taille||'-'}</td><td>${deltaT}</td></tr>`;
+        }
+    }
+}
+
+function showModal(icon,title,text){document.getElementById('modal-icon').textContent=icon;document.getElementById('modal-title').textContent=title;document.getElementById('modal-text').textContent=text;document.getElementById('progression-modal').classList.add('show')}
+function closeModal(){document.getElementById('progression-modal').classList.remove('show')}
+
+function setupNotifications(){
+    if(!('Notification'in window)){document.getElementById('notif-status').innerHTML='<div class="alert">❌ Non supporté</div>';return}
+    if(Notification.permission==='granted'){document.getElementById('notif-status').innerHTML='<div class="success">✅ Activées !</div>';return}
+    Notification.requestPermission().then(permission=>{
+        if(permission==='granted'){document.getElementById('notif-status').innerHTML='<div class="success">✅ Activées !</div>';new Notification('💪 Masse Builder',{body:'Notifs ON !'})}
+        else document.getElementById('notif-status').innerHTML='<div class="alert">❌ Refusées</div>';
+    });
+}
+
+function openDemo(url){
+    window.open(url,'_blank').onerror=()=>{
+        alert('❌ Impossible d\'ouvrir la vidéo.\nVérifie ta connexion ou copie le lien manuellement.');
+        navigator.clipboard.writeText(url);
+    };
+}
     </script>
 </body>
 </html>
