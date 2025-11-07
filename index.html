@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Masse Builder v3.0 Final</title>
+    <title>Masse Builder v3.0 Final - Phase Sèche</title> <!-- 🆕 -->
     <style>
         * {margin: 0; padding: 0; box-sizing: border-box;}
         body {font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); min-height: 100vh; padding: 15px; color: #333;}
@@ -130,12 +130,12 @@
     <div class="auto-save-indicator" id="auto-save-indicator">✅ Sauvegardé</div>
     <div class="container">
         <h1>💪 MASSE BUILDER</h1>
-        <div style="text-align: center;"><span class="version-badge">v3.0 FINAL • Timer Amélioré • Progression 8S • Export IA</span></div>
-        <div class="header-info">8 semaines • 3 séances/semaine</div>
+        <div style="text-align: center;"><span class="version-badge">v3.1 SÈCHE • 10 Semaines • Épaules Priorité</span></div> <!-- 🆕 -->
+        <div class="header-info">10 semaines • 3 séances/semaine • Phase Sèche</div> <!-- 🆕 -->
 
         <div class="week-tracker">
             <div style="font-size: 14px; margin-bottom: 5px;">📅 PROGRESSION</div>
-            <div class="week-display" id="week-display">SEMAINE 1 / 8</div>
+            <div class="week-display" id="week-display">SEMAINE 1 / 10</div> <!-- 🆕 -->
             <div class="week-controls">
                 <button class="btn btn-secondary" onclick="changeWeek(-1)">◀️ S-1</button>
                 <button class="btn btn-secondary" onclick="changeWeek(1)">S+1 ▶️</button>
@@ -165,7 +165,7 @@
             <button class="tab" onclick="showTab('mercredi')">🔵 MER</button>
             <button class="tab" onclick="showTab('vendredi')">🟢 VEN</button>
             <button class="tab" onclick="showTab('progression')">📊 SUIVI</button>
-            <button class="tab" onclick="showTab('evolution')">📈 8 SEM</button>
+            <button class="tab" onclick="showTab('evolution')">📈 10 SEM</button> <!-- 🆕 -->
         </div>
         
         <div class="timer">
@@ -175,197 +175,166 @@
                 <button class="btn btn-secondary" onclick="startTimer(60)">60s</button>
                 <button class="btn btn-secondary" onclick="startTimer(90)">90s</button>
                 <button class="btn btn-secondary" onclick="startTimer(120)">2min</button>
+                <button class="btn btn-secondary" onclick="startTimer(180)">3min</button> <!-- 🆕 -->
                 <button class="btn btn-primary" onclick="stopTimer()">⏹ Stop</button>
             </div>
         </div>
         
         <!-- LUNDI -->
         <div id="tab-lundi" class="tab-content active">
-            <h2 style="color: #667eea; margin-bottom: 12px; font-size: 20px;">🔴 LUNDI - POUSSÉE</h2>
+            <h2 style="color: #667eea; margin-bottom: 12px; font-size: 20px;">🔴 LUNDI - PUSH + ÉPAULES PRIORITÉ</h2> <!-- 🆕 -->
             
             <div class="workout-section warmup">
-                <h3>🔥 ÉCHAUFFEMENT (15 min)</h3>
+                <h3>🔥 ÉCHAUFFEMENT (20 min)</h3> <!-- 🆕 -->
                 <ul>
-                    <li>Vélo 3 min (FC 120-130)</li>
-                    <li>Foam roll thoracique 2 min</li>
-                    <li>Band pull-aparts 2x20</li>
-                    <li>Rotations externes câble 2x15</li>
+                    <li>Vélo/rameur léger 5 min (FC 120-130)</li> <!-- 🆕 -->
+                    <li>Rotations bras 20 reps</li> <!-- 🆕 -->
+                    <li>Band pull-aparts 2×20</li> <!-- 🆕 -->
+                    <li>Dislocations épaules 2×15</li> <!-- 🆕 -->
+                    <li>Wall slides 2×10</li> <!-- 🆕 -->
+                    <li>Scapular push-ups 2×10</li> <!-- 🆕 -->
+                    <li>Développé incliné vide 1×15</li> <!-- 🆕 -->
+                    <li>Développé incliné 20kg 1×12</li> <!-- 🆕 -->
                 </ul>
             </div>
             
             <div class="workout-section">
-                <h3>💪 BLOC 1 - PECS SUPÉRIEURS</h3>
+                <h3>🔥 BLOC 1 - ÉPAULES (PRIORITÉ)</h3> <!-- 🆕 -->
                 
                 <div class="exercise">
                     <div class="exercise-header">
-                        <div class="exercise-title">1A. Développé incliné haltères 30°</div>
-                        <button class="demo-btn" onclick="openDemo('https://www.youtube.com/watch?v=8iPEnn-ltC8')">📹 Démo</button>
+                        <div class="exercise-title">1. Élévations latérales haltères</div> <!-- 🆕 -->
+                        <button class="demo-btn" onclick="openDemo('https://www.youtube.com/watch?v=3VcKaXpzqRo')">📹 Démo</button>
                     </div>
-                    <div class="last-week-data" id="lastweek-lun-incline">💾 Semaine dernière: Chargement...</div>
-                    <div class="performance-analysis" id="analysis-lun-1a"></div>
+                    <div class="last-week-data" id="lastweek-lun-elev">💾 Semaine dernière: Chargement...</div> <!-- 🆕 -->
+                    <div class="performance-analysis" id="analysis-lun-1"></div> <!-- 🆕 -->
                     <div class="exercise-details">
-                        <div class="detail-item"><span class="detail-label">Séries:</span> 4x8</div>
-                        <div class="detail-item"><span class="detail-label">Charge S1:</span> 32kg</div>
-                        <div class="detail-item"><span class="detail-label">Tempo:</span> 3-0-2</div>
-                        <div class="detail-item"><span class="detail-label">Repos:</span> 90s</div>
-                        <div class="detail-item"><span class="detail-label">RPE:</span> 7-8</div>
+                        <div class="detail-item"><span class="detail-label">Séries:</span> 4×12</div> <!-- 🆕 -->
+                        <div class="detail-item"><span class="detail-label">Charge S1:</span> 8kg</div> <!-- 🆕 -->
+                        <div class="detail-item"><span class="detail-label">Tempo:</span> 2-1-2-1</div> <!-- 🆕 -->
+                        <div class="detail-item"><span class="detail-label">Repos:</span> 90s</div> <!-- 🆕 -->
+                        <div class="detail-item"><span class="detail-label">Progression:</span> +1kg/2sem</div> <!-- 🆕 -->
                     </div>
-                    <div class="exercise-visual"><strong>📐 POSITION:</strong> Banc 30° • Pieds au sol • Dos plaqué • Haltères niveau épaules</div>
-                    <div class="movement-diagram">⬇️ 3s lent → 💥 2s montée → 💪 Squeeze</div>
+                    <div class="exercise-visual"><strong>🎯 FOCUS:</strong> SQUEEZE deltoïdes • PAS balancer • Contraction pic 1s</div> <!-- 🆕 -->
+                    <div class="movement-diagram">⬆️ 2s montée → 💪 SQUEEZE 1s → ⬇️ 2s descente</div> <!-- 🆕 -->
                     <div class="sets-tracker">
-                        <div class="set-input"><label>S1 (kg×reps)</label><input type="text" id="lun-1a-s1" data-exercise="lun-1a" data-target="8" placeholder="32×8" oninput="handleInput(this)"></div>
-                        <div class="set-input"><label>S2</label><input type="text" id="lun-1a-s2" data-exercise="lun-1a" data-target="8" oninput="handleInput(this)"></div>
-                        <div class="set-input"><label>S3</label><input type="text" id="lun-1a-s3" data-exercise="lun-1a" data-target="8" oninput="handleInput(this)"></div>
-                        <div class="set-input"><label>S4</label><input type="text" id="lun-1a-s4" data-exercise="lun-1a" data-target="8" oninput="handleInput(this)"></div>
+                        <div class="set-input"><label>S1 (kg×reps)</label><input type="text" id="lun-1-s1" data-exercise="lun-1" data-target="12" placeholder="8×12" oninput="handleInput(this)"></div> <!-- 🆕 -->
+                        <div class="set-input"><label>S2</label><input type="text" id="lun-1-s2" data-exercise="lun-1" data-target="12" oninput="handleInput(this)"></div> <!-- 🆕 -->
+                        <div class="set-input"><label>S3</label><input type="text" id="lun-1-s3" data-exercise="lun-1" data-target="12" oninput="handleInput(this)"></div> <!-- 🆕 -->
+                        <div class="set-input"><label>S4</label><input type="text" id="lun-1-s4" data-exercise="lun-1" data-target="12" oninput="handleInput(this)"></div> <!-- 🆕 -->
                     </div>
                 </div>
 
                 <div class="exercise">
                     <div class="exercise-header">
-                        <div class="exercise-title">1B. Rowing haltère 1 bras</div>
-                        <button class="demo-btn" onclick="openDemo('https://www.youtube.com/watch?v=roCP6wCXPqo')">📹 Démo</button>
+                        <div class="exercise-title">2. Face pull poulie haute</div> <!-- 🆕 -->
+                        <button class="demo-btn" onclick="openDemo('https://www.youtube.com/watch?v=rep-qVOkqgk')">📹 Démo</button>
                     </div>
-                    <div class="last-week-data" id="lastweek-lun-rowing">💾 Semaine dernière: Chargement...</div>
-                    <div class="performance-analysis" id="analysis-lun-1b"></div>
+                    <div class="last-week-data" id="lastweek-lun-face">💾 Semaine dernière: Chargement...</div> <!-- 🆕 -->
+                    <div class="performance-analysis" id="analysis-lun-2"></div> <!-- 🆕 -->
                     <div class="exercise-details">
-                        <div class="detail-item"><span class="detail-label">Séries:</span> 4x10/bras</div>
-                        <div class="detail-item"><span class="detail-label">Charge S1:</span> 18kg</div>
-                        <div class="detail-item"><span class="detail-label">Tempo:</span> 2-0-2</div>
-                        <div class="detail-item"><span class="detail-label">Repos:</span> 60s</div>
+                        <div class="detail-item"><span class="detail-label">Séries:</span> 4×15</div> <!-- 🆕 -->
+                        <div class="detail-item"><span class="detail-label">Charge S1:</span> 20kg</div> <!-- 🆕 -->
+                        <div class="detail-item"><span class="detail-label">Repos:</span> 90s</div> <!-- 🆕 -->
+                        <div class="detail-item"><span class="detail-label">Progression:</span> +2.5kg/2sem</div> <!-- 🆕 -->
                     </div>
+                    <div class="exercise-visual"><strong>🎯 FOCUS:</strong> Coudes HAUTS • Squeeze deltoïdes post</div> <!-- 🆕 -->
                     <div class="sets-tracker">
-                        <div class="set-input"><label>S1 (D/G)</label><input type="text" id="lun-1b-s1" data-exercise="lun-1b" data-target="10" placeholder="18×10/10" oninput="handleInput(this)"></div>
-                        <div class="set-input"><label>S2</label><input type="text" id="lun-1b-s2" data-exercise="lun-1b" data-target="10" oninput="handleInput(this)"></div>
-                        <div class="set-input"><label>S3</label><input type="text" id="lun-1b-s3" data-exercise="lun-1b" data-target="10" oninput="handleInput(this)"></div>
-                        <div class="set-input"><label>S4</label><input type="text" id="lun-1b-s4" data-exercise="lun-1b" data-target="10" oninput="handleInput(this)"></div>
+                        <div class="set-input"><label>S1</label><input type="text" id="lun-2-s1" data-exercise="lun-2" data-target="15" placeholder="20×15" oninput="handleInput(this)"></div> <!-- 🆕 -->
+                        <div class="set-input"><label>S2</label><input type="text" id="lun-2-s2" data-exercise="lun-2" data-target="15" oninput="handleInput(this)"></div> <!-- 🆕 -->
+                        <div class="set-input"><label>S3</label><input type="text" id="lun-2-s3" data-exercise="lun-2" data-target="15" oninput="handleInput(this)"></div> <!-- 🆕 -->
+                        <div class="set-input"><label>S4</label><input type="text" id="lun-2-s4" data-exercise="lun-2" data-target="15" oninput="handleInput(this)"></div> <!-- 🆕 -->
                     </div>
                 </div>
             </div>
             
             <div class="workout-section">
-                <h3>🏔️ BLOC 2 - DELTOÏDES</h3>
+                <h3>💪 BLOC 2 - PECS & ÉPAULES</h3> <!-- 🆕 -->
                 
                 <div class="exercise">
                     <div class="exercise-header">
-                        <div class="exercise-title">2A. Développé Arnold</div>
+                        <div class="exercise-title">3. Développé incliné haltères 30°</div> <!-- 🆕 title modifié -->
+                        <button class="demo-btn" onclick="openDemo('https://www.youtube.com/watch?v=8iPEnn-ltC8')">📹 Démo</button>
+                    </div>
+                    <div class="last-week-data" id="lastweek-lun-incline">💾 Semaine dernière: Chargement...</div>
+                    <div class="performance-analysis" id="analysis-lun-3"></div> <!-- 🆕 id changé -->
+                    <div class="exercise-details">
+                        <div class="detail-item"><span class="detail-label">Séries:</span> 5×8</div> <!-- 🆕 -->
+                        <div class="detail-item"><span class="detail-label">Charge S1:</span> 28kg</div> <!-- 🆕 -->
+                        <div class="detail-item"><span class="detail-label">Repos:</span> 3min</div> <!-- 🆕 -->
+                        <div class="detail-item"><span class="detail-label">RPE:</span> 7-8</div>
+                    </div>
+                    <div class="exercise-visual"><strong>⚠️ SÈCHE:</strong> Démarrer SOUS max • Objectif = MAINTIEN force</div> <!-- 🆕 -->
+                    <div class="movement-diagram">⬇️ 3s lent → 💥 2s montée → 💪 Squeeze</div>
+                    <div class="sets-tracker">
+                        <div class="set-input"><label>S1 (kg×reps)</label><input type="text" id="lun-3-s1" data-exercise="lun-3" data-target="8" placeholder="28×8" oninput="handleInput(this)"></div> <!-- 🆕 -->
+                        <div class="set-input"><label>S2</label><input type="text" id="lun-3-s2" data-exercise="lun-3" data-target="8" oninput="handleInput(this)"></div> <!-- 🆕 -->
+                        <div class="set-input"><label>S3</label><input type="text" id="lun-3-s3" data-exercise="lun-3" data-target="8" oninput="handleInput(this)"></div> <!-- 🆕 -->
+                        <div class="set-input"><label>S4</label><input type="text" id="lun-3-s4" data-exercise="lun-3" data-target="8" oninput="handleInput(this)"></div> <!-- 🆕 -->
+                        <div class="set-input"><label>S5</label><input type="text" id="lun-3-s5" data-exercise="lun-3" data-target="8" oninput="handleInput(this)"></div> <!-- 🆕 -->
+                    </div>
+                </div>
+
+                <div class="exercise">
+                    <div class="exercise-header">
+                        <div class="exercise-title">4. Développé Arnold</div> <!-- 🆕 -->
                         <button class="demo-btn" onclick="openDemo('https://www.youtube.com/watch?v=6Z15_WdXmVw')">📹 Démo</button>
                     </div>
-                    <div class="performance-analysis" id="analysis-lun-2a"></div>
+                    <div class="performance-analysis" id="analysis-lun-4"></div> <!-- 🆕 -->
                     <div class="exercise-details">
-                        <div class="detail-item"><span class="detail-label">Séries:</span> 4x10</div>
-                        <div class="detail-item"><span class="detail-label">Charge S1:</span> 20kg</div>
-                        <div class="detail-item"><span class="detail-label">Tempo:</span> 2-0-2</div>
-                        <div class="detail-item"><span class="detail-label">Repos:</span> 60s</div>
+                        <div class="detail-item"><span class="detail-label">Séries:</span> 3×10</div> <!-- 🆕 -->
+                        <div class="detail-item"><span class="detail-label">Charge S1:</span> 16kg</div> <!-- 🆕 -->
+                        <div class="detail-item"><span class="detail-label">Tempo:</span> Contrôlé</div> <!-- 🆕 -->
+                        <div class="detail-item"><span class="detail-label">Repos:</span> 2min</div> <!-- 🆕 -->
                     </div>
                     <div class="movement-diagram">🔄 Paumes vers toi → 🔄 Pivoter → 🙌 Finir devant</div>
                     <div class="sets-tracker">
-                        <div class="set-input"><label>S1</label><input type="text" id="lun-2a-s1" data-exercise="lun-2a" data-target="10" placeholder="20×10" oninput="handleInput(this)"></div>
-                        <div class="set-input"><label>S2</label><input type="text" id="lun-2a-s2" data-exercise="lun-2a" data-target="10" oninput="handleInput(this)"></div>
-                        <div class="set-input"><label>S3</label><input type="text" id="lun-2a-s3" data-exercise="lun-2a" data-target="10" oninput="handleInput(this)"></div>
-                        <div class="set-input"><label>S4</label><input type="text" id="lun-2a-s4" data-exercise="lun-2a" data-target="10" oninput="handleInput(this)"></div>
-                    </div>
-                </div>
-                
-                <div class="exercise">
-                    <div class="exercise-header">
-                        <div class="exercise-title">2B. Face pull haute</div>
-                        <button class="demo-btn" onclick="openDemo('https://www.youtube.com/watch?v=rep-qVOkqgk')">📹 Démo</button>
-                    </div>
-                    <div class="performance-analysis" id="analysis-lun-2b"></div>
-                    <div class="exercise-details">
-                        <div class="detail-item"><span class="detail-label">Séries:</span> 4x15</div>
-                        <div class="detail-item"><span class="detail-label">Charge S1:</span> Pile 6</div>
-                        <div class="detail-item"><span class="detail-label">Tempo:</span> 1-1-1</div>
-                        <div class="detail-item"><span class="detail-label">Repos:</span> 45s</div>
-                    </div>
-                    <div class="sets-tracker">
-                        <div class="set-input"><label>S1</label><input type="text" id="lun-2b-s1" data-exercise="lun-2b" data-target="15" placeholder="P6×15" oninput="handleInput(this)"></div>
-                        <div class="set-input"><label>S2</label><input type="text" id="lun-2b-s2" data-exercise="lun-2b" data-target="15" oninput="handleInput(this)"></div>
-                        <div class="set-input"><label>S3</label><input type="text" id="lun-2b-s3" data-exercise="lun-2b" data-target="15" oninput="handleInput(this)"></div>
-                        <div class="set-input"><label>S4</label><input type="text" id="lun-2b-s4" data-exercise="lun-2b" data-target="15" oninput="handleInput(this)"></div>
+                        <div class="set-input"><label>S1</label><input type="text" id="lun-4-s1" data-exercise="lun-4" data-target="10" placeholder="16×10" oninput="handleInput(this)"></div> <!-- 🆕 -->
+                        <div class="set-input"><label>S2</label><input type="text" id="lun-4-s2" data-exercise="lun-4" data-target="10" oninput="handleInput(this)"></div> <!-- 🆕 -->
+                        <div class="set-input"><label>S3</label><input type="text" id="lun-4-s3" data-exercise="lun-4" data-target="10" oninput="handleInput(this)"></div> <!-- 🆕 -->
                     </div>
                 </div>
             </div>
             
             <div class="workout-section">
-                <h3>💥 BLOC 3 - DELTOÏDES & TRICEPS</h3>
+                <h3>💥 BLOC 3 - TRICEPS</h3> <!-- 🆕 -->
                 
                 <div class="exercise">
                     <div class="exercise-header">
-                        <div class="exercise-title">3A. Élévations latérales</div>
-                        <button class="demo-btn" onclick="openDemo('https://www.youtube.com/watch?v=3VcKaXpzqRo')">📹 Démo</button>
-                    </div>
-                    <div class="performance-analysis" id="analysis-lun-3a"></div>
-                    <div class="exercise-details">
-                        <div class="detail-item"><span class="detail-label">Séries:</span> 4x12</div>
-                        <div class="detail-item"><span class="detail-label">Charge S1:</span> 10kg</div>
-                        <div class="detail-item"><span class="detail-label">Tempo:</span> 1-1-3</div>
-                        <div class="detail-item"><span class="detail-label">Repos:</span> 45s</div>
-                    </div>
-                    <div class="exercise-visual"><strong>🔑 ASTUCE:</strong> Rotation externe légère • Descente LENTE 3s</div>
-                    <div class="sets-tracker">
-                        <div class="set-input"><label>S1</label><input type="text" id="lun-3a-s1" data-exercise="lun-3a" data-target="12" placeholder="10×12" oninput="handleInput(this)"></div>
-                        <div class="set-input"><label>S2</label><input type="text" id="lun-3a-s2" data-exercise="lun-3a" data-target="12" oninput="handleInput(this)"></div>
-                        <div class="set-input"><label>S3</label><input type="text" id="lun-3a-s3" data-exercise="lun-3a" data-target="12" oninput="handleInput(this)"></div>
-                        <div class="set-input"><label>S4</label><input type="text" id="lun-3a-s4" data-exercise="lun-3a" data-target="12" oninput="handleInput(this)"></div>
-                    </div>
-                </div>
-                
-                <div class="exercise">
-                    <div class="exercise-header">
-                        <div class="exercise-title">3B. Oiseau poulie</div>
-                        <button class="demo-btn" onclick="openDemo('https://www.youtube.com/watch?v=tpvqJ2YZV_k')">📹 Démo</button>
-                    </div>
-                    <div class="performance-analysis" id="analysis-lun-3b"></div>
-                    <div class="exercise-details">
-                        <div class="detail-item"><span class="detail-label">Séries:</span> 4x15</div>
-                        <div class="detail-item"><span class="detail-label">Charge S1:</span> Pile 4</div>
-                        <div class="detail-item"><span class="detail-label">Tempo:</span> 1-1-2</div>
-                        <div class="detail-item"><span class="detail-label">Repos:</span> 45s</div>
-                    </div>
-                    <div class="sets-tracker">
-                        <div class="set-input"><label>S1</label><input type="text" id="lun-3b-s1" data-exercise="lun-3b" data-target="15" placeholder="P4×15" oninput="handleInput(this)"></div>
-                        <div class="set-input"><label>S2</label><input type="text" id="lun-3b-s2" data-exercise="lun-3b" data-target="15" oninput="handleInput(this)"></div>
-                        <div class="set-input"><label>S3</label><input type="text" id="lun-3b-s3" data-exercise="lun-3b" data-target="15" oninput="handleInput(this)"></div>
-                        <div class="set-input"><label>S4</label><input type="text" id="lun-3b-s4" data-exercise="lun-3b" data-target="15" oninput="handleInput(this)"></div>
-                    </div>
-                </div>
-                
-                <div class="exercise">
-                    <div class="exercise-header">
-                        <div class="exercise-title">4A. Dips assistés</div>
+                        <div class="exercise-title">5. Dips (assistés ou lestés)</div> <!-- 🆕 numéro changé -->
                         <button class="demo-btn" onclick="openDemo('https://www.youtube.com/watch?v=2z8JmcrW-As')">📹 Démo</button>
                     </div>
-                    <div class="performance-analysis" id="analysis-lun-4a"></div>
+                    <div class="performance-analysis" id="analysis-lun-5"></div> <!-- 🆕 id changé -->
                     <div class="exercise-details">
-                        <div class="detail-item"><span class="detail-label">Séries:</span> 3x10</div>
-                        <div class="detail-item"><span class="detail-label">Assistance:</span> -30kg</div>
+                        <div class="detail-item"><span class="detail-label">Séries:</span> 3×10</div>
+                        <div class="detail-item"><span class="detail-label">Assistance:</span> Variable</div> <!-- 🆕 -->
                         <div class="detail-item"><span class="detail-label">Tempo:</span> 2-0-2</div>
-                        <div class="detail-item"><span class="detail-label">Repos:</span> 60s</div>
+                        <div class="detail-item"><span class="detail-label">Repos:</span> 2min</div> <!-- 🆕 -->
                     </div>
                     <div class="sets-tracker">
-                        <div class="set-input"><label>S1</label><input type="text" id="lun-4a-s1" data-exercise="lun-4a" data-target="10" placeholder="-30×10" oninput="handleInput(this)"></div>
-                        <div class="set-input"><label>S2</label><input type="text" id="lun-4a-s2" data-exercise="lun-4a" data-target="10" oninput="handleInput(this)"></div>
-                        <div class="set-input"><label>S3</label><input type="text" id="lun-4a-s3" data-exercise="lun-4a" data-target="10" oninput="handleInput(this)"></div>
+                        <div class="set-input"><label>S1</label><input type="text" id="lun-5-s1" data-exercise="lun-5" data-target="10" placeholder="10" oninput="handleInput(this)"></div> <!-- 🆕 -->
+                        <div class="set-input"><label>S2</label><input type="text" id="lun-5-s2" data-exercise="lun-5" data-target="10" oninput="handleInput(this)"></div> <!-- 🆕 -->
+                        <div class="set-input"><label>S3</label><input type="text" id="lun-5-s3" data-exercise="lun-5" data-target="10" oninput="handleInput(this)"></div> <!-- 🆕 -->
                     </div>
                 </div>
                 
                 <div class="exercise">
                     <div class="exercise-header">
-                        <div class="exercise-title">4B. Extension triceps poulie</div>
+                        <div class="exercise-title">6. Extension triceps câble</div> <!-- 🆕 numéro changé -->
                         <button class="demo-btn" onclick="openDemo('https://www.youtube.com/watch?v=kiuVA0gs3EI')">📹 Démo</button>
                     </div>
-                    <div class="performance-analysis" id="analysis-lun-4b"></div>
+                    <div class="performance-analysis" id="analysis-lun-6"></div> <!-- 🆕 id changé -->
                     <div class="exercise-details">
-                        <div class="detail-item"><span class="detail-label">Séries:</span> 3x12</div>
+                        <div class="detail-item"><span class="detail-label">Séries:</span> 3×12</div>
                         <div class="detail-item"><span class="detail-label">Charge S1:</span> Pile 6</div>
                         <div class="detail-item"><span class="detail-label">Tempo:</span> 1-1-2</div>
-                        <div class="detail-item"><span class="detail-label">Repos:</span> 45s</div>
+                        <div class="detail-item"><span class="detail-label">Repos:</span> 90s</div> <!-- 🆕 -->
                     </div>
+                    <div class="exercise-visual"><strong>🎯 ASTUCE:</strong> Corde • Extension complète • Coudes fixes</div> <!-- 🆕 -->
                     <div class="sets-tracker">
-                        <div class="set-input"><label>S1</label><input type="text" id="lun-4b-s1" data-exercise="lun-4b" data-target="12" placeholder="P6×12" oninput="handleInput(this)"></div>
-                        <div class="set-input"><label>S2</label><input type="text" id="lun-4b-s2" data-exercise="lun-4b" data-target="12" oninput="handleInput(this)"></div>
-                        <div class="set-input"><label>S3</label><input type="text" id="lun-4b-s3" data-exercise="lun-4b" data-target="12" oninput="handleInput(this)"></div>
+                        <div class="set-input"><label>S1</label><input type="text" id="lun-6-s1" data-exercise="lun-6" data-target="12" placeholder="P6×12" oninput="handleInput(this)"></div> <!-- 🆕 -->
+                        <div class="set-input"><label>S2</label><input type="text" id="lun-6-s2" data-exercise="lun-6" data-target="12" oninput="handleInput(this)"></div> <!-- 🆕 -->
+                        <div class="set-input"><label>S3</label><input type="text" id="lun-6-s3" data-exercise="lun-6" data-target="12" oninput="handleInput(this)"></div> <!-- 🆕 -->
                     </div>
                 </div>
             </div>
@@ -375,14 +344,18 @@
         
         <!-- MERCREDI -->
         <div id="tab-mercredi" class="tab-content">
-            <h2 style="color: #667eea; margin-bottom: 12px; font-size: 20px;">🔵 MERCREDI - TRACTION</h2>
+            <h2 style="color: #667eea; margin-bottom: 12px; font-size: 20px;">🔵 MERCREDI - PULL</h2> <!-- 🆕 title modifié -->
             
             <div class="workout-section warmup">
-                <h3>🔥 ÉCHAUFFEMENT (13 min)</h3>
+                <h3>🔥 ÉCHAUFFEMENT (20 min)</h3> <!-- 🆕 -->
                 <ul>
-                    <li>Rameur 3 min</li>
-                    <li>Dead hang 2x20s</li>
-                    <li>Scapular pull-ups 3x8</li>
+                    <li>Rameur léger 5 min</li> <!-- 🆕 -->
+                    <li>Cat-cow 20 reps</li> <!-- 🆕 -->
+                    <li>Thread the needle 10/côté</li> <!-- 🆕 -->
+                    <li>Band rows 2×20</li> <!-- 🆕 -->
+                    <li>Scapular pull-ups 2×8</li> <!-- 🆕 -->
+                    <li>Dead hangs 2×30s</li>
+                    <li>Tirage poulie léger 1×15</li> <!-- 🆕 -->
                 </ul>
             </div>
             
@@ -391,17 +364,18 @@
                 
                 <div class="exercise">
                     <div class="exercise-header">
-                        <div class="exercise-title">1. Tractions assistées</div>
+                        <div class="exercise-title">1. Tractions (assistées progression)</div> <!-- 🆕 title modifié -->
                         <button class="demo-btn" onclick="openDemo('https://www.youtube.com/watch?v=eGo4IYlbE5g')">📹 Démo</button>
                     </div>
                     <div class="last-week-data" id="lastweek-mer-tractions">💾 Semaine dernière: Chargement...</div>
                     <div class="performance-analysis" id="analysis-mer-1"></div>
                     <div class="exercise-details">
-                        <div class="detail-item"><span class="detail-label">Séries:</span> 5x5</div>
-                        <div class="detail-item"><span class="detail-label">Assistance:</span> Variable</div>
+                        <div class="detail-item"><span class="detail-label">Séries:</span> 5×5</div>
+                        <div class="detail-item"><span class="detail-label">Assistance S1:</span> -20kg</div> <!-- 🆕 -->
                         <div class="detail-item"><span class="detail-label">Tempo:</span> 3-0-2</div>
-                        <div class="detail-item"><span class="detail-label">Repos:</span> 120s</div>
+                        <div class="detail-item"><span class="detail-label">Repos:</span> 3min</div> <!-- 🆕 -->
                     </div>
+                    <div class="exercise-visual"><strong>📊 PROGRESSION:</strong> S1-3: -20kg • S4-6: -15kg • S7-9: -10kg • S10: -5kg</div> <!-- 🆕 -->
                     <div class="movement-diagram">⬇️ 3s descente → ⬆️ 2s coudes vers BAS</div>
                     <div class="sets-tracker">
                         <div class="set-input"><label>S1</label><input type="text" id="mer-1-s1" data-exercise="mer-1" data-target="5" placeholder="5" oninput="handleInput(this)"></div>
@@ -414,22 +388,24 @@
                 
                 <div class="exercise">
                     <div class="exercise-header">
-                        <div class="exercise-title">2. Rowing barre</div>
+                        <div class="exercise-title">2. Rowing barre (pronation)</div> <!-- 🆕 -->
                         <button class="demo-btn" onclick="openDemo('https://www.youtube.com/watch?v=kBWAon7ItDw')">📹 Démo</button>
                     </div>
                     <div class="last-week-data" id="lastweek-mer-rowing">💾 Semaine dernière: Chargement...</div>
                     <div class="performance-analysis" id="analysis-mer-2"></div>
                     <div class="exercise-details">
-                        <div class="detail-item"><span class="detail-label">Séries:</span> 4x10</div>
-                        <div class="detail-item"><span class="detail-label">Charge S1:</span> 70kg</div>
+                        <div class="detail-item"><span class="detail-label">Séries:</span> 5×8</div> <!-- 🆕 -->
+                        <div class="detail-item"><span class="detail-label">Charge S1:</span> 50kg</div> <!-- 🆕 -->
                         <div class="detail-item"><span class="detail-label">Tempo:</span> 2-1-2</div>
-                        <div class="detail-item"><span class="detail-label">Repos:</span> 90s</div>
+                        <div class="detail-item"><span class="detail-label">Repos:</span> 3min</div> <!-- 🆕 -->
                     </div>
+                    <div class="exercise-visual"><strong>🎯 FOCUS:</strong> Coudes le long du corps • +2.5kg/2sem</div> <!-- 🆕 -->
                     <div class="sets-tracker">
-                        <div class="set-input"><label>S1</label><input type="text" id="mer-2-s1" data-exercise="mer-2" data-target="10" placeholder="70×10" oninput="handleInput(this)"></div>
-                        <div class="set-input"><label>S2</label><input type="text" id="mer-2-s2" data-exercise="mer-2" data-target="10" oninput="handleInput(this)"></div>
-                        <div class="set-input"><label>S3</label><input type="text" id="mer-2-s3" data-exercise="mer-2" data-target="10" oninput="handleInput(this)"></div>
-                        <div class="set-input"><label>S4</label><input type="text" id="mer-2-s4" data-exercise="mer-2" data-target="10" oninput="handleInput(this)"></div>
+                        <div class="set-input"><label>S1</label><input type="text" id="mer-2-s1" data-exercise="mer-2" data-target="8" placeholder="50×8" oninput="handleInput(this)"></div> <!-- 🆕 -->
+                        <div class="set-input"><label>S2</label><input type="text" id="mer-2-s2" data-exercise="mer-2" data-target="8" oninput="handleInput(this)"></div> <!-- 🆕 -->
+                        <div class="set-input"><label>S3</label><input type="text" id="mer-2-s3" data-exercise="mer-2" data-target="8" oninput="handleInput(this)"></div> <!-- 🆕 -->
+                        <div class="set-input"><label>S4</label><input type="text" id="mer-2-s4" data-exercise="mer-2" data-target="8" oninput="handleInput(this)"></div> <!-- 🆕 -->
+                        <div class="set-input"><label>S5</label><input type="text" id="mer-2-s5" data-exercise="mer-2" data-target="8" oninput="handleInput(this)"></div> <!-- 🆕 -->
                     </div>
                 </div>
             </div>
@@ -439,21 +415,21 @@
                 
                 <div class="exercise">
                     <div class="exercise-header">
-                        <div class="exercise-title">3. Tirage horizontal poulie</div>
+                        <div class="exercise-title">3. Tirage horizontal machine</div> <!-- 🆕 title modifié -->
                         <button class="demo-btn" onclick="openDemo('https://www.youtube.com/watch?v=GZbfZ033f74')">📹 Démo</button>
                     </div>
                     <div class="performance-analysis" id="analysis-mer-3"></div>
                     <div class="exercise-details">
-                        <div class="detail-item"><span class="detail-label">Séries:</span> 4x10</div>
+                        <div class="detail-item"><span class="detail-label">Séries:</span> 3×10</div> <!-- 🆕 -->
                         <div class="detail-item"><span class="detail-label">Charge S1:</span> Pile 8</div>
                         <div class="detail-item"><span class="detail-label">Tempo:</span> 1-1-2</div>
-                        <div class="detail-item"><span class="detail-label">Repos:</span> 60s</div>
+                        <div class="detail-item"><span class="detail-label">Repos:</span> 2min</div> <!-- 🆕 -->
                     </div>
+                    <div class="exercise-visual"><strong>🎯 ASTUCE:</strong> Prise neutre • Squeeze scapula</div> <!-- 🆕 -->
                     <div class="sets-tracker">
                         <div class="set-input"><label>S1</label><input type="text" id="mer-3-s1" data-exercise="mer-3" data-target="10" placeholder="P8×10" oninput="handleInput(this)"></div>
                         <div class="set-input"><label>S2</label><input type="text" id="mer-3-s2" data-exercise="mer-3" data-target="10" oninput="handleInput(this)"></div>
                         <div class="set-input"><label>S3</label><input type="text" id="mer-3-s3" data-exercise="mer-3" data-target="10" oninput="handleInput(this)"></div>
-                        <div class="set-input"><label>S4</label><input type="text" id="mer-3-s4" data-exercise="mer-3" data-target="10" oninput="handleInput(this)"></div>
                     </div>
                 </div>
                 
@@ -464,98 +440,40 @@
                     </div>
                     <div class="performance-analysis" id="analysis-mer-4"></div>
                     <div class="exercise-details">
-                        <div class="detail-item"><span class="detail-label">Séries:</span> 4x12</div>
+                        <div class="detail-item"><span class="detail-label">Séries:</span> 3×12</div> <!-- 🆕 -->
                         <div class="detail-item"><span class="detail-label">Charge S1:</span> Pile 6</div>
                         <div class="detail-item"><span class="detail-label">Tempo:</span> 1-1-2</div>
-                        <div class="detail-item"><span class="detail-label">Repos:</span> 60s</div>
+                        <div class="detail-item"><span class="detail-label">Repos:</span> 90s</div> <!-- 🆕 -->
                     </div>
+                    <div class="exercise-visual"><strong>🎯 ASTUCE:</strong> Bras semi-tendus • Étirement lats</div> <!-- 🆕 -->
                     <div class="sets-tracker">
                         <div class="set-input"><label>S1</label><input type="text" id="mer-4-s1" data-exercise="mer-4" data-target="12" placeholder="P6×12" oninput="handleInput(this)"></div>
                         <div class="set-input"><label>S2</label><input type="text" id="mer-4-s2" data-exercise="mer-4" data-target="12" oninput="handleInput(this)"></div>
                         <div class="set-input"><label>S3</label><input type="text" id="mer-4-s3" data-exercise="mer-4" data-target="12" oninput="handleInput(this)"></div>
-                        <div class="set-input"><label>S4</label><input type="text" id="mer-4-s4" data-exercise="mer-4" data-target="12" oninput="handleInput(this)"></div>
                     </div>
                 </div>
             </div>
             
             <div class="workout-section">
-                <h3>💥 BLOC 3 - DELTOÏDES ARRIÈRE & BICEPS</h3>
+                <h3>💥 BLOC 3 - BICEPS</h3> <!-- 🆕 -->
                 
                 <div class="exercise">
                     <div class="exercise-header">
-                        <div class="exercise-title">5. Face pull</div>
-                        <button class="demo-btn" onclick="openDemo('https://www.youtube.com/watch?v=rep-qVOkqgk')">📹 Démo</button>
-                    </div>
-                    <div class="performance-analysis" id="analysis-mer-5"></div>
-                    <div class="exercise-details">
-                        <div class="detail-item"><span class="detail-label">Séries:</span> 4x20</div>
-                        <div class="detail-item"><span class="detail-label">Charge S1:</span> Pile 5</div>
-                        <div class="detail-item"><span class="detail-label">Tempo:</span> 1-1-1</div>
-                        <div class="detail-item"><span class="detail-label">Repos:</span> 45s</div>
-                    </div>
-                    <div class="sets-tracker">
-                        <div class="set-input"><label>S1</label><input type="text" id="mer-5-s1" data-exercise="mer-5" data-target="20" placeholder="P5×20" oninput="handleInput(this)"></div>
-                        <div class="set-input"><label>S2</label><input type="text" id="mer-5-s2" data-exercise="mer-5" data-target="20" oninput="handleInput(this)"></div>
-                        <div class="set-input"><label>S3</label><input type="text" id="mer-5-s3" data-exercise="mer-5" data-target="20" oninput="handleInput(this)"></div>
-                        <div class="set-input"><label>S4</label><input type="text" id="mer-5-s4" data-exercise="mer-5" data-target="20" oninput="handleInput(this)"></div>
-                    </div>
-                </div>
-                
-                <div class="exercise">
-                    <div class="exercise-header">
-                        <div class="exercise-title">6. Rear delt fly machine</div>
-                        <button class="demo-btn" onclick="openDemo('https://www.youtube.com/watch?v=YyF6dMyRbS0')">📹 Démo</button>
-                    </div>
-                    <div class="performance-analysis" id="analysis-mer-6"></div>
-                    <div class="exercise-details">
-                        <div class="detail-item"><span class="detail-label">Séries:</span> 4x15</div>
-                        <div class="detail-item"><span class="detail-label">Charge S1:</span> Pile 5</div>
-                        <div class="detail-item"><span class="detail-label">Tempo:</span> 1-1-2</div>
-                        <div class="detail-item"><span class="detail-label">Repos:</span> 45s</div>
-                    </div>
-                    <div class="sets-tracker">
-                        <div class="set-input"><label>S1</label><input type="text" id="mer-6-s1" data-exercise="mer-6" data-target="15" placeholder="P5×15" oninput="handleInput(this)"></div>
-                        <div class="set-input"><label>S2</label><input type="text" id="mer-6-s2" data-exercise="mer-6" data-target="15" oninput="handleInput(this)"></div>
-                        <div class="set-input"><label>S3</label><input type="text" id="mer-6-s3" data-exercise="mer-6" data-target="15" oninput="handleInput(this)"></div>
-                        <div class="set-input"><label>S4</label><input type="text" id="mer-6-s4" data-exercise="mer-6" data-target="15" oninput="handleInput(this)"></div>
-                    </div>
-                </div>
-                
-                <div class="exercise">
-                    <div class="exercise-header">
-                        <div class="exercise-title">7. Shrugs haltères</div>
-                        <button class="demo-btn" onclick="openDemo('https://www.youtube.com/watch?v=g6qbq4Lf1FI')">📹 Démo</button>
-                    </div>
-                    <div class="performance-analysis" id="analysis-mer-7"></div>
-                    <div class="exercise-details">
-                        <div class="detail-item"><span class="detail-label">Séries:</span> 3x12</div>
-                        <div class="detail-item"><span class="detail-label">Charge S1:</span> 28kg</div>
-                        <div class="detail-item"><span class="detail-label">Tempo:</span> 1-2-1</div>
-                        <div class="detail-item"><span class="detail-label">Repos:</span> 45s</div>
-                    </div>
-                    <div class="sets-tracker">
-                        <div class="set-input"><label>S1</label><input type="text" id="mer-7-s1" data-exercise="mer-7" data-target="12" placeholder="28×12" oninput="handleInput(this)"></div>
-                        <div class="set-input"><label>S2</label><input type="text" id="mer-7-s2" data-exercise="mer-7" data-target="12" oninput="handleInput(this)"></div>
-                        <div class="set-input"><label>S3</label><input type="text" id="mer-7-s3" data-exercise="mer-7" data-target="12" oninput="handleInput(this)"></div>
-                    </div>
-                </div>
-                
-                <div class="exercise">
-                    <div class="exercise-header">
-                        <div class="exercise-title">8. Curl haltères banc incliné</div>
+                        <div class="exercise-title">5. Curl incliné haltères</div> <!-- 🆕 numéro et title modifiés -->
                         <button class="demo-btn" onclick="openDemo('https://www.youtube.com/watch?v=soxrZlIl35U')">📹 Démo</button>
                     </div>
-                    <div class="performance-analysis" id="analysis-mer-8"></div>
+                    <div class="performance-analysis" id="analysis-mer-5"></div> <!-- 🆕 id changé -->
                     <div class="exercise-details">
-                        <div class="detail-item"><span class="detail-label">Séries:</span> 3x10</div>
+                        <div class="detail-item"><span class="detail-label">Séries:</span> 3×10</div>
                         <div class="detail-item"><span class="detail-label">Charge S1:</span> 14kg</div>
                         <div class="detail-item"><span class="detail-label">Tempo:</span> 2-1-2</div>
-                        <div class="detail-item"><span class="detail-label">Repos:</span> 45s</div>
+                        <div class="detail-item"><span class="detail-label">Repos:</span> 90s</div> <!-- 🆕 -->
                     </div>
+                    <div class="exercise-visual"><strong>🎯 ASTUCE:</strong> Banc 45° • Étirement maximal</div> <!-- 🆕 -->
                     <div class="sets-tracker">
-                        <div class="set-input"><label>S1</label><input type="text" id="mer-8-s1" data-exercise="mer-8" data-target="10" placeholder="14×10" oninput="handleInput(this)"></div>
-                        <div class="set-input"><label>S2</label><input type="text" id="mer-8-s2" data-exercise="mer-8" data-target="10" oninput="handleInput(this)"></div>
-                        <div class="set-input"><label>S3</label><input type="text" id="mer-8-s3" data-exercise="mer-8" data-target="10" oninput="handleInput(this)"></div>
+                        <div class="set-input"><label>S1</label><input type="text" id="mer-5-s1" data-exercise="mer-5" data-target="10" placeholder="14×10" oninput="handleInput(this)"></div> <!-- 🆕 -->
+                        <div class="set-input"><label>S2</label><input type="text" id="mer-5-s2" data-exercise="mer-5" data-target="10" oninput="handleInput(this)"></div> <!-- 🆕 -->
+                        <div class="set-input"><label>S3</label><input type="text" id="mer-5-s3" data-exercise="mer-5" data-target="10" oninput="handleInput(this)"></div> <!-- 🆕 -->
                     </div>
                 </div>
             </div>
@@ -565,15 +483,20 @@
         
         <!-- VENDREDI -->
         <div id="tab-vendredi" class="tab-content">
-            <h2 style="color: #667eea; margin-bottom: 12px; font-size: 20px;">🟢 VENDREDI - JAMBES</h2>
+            <h2 style="color: #667eea; margin-bottom: 12px; font-size: 20px;">🟢 VENDREDI - LEGS</h2>
             
             <div class="workout-section warmup">
-                <h3>🔥 ÉCHAUFFEMENT (17 min)</h3>
+                <h3>🔥 ÉCHAUFFEMENT (20 min)</h3> <!-- 🆕 -->
                 <ul>
-                    <li>Vélo 4 min</li>
-                    <li>Foam roll IT band + quads 3 min</li>
+                    <li>Vélo 5 min</li> <!-- 🆕 -->
                     <li>90/90 hip transitions 2x8</li>
-                    <li>Glute bridge 20 reps</li>
+                    <li>Glute bridge 2×20</li> <!-- 🆕 -->
+                    <li>Deep squat hold 2×30s</li> <!-- 🆕 -->
+                    <li>Foam roll IT band 2 min/jambe</li> <!-- 🆕 -->
+                    <li>Foam roll quadriceps 2 min</li> <!-- 🆕 -->
+                    <li>Foam roll fessiers 2 min/côté</li> <!-- 🆕 -->
+                    <li>Goblet squat vide 2×10</li> <!-- 🆕 -->
+                    <li>Hip thrust vide 2×15</li> <!-- 🆕 -->
                 </ul>
             </div>
             
@@ -588,15 +511,16 @@
                     <div class="last-week-data" id="lastweek-ven-rdl">💾 Semaine dernière: Chargement...</div>
                     <div class="performance-analysis" id="analysis-ven-1"></div>
                     <div class="exercise-details">
-                        <div class="detail-item"><span class="detail-label">Séries:</span> 5x8</div>
-                        <div class="detail-item"><span class="detail-label">Charge S1:</span> 70kg</div>
-                        <div class="detail-item"><span class="detail-label">Tempo:</span> 3-0-2</div>
-                        <div class="detail-item"><span class="detail-label">Repos:</span> 120s</div>
+                        <div class="detail-item"><span class="detail-label">Séries:</span> 5×8</div>
+                        <div class="detail-item"><span class="detail-label">Charge S1:</span> 50kg</div> <!-- 🆕 -->
+                        <div class="detail-item"><span class="detail-label">Tempo:</span> 3-0-2-1</div> <!-- 🆕 -->
+                        <div class="detail-item"><span class="detail-label">Repos:</span> 3min</div> <!-- 🆕 -->
                         <div class="detail-item"><span class="detail-label">RPE:</span> 7-8</div>
                     </div>
+                    <div class="exercise-visual"><strong>🎯 FOCUS:</strong> Hanche arrière • Dos neutre • +5kg/2sem</div> <!-- 🆕 -->
                     <div class="movement-diagram">⬇️ 3s stretch ischio → 🍑 Squeeze fessiers → ⬆️ 2s</div>
                     <div class="sets-tracker">
-                        <div class="set-input"><label>S1</label><input type="text" id="ven-1-s1" data-exercise="ven-1" data-target="8" placeholder="70×8" oninput="handleInput(this)"></div>
+                        <div class="set-input"><label>S1</label><input type="text" id="ven-1-s1" data-exercise="ven-1" data-target="8" placeholder="50×8" oninput="handleInput(this)"></div> <!-- 🆕 -->
                         <div class="set-input"><label>S2</label><input type="text" id="ven-1-s2" data-exercise="ven-1" data-target="8" oninput="handleInput(this)"></div>
                         <div class="set-input"><label>S3</label><input type="text" id="ven-1-s3" data-exercise="ven-1" data-target="8" oninput="handleInput(this)"></div>
                         <div class="set-input"><label>S4</label><input type="text" id="ven-1-s4" data-exercise="ven-1" data-target="8" oninput="handleInput(this)"></div>
@@ -606,19 +530,20 @@
                 
                 <div class="exercise">
                     <div class="exercise-header">
-                        <div class="exercise-title">2. Hip thrust</div>
+                        <div class="exercise-title">2. Hip thrust barre</div> <!-- 🆕 title modifié -->
                         <button class="demo-btn" onclick="openDemo('https://www.youtube.com/watch?v=xDmFkJxPzeM')">📹 Démo</button>
                     </div>
                     <div class="last-week-data" id="lastweek-ven-hip">💾 Semaine dernière: Chargement...</div>
                     <div class="performance-analysis" id="analysis-ven-2"></div>
                     <div class="exercise-details">
-                        <div class="detail-item"><span class="detail-label">Séries:</span> 4x12</div>
-                        <div class="detail-item"><span class="detail-label">Charge S1:</span> 80kg</div>
-                        <div class="detail-item"><span class="detail-label">Tempo:</span> 1-1-2</div>
-                        <div class="detail-item"><span class="detail-label">Repos:</span> 90s</div>
+                        <div class="detail-item"><span class="detail-label">Séries:</span> 4×12</div>
+                        <div class="detail-item"><span class="detail-label">Charge S1:</span> 30kg</div> <!-- 🆕 -->
+                        <div class="detail-item"><span class="detail-label">Tempo:</span> 1-2-2</div> <!-- 🆕 -->
+                        <div class="detail-item"><span class="detail-label">Repos:</span> 2min</div> <!-- 🆕 -->
                     </div>
+                    <div class="exercise-visual"><strong>🎯 ASTUCE:</strong> Contraction 2s en haut • +5kg/2sem</div> <!-- 🆕 -->
                     <div class="sets-tracker">
-                        <div class="set-input"><label>S1</label><input type="text" id="ven-2-s1" data-exercise="ven-2" data-target="12" placeholder="80×12" oninput="handleInput(this)"></div>
+                        <div class="set-input"><label>S1</label><input type="text" id="ven-2-s1" data-exercise="ven-2" data-target="12" placeholder="30×12" oninput="handleInput(this)"></div> <!-- 🆕 -->
                         <div class="set-input"><label>S2</label><input type="text" id="ven-2-s2" data-exercise="ven-2" data-target="12" oninput="handleInput(this)"></div>
                         <div class="set-input"><label>S3</label><input type="text" id="ven-2-s3" data-exercise="ven-2" data-target="12" oninput="handleInput(this)"></div>
                         <div class="set-input"><label>S4</label><input type="text" id="ven-2-s4" data-exercise="ven-2" data-target="12" oninput="handleInput(this)"></div>
@@ -636,36 +561,17 @@
                     </div>
                     <div class="performance-analysis" id="analysis-ven-3"></div>
                     <div class="exercise-details">
-                        <div class="detail-item"><span class="detail-label">Séries:</span> 4x12</div>
-                        <div class="detail-item"><span class="detail-label">Charge S1:</span> 32kg</div>
+                        <div class="detail-item"><span class="detail-label">Séries:</span> 4×10</div> <!-- 🆕 -->
+                        <div class="detail-item"><span class="detail-label">Charge S1:</span> 20kg</div> <!-- 🆕 -->
                         <div class="detail-item"><span class="detail-label">Tempo:</span> 2-0-2</div>
-                        <div class="detail-item"><span class="detail-label">Repos:</span> 60s</div>
+                        <div class="detail-item"><span class="detail-label">Repos:</span> 2min</div> <!-- 🆕 -->
                     </div>
+                    <div class="exercise-visual"><strong>🎯 ASTUCE:</strong> ATG (ass to grass) • +2kg/2sem</div> <!-- 🆕 -->
                     <div class="sets-tracker">
-                        <div class="set-input"><label>S1</label><input type="text" id="ven-3-s1" data-exercise="ven-3" data-target="12" placeholder="32×12" oninput="handleInput(this)"></div>
-                        <div class="set-input"><label>S2</label><input type="text" id="ven-3-s2" data-exercise="ven-3" data-target="12" oninput="handleInput(this)"></div>
-                        <div class="set-input"><label>S3</label><input type="text" id="ven-3-s3" data-exercise="ven-3" data-target="12" oninput="handleInput(this)"></div>
-                        <div class="set-input"><label>S4</label><input type="text" id="ven-3-s4" data-exercise="ven-3" data-target="12" oninput="handleInput(this)"></div>
-                    </div>
-                </div>
-                
-                <div class="exercise">
-                    <div class="exercise-header">
-                        <div class="exercise-title">4. Presse à cuisses</div>
-                        <button class="demo-btn" onclick="openDemo('https://www.youtube.com/watch?v=IZxyjW7MPJQ')">📹 Démo</button>
-                    </div>
-                    <div class="performance-analysis" id="analysis-ven-4"></div>
-                    <div class="exercise-details">
-                        <div class="detail-item"><span class="detail-label">Séries:</span> 4x12</div>
-                        <div class="detail-item"><span class="detail-label">Charge S1:</span> 120kg</div>
-                        <div class="detail-item"><span class="detail-label">Tempo:</span> 2-0-2</div>
-                        <div class="detail-item"><span class="detail-label">Repos:</span> 60s</div>
-                    </div>
-                    <div class="sets-tracker">
-                        <div class="set-input"><label>S1</label><input type="text" id="ven-4-s1" data-exercise="ven-4" data-target="12" placeholder="120×12" oninput="handleInput(this)"></div>
-                        <div class="set-input"><label>S2</label><input type="text" id="ven-4-s2" data-exercise="ven-4" data-target="12" oninput="handleInput(this)"></div>
-                        <div class="set-input"><label>S3</label><input type="text" id="ven-4-s3" data-exercise="ven-4" data-target="12" oninput="handleInput(this)"></div>
-                        <div class="set-input"><label>S4</label><input type="text" id="ven-4-s4" data-exercise="ven-4" data-target="12" oninput="handleInput(this)"></div>
+                        <div class="set-input"><label>S1</label><input type="text" id="ven-3-s1" data-exercise="ven-3" data-target="10" placeholder="20×10" oninput="handleInput(this)"></div> <!-- 🆕 -->
+                        <div class="set-input"><label>S2</label><input type="text" id="ven-3-s2" data-exercise="ven-3" data-target="10" oninput="handleInput(this)"></div> <!-- 🆕 -->
+                        <div class="set-input"><label>S3</label><input type="text" id="ven-3-s3" data-exercise="ven-3" data-target="10" oninput="handleInput(this)"></div> <!-- 🆕 -->
+                        <div class="set-input"><label>S4</label><input type="text" id="ven-3-s4" data-exercise="ven-3" data-target="10" oninput="handleInput(this)"></div> <!-- 🆕 -->
                     </div>
                 </div>
             </div>
@@ -675,60 +581,40 @@
                 
                 <div class="exercise">
                     <div class="exercise-header">
-                        <div class="exercise-title">5. Fentes bulgares</div>
+                        <div class="exercise-title">4. Fentes bulgares</div> <!-- 🆕 numéro changé -->
                         <button class="demo-btn" onclick="openDemo('https://www.youtube.com/watch?v=2C-uNgKwPLE')">📹 Démo</button>
                     </div>
-                    <div class="performance-analysis" id="analysis-ven-5"></div>
+                    <div class="performance-analysis" id="analysis-ven-4"></div> <!-- 🆕 id changé -->
                     <div class="exercise-details">
-                        <div class="detail-item"><span class="detail-label">Séries:</span> 3x8/jambe</div>
-                        <div class="detail-item"><span class="detail-label">Charge S1:</span> 18kg</div>
+                        <div class="detail-item"><span class="detail-label">Séries:</span> 3×10/jambe</div> <!-- 🆕 -->
+                        <div class="detail-item"><span class="detail-label">Charge S1:</span> 10kg</div> <!-- 🆕 -->
                         <div class="detail-item"><span class="detail-label">Tempo:</span> 2-0-2</div>
-                        <div class="detail-item"><span class="detail-label">Repos:</span> 60s</div>
+                        <div class="detail-item"><span class="detail-label">Repos:</span> 90s</div> <!-- 🆕 -->
                     </div>
                     <div class="sets-tracker">
-                        <div class="set-input"><label>S1 (D/G)</label><input type="text" id="ven-5-s1" data-exercise="ven-5" data-target="8" placeholder="18×8/8" oninput="handleInput(this)"></div>
-                        <div class="set-input"><label>S2</label><input type="text" id="ven-5-s2" data-exercise="ven-5" data-target="8" oninput="handleInput(this)"></div>
-                        <div class="set-input"><label>S3</label><input type="text" id="ven-5-s3" data-exercise="ven-5" data-target="8" oninput="handleInput(this)"></div>
+                        <div class="set-input"><label>S1 (D/G)</label><input type="text" id="ven-4-s1" data-exercise="ven-4" data-target="10" placeholder="10×10/10" oninput="handleInput(this)"></div> <!-- 🆕 -->
+                        <div class="set-input"><label>S2</label><input type="text" id="ven-4-s2" data-exercise="ven-4" data-target="10" oninput="handleInput(this)"></div> <!-- 🆕 -->
+                        <div class="set-input"><label>S3</label><input type="text" id="ven-4-s3" data-exercise="ven-4" data-target="10" oninput="handleInput(this)"></div> <!-- 🆕 -->
                     </div>
                 </div>
                 
                 <div class="exercise">
                     <div class="exercise-header">
-                        <div class="exercise-title">6. Leg curl allongé</div>
-                        <button class="demo-btn" onclick="openDemo('https://www.youtube.com/watch?v=ELOCsoDSmrg')">📹 Démo</button>
-                    </div>
-                    <div class="performance-analysis" id="analysis-ven-6"></div>
-                    <div class="exercise-details">
-                        <div class="detail-item"><span class="detail-label">Séries:</span> 4x12</div>
-                        <div class="detail-item"><span class="detail-label">Charge S1:</span> Pile 6</div>
-                        <div class="detail-item"><span class="detail-label">Tempo:</span> 1-1-2</div>
-                        <div class="detail-item"><span class="detail-label">Repos:</span> 45s</div>
-                    </div>
-                    <div class="sets-tracker">
-                        <div class="set-input"><label>S1</label><input type="text" id="ven-6-s1" data-exercise="ven-6" data-target="12" placeholder="P6×12" oninput="handleInput(this)"></div>
-                        <div class="set-input"><label>S2</label><input type="text" id="ven-6-s2" data-exercise="ven-6" data-target="12" oninput="handleInput(this)"></div>
-                        <div class="set-input"><label>S3</label><input type="text" id="ven-6-s3" data-exercise="ven-6" data-target="12" oninput="handleInput(this)"></div>
-                        <div class="set-input"><label>S4</label><input type="text" id="ven-6-s4" data-exercise="ven-6" data-target="12" oninput="handleInput(this)"></div>
-                    </div>
-                </div>
-                
-                <div class="exercise">
-                    <div class="exercise-header">
-                        <div class="exercise-title">7. Mollets presse</div>
+                        <div class="exercise-title">5. Mollets debout</div> <!-- 🆕 numéro et title modifiés -->
                         <button class="demo-btn" onclick="openDemo('https://www.youtube.com/watch?v=JbyjNymZOJo')">📹 Démo</button>
                     </div>
-                    <div class="performance-analysis" id="analysis-ven-7"></div>
+                    <div class="performance-analysis" id="analysis-ven-5"></div> <!-- 🆕 id changé -->
                     <div class="exercise-details">
-                        <div class="detail-item"><span class="detail-label">Séries:</span> 4x15</div>
-                        <div class="detail-item"><span class="detail-label">Charge S1:</span> 80kg</div>
-                        <div class="detail-item"><span class="detail-label">Tempo:</span> 1-2-1</div>
-                        <div class="detail-item"><span class="detail-label">Repos:</span> 45s</div>
+                        <div class="detail-item"><span class="detail-label">Séries:</span> 4×20</div> <!-- 🆕 -->
+                        <div class="detail-item"><span class="detail-label">Tempo:</span> 2-2-2</div> <!-- 🆕 -->
+                        <div class="detail-item"><span class="detail-label">Repos:</span> 60s</div> <!-- 🆕 -->
                     </div>
+                    <div class="exercise-visual"><strong>🎯 ASTUCE:</strong> Étirement + contraction complète</div> <!-- 🆕 -->
                     <div class="sets-tracker">
-                        <div class="set-input"><label>S1</label><input type="text" id="ven-7-s1" data-exercise="ven-7" data-target="15" placeholder="80×15" oninput="handleInput(this)"></div>
-                        <div class="set-input"><label>S2</label><input type="text" id="ven-7-s2" data-exercise="ven-7" data-target="15" oninput="handleInput(this)"></div>
-                        <div class="set-input"><label>S3</label><input type="text" id="ven-7-s3" data-exercise="ven-7" data-target="15" oninput="handleInput(this)"></div>
-                        <div class="set-input"><label>S4</label><input type="text" id="ven-7-s4" data-exercise="ven-7" data-target="15" oninput="handleInput(this)"></div>
+                        <div class="set-input"><label>S1</label><input type="text" id="ven-5-s1" data-exercise="ven-5" data-target="20" placeholder="20" oninput="handleInput(this)"></div> <!-- 🆕 -->
+                        <div class="set-input"><label>S2</label><input type="text" id="ven-5-s2" data-exercise="ven-5" data-target="20" oninput="handleInput(this)"></div> <!-- 🆕 -->
+                        <div class="set-input"><label>S3</label><input type="text" id="ven-5-s3" data-exercise="ven-5" data-target="20" oninput="handleInput(this)"></div> <!-- 🆕 -->
+                        <div class="set-input"><label>S4</label><input type="text" id="ven-5-s4" data-exercise="ven-5" data-target="20" oninput="handleInput(this)"></div> <!-- 🆕 -->
                     </div>
                 </div>
             </div>
@@ -786,9 +672,9 @@
             
             <div class="workout-section">
                 <h3>💪 Charges clés</h3>
-                <div class="progress-item"><span>Incliné HB (kg)</span><input type="text" id="prog-incline" placeholder="32" oninput="saveProgressData()"></div>
+                <div class="progress-item"><span>Incliné HB (kg)</span><input type="text" id="prog-incline" placeholder="28" oninput="saveProgressData()"></div> <!-- 🆕 -->
                 <div class="progress-item"><span>Tractions (reps)</span><input type="text" id="prog-tractions" placeholder="5" oninput="saveProgressData()"></div>
-                <div class="progress-item"><span>RDL (kg)</span><input type="text" id="prog-rdl" placeholder="70" oninput="saveProgressData()"></div>
+                <div class="progress-item"><span>RDL (kg)</span><input type="text" id="prog-rdl" placeholder="50" oninput="saveProgressData()"></div> <!-- 🆕 -->
             </div>
             
             <div class="workout-section">
@@ -801,9 +687,9 @@
             </div>
         </div>
 
-        <!-- ÉVOLUTION 8 SEMAINES -->
+        <!-- ÉVOLUTION 10 SEMAINES --> <!-- 🆕 -->
         <div id="tab-evolution" class="tab-content">
-            <h2 style="color: #667eea; margin-bottom: 12px; font-size: 20px;">📈 PROGRESSION 8 SEMAINES</h2>
+            <h2 style="color: #667eea; margin-bottom: 12px; font-size: 20px;">📈 PROGRESSION 10 SEMAINES</h2> <!-- 🆕 -->
             
             <div class="workout-section">
                 <h3>🎯 Vue d'ensemble</h3>
@@ -813,10 +699,10 @@
             </div>
 
             <div class="workout-section">
-                <h3>💪 Développé Incliné (4x8)</h3>
+                <h3>💪 Développé Incliné (5×8)</h3> <!-- 🆕 -->
                 <table class="progression-table" id="table-incline">
                     <thead>
-                        <tr><th>Semaine</th><th>S1</th><th>S2</th><th>S3</th><th>S4</th><th>Moyenne</th><th>Statut</th></tr>
+                        <tr><th>Semaine</th><th>S1</th><th>S2</th><th>S3</th><th>S4</th><th>S5</th><th>Moyenne</th><th>Statut</th></tr> <!-- 🆕 -->
                     </thead>
                     <tbody>
                         <!-- Généré dynamiquement -->
@@ -825,7 +711,7 @@
             </div>
 
             <div class="workout-section">
-                <h3>🏋️ Romanian Deadlift (5x8)</h3>
+                <h3>🏋️ Romanian Deadlift (5×8)</h3>
                 <table class="progression-table" id="table-rdl">
                     <thead>
                         <tr><th>Semaine</th><th>S1</th><th>S2</th><th>S3</th><th>S4</th><th>S5</th><th>Moyenne</th><th>Statut</th></tr>
@@ -939,13 +825,12 @@ let currentWeek=parseInt(localStorage.getItem('currentWeek')||'1'),autoSaveTimeo
 let inputStates={};
 let generatedReport='';
 
-const baselineProgram={
-    'lun-1a':{weight:32,reps:8},'lun-1b':{weight:18,reps:10},'lun-2a':{weight:20,reps:10},'lun-2b':{weight:'P6',reps:15},
-    'lun-3a':{weight:10,reps:12},'lun-3b':{weight:'P4',reps:15},'lun-4a':{weight:-30,reps:10},'lun-4b':{weight:'P6',reps:12},
-    'mer-1':{weight:'',reps:5},'mer-2':{weight:70,reps:10},'mer-3':{weight:'P8',reps:10},'mer-4':{weight:'P6',reps:12},
-    'mer-5':{weight:'P5',reps:20},'mer-6':{weight:'P5',reps:15},'mer-7':{weight:28,reps:12},'mer-8':{weight:14,reps:10},
-    'ven-1':{weight:70,reps:8},'ven-2':{weight:80,reps:12},'ven-3':{weight:32,reps:12},'ven-4':{weight:120,reps:12},
-    'ven-5':{weight:18,reps:8},'ven-6':{weight:'P6',reps:12},'ven-7':{weight:80,reps:15}
+const baselineProgram={ // 🆕 Charges adaptées au programme sèche
+    'lun-1':{weight:8,reps:12},'lun-2':{weight:20,reps:15},'lun-3':{weight:28,reps:8},'lun-4':{weight:16,reps:10}, // 🆕
+    'lun-5':{weight:'',reps:10},'lun-6':{weight:'P6',reps:12}, // 🆕
+    'mer-1':{weight:'',reps:5},'mer-2':{weight:50,reps:8},'mer-3':{weight:'P8',reps:10},'mer-4':{weight:'P6',reps:12}, // 🆕
+    'mer-5':{weight:14,reps:10}, // 🆕
+    'ven-1':{weight:50,reps:8},'ven-2':{weight:30,reps:12},'ven-3':{weight:20,reps:10},'ven-4':{weight:10,reps:10},'ven-5':{weight:'',reps:20} // 🆕
 };
 
 window.onload=function(){updateWeekDisplay();loadAllData();checkPhotoReminders();loadPhotos();updatePhotoComparison();validateFeedbackForm();requestWakeLock()};
@@ -953,16 +838,22 @@ window.onload=function(){updateWeekDisplay();loadAllData();checkPhotoReminders()
 async function requestWakeLock(){try{if('wakeLock'in navigator){wakeLock=await navigator.wakeLock.request('screen');wakeLock.addEventListener('release',()=>{console.log('Wake Lock released')});console.log('Wake Lock active')}}catch(err){console.log('Wake Lock not supported:',err)}}
 
 function updateWeekDisplay(){
-    document.getElementById('week-display').textContent=`SEMAINE ${currentWeek} / 8`;
+    document.getElementById('week-display').textContent=`SEMAINE ${currentWeek} / 10`; // 🆕
     localStorage.setItem('currentWeek',currentWeek);
-    if(currentWeek===2||currentWeek===4||currentWeek===6||currentWeek===8){
+    if(currentWeek===4||currentWeek===8||currentWeek===10){ // 🆕 Ajout S10
         setTimeout(()=>showModal('📊','Temps de mesurer !',`Fin de semaine ${currentWeek} : Prends tes mesures (poids, tour de taille, photos)`),1000)
+    }
+    if(currentWeek===7){ // 🆕 Deload S7
+        setTimeout(()=>showModal('⚠️','DELOAD Semaine 7',`Volume -40% • Charges maintenues • Reps -2 • Récup systémique`),1000)
+    }
+    if(currentWeek===10){ // 🆕 Deload final S10
+        setTimeout(()=>showModal('🎉','DELOAD FINAL S10',`Volume -50% • Charges -10% • Récup avant transition`),1000)
     }
     loadPhotos();updatePhotoComparison();
     document.getElementById('current-photo-week').textContent=currentWeek;
 }
 
-function changeWeek(delta){const newWeek=currentWeek+delta;if(newWeek>=1&&newWeek<=8){currentWeek=newWeek;updateWeekDisplay();loadAllData();checkPhotoReminders();generate8WeeksView()}}
+function changeWeek(delta){const newWeek=currentWeek+delta;if(newWeek>=1&&newWeek<=10){currentWeek=newWeek;updateWeekDisplay();loadAllData();checkPhotoReminders();generate8WeeksView()}} // 🆕 10 au lieu de 8
 function resetWeek(){if(confirm('Remettre à Semaine 1 ?')){currentWeek=1;updateWeekDisplay();loadAllData();checkPhotoReminders();generate8WeeksView()}}
 
 function prefillInputs(day){
@@ -1050,8 +941,8 @@ function loadAllData(){['lundi','mercredi','vendredi'].forEach(day=>{prefillInpu
 function loadLastWeekData(day){
     if(currentWeek===1)return;
     const lastWeek=currentWeek-1,saved=localStorage.getItem(`workout-${day}-w${lastWeek}`);
-    const exerciseMap={
-        'lundi':[{id:'lun-incline',display:'lastweek-lun-incline',keys:['lun-1a-s1','lun-1a-s2','lun-1a-s3','lun-1a-s4']},{id:'lun-rowing',display:'lastweek-lun-rowing',keys:['lun-1b-s1','lun-1b-s2']}],
+    const exerciseMap={ // 🆕 Mapping adapté aux nouveaux exercices
+        'lundi':[{id:'lun-elev',display:'lastweek-lun-elev',keys:['lun-1-s1','lun-1-s2']},{id:'lun-face',display:'lastweek-lun-face',keys:['lun-2-s1','lun-2-s2']},{id:'lun-incline',display:'lastweek-lun-incline',keys:['lun-3-s1','lun-3-s2','lun-3-s3']}], // 🆕
         'mercredi':[{id:'mer-tractions',display:'lastweek-mer-tractions',keys:['mer-1-s1','mer-1-s2','mer-1-s3','mer-1-s4','mer-1-s5']},{id:'mer-rowing',display:'lastweek-mer-rowing',keys:['mer-2-s1','mer-2-s2']}],
         'vendredi':[{id:'ven-rdl',display:'lastweek-ven-rdl',keys:['ven-1-s1','ven-1-s2']},{id:'ven-hip',display:'lastweek-ven-hip',keys:['ven-2-s1','ven-2-s2']}]
     };
@@ -1151,13 +1042,13 @@ function validateFeedbackForm(){
 }
 
 function generateStructuredReport(day,duration,feedback){
-    const dayNames={'lundi':'LUNDI - POUSSÉE','mercredi':'MERCREDI - TRACTION','vendredi':'VENDREDI - JAMBES'};
+    const dayNames={'lundi':'LUNDI - PUSH + ÉPAULES','mercredi':'MERCREDI - PULL','vendredi':'VENDREDI - LEGS'}; // 🆕
     const data=JSON.parse(localStorage.getItem(`workout-${day}-w${currentWeek}`)||'{}');
-    let report=`🏋️ RAPPORT SÉANCE STRUCTURÉ - MASSE BUILDER
+    let report=`🏋️ RAPPORT SÉANCE STRUCTURÉ - MASSE BUILDER SÈCHE // 🆕
 ═══════════════════════════════════════════
 
 📅 DATE: ${new Date().toLocaleDateString('fr-FR')}
-📍 SEMAINE: ${currentWeek}/8
+📍 SEMAINE: ${currentWeek}/10 // 🆕
 🎯 SÉANCE: ${dayNames[day]||day.toUpperCase()}
 ⏱️ DURÉE: ${duration} minutes
 
@@ -1184,12 +1075,13 @@ Notes: ${feedback.notes}
 🔮 PROMPT ANALYSE IA
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-"Analyse ce rapport de séance musculation:
+"Analyse ce rapport de séance musculation SÈCHE:
 - Identifie patterns de progression/stagnation
 - Détecte déséquilibres potentiels
 - Suggère ajustements charges/volume
 - Repère signaux surentraînement
-- Recommande focus semaine prochaine"
+- Recommande focus semaine prochaine
+- Évalue maintien force pendant déficit calorique" // 🆕
 `;
     return report;
 }
@@ -1223,12 +1115,12 @@ function emailReport(){
 }
 
 function checkPhotoReminders(){
-    const photoWeeks=[0,4,8],reminderDiv=document.getElementById('photo-reminder');
+    const photoWeeks=[0,4,8,10],reminderDiv=document.getElementById('photo-reminder'); // 🆕 Ajout S10
     if(!reminderDiv)return;
     if(photoWeeks.includes(currentWeek)){
-        const message=currentWeek===0?'AVANT (face/dos/profil)':currentWeek===4?'MI-PARCOURS':'FINALES';
+        const message=currentWeek===0?'AVANT (face/dos/profil)':currentWeek===4?'MI-PARCOURS (4 sem)':currentWeek===8?'PRESQUE FIN (8 sem)':'FINALES'; // 🆕
         reminderDiv.innerHTML=`<div class="warning">📸 S${currentWeek} : Prends tes photos ${message}</div>`;
-    }else reminderDiv.innerHTML=`<div class="success">✅ Prochaines photos: Semaine ${photoWeeks.find(w=>w>currentWeek)||8}</div>`;
+    }else reminderDiv.innerHTML=`<div class="success">✅ Prochaines photos: Semaine ${photoWeeks.find(w=>w>currentWeek)||10}</div>`; // 🆕
 }
 
 function uploadPhoto(type){currentPhotoType=type;document.getElementById('photo-input').click()}
@@ -1278,7 +1170,7 @@ function loadPhotos(){
 function updatePhotoComparison(){
     const comparisonDiv=document.getElementById('photo-comparison');
     if(!comparisonDiv)return;
-    const weeks=[0,1,4,8];
+    const weeks=[0,1,4,8,10]; // 🆕 Ajout S10
     const hasAnyPhotos=weeks.some(w=>localStorage.getItem(`photo-w${w}-face`)||localStorage.getItem(`photo-w${w}-dos`)||localStorage.getItem(`photo-w${w}-profil`));
     if(!hasAnyPhotos){comparisonDiv.innerHTML='<p style="color: #999; text-align: center;">Prends tes premières photos !</p>';return}
     let html='';
@@ -1304,7 +1196,7 @@ function analyzePhotosWithAI(){
         if(photoData)photos.push({type:type,data:photoData});
     });
     if(photos.length===0){alert('❌ Aucune photo à analyser');return}
-    const prompt=`Analyse ces photos de progression musculation (Semaine ${currentWeek}/8):\n\n- Identifie points forts et retards musculaires\n- Évalue symétrie et proportions\n- Suggère ajustements programme`;
+    const prompt=`Analyse ces photos de progression musculation SÈCHE (Semaine ${currentWeek}/10):\n\n- Identifie points forts et retards musculaires\n- Évalue symétrie et proportions\n- Suggère ajustements programme\n- Évalue perte de gras vs maintien musculaire`; // 🆕
     window.open('https://chatgpt.com/?model=gpt-4o','_blank');
     navigator.clipboard.writeText(prompt);
     alert('✅ Prompt copié !\n\nColle-le dans ChatGPT Vision et uploade tes photos pour analyse.');
@@ -1312,7 +1204,7 @@ function analyzePhotosWithAI(){
 
 function exportReport(){
     const history=JSON.parse(localStorage.getItem('workoutHistory')||'[]'),measures=JSON.parse(localStorage.getItem('currentMeasures')||'{}');
-    let report=`📊 BILAN MASSE BUILDER\n📅 ${new Date().toLocaleDateString('fr-FR')}\n🗓️ Semaine: ${currentWeek}/8\n\n━━━━━━━━━━━━━━━━━━━━━━━━━━\n📏 MESURES\n━━━━━━━━━━━━━━━━━━━━━━━━━━\nPoids: ${measures.poids||'?'} kg\nTaille: ${measures.taille||'?'} cm\n\n`;
+    let report=`📊 BILAN MASSE BUILDER SÈCHE\n📅 ${new Date().toLocaleDateString('fr-FR')}\n🗓️ Semaine: ${currentWeek}/10\n\n━━━━━━━━━━━━━━━━━━━━━━━━━━\n📏 MESURES\n━━━━━━━━━━━━━━━━━━━━━━━━━━\nPoids: ${measures.poids||'?'} kg\nTaille: ${measures.taille||'?'} cm\n\n`; // 🆕
     if(history.length>0){report+=`━━━━━━━━━━━━━━━━━━━━━━━━━━\n🏋️ HISTORIQUE (${history.length})\n━━━━━━━━━━━━━━━━━━━━━━━━━━\n`;const recent=history.slice(-6).reverse();recent.forEach((w,i)=>{report+=`\n${i+1}. ${w.day.toUpperCase()} S${w.week} - ${w.date}\n`;const exercises=Object.entries(w.exercises).slice(0,6);exercises.forEach(([key,val])=>report+=`   ${key}: ${val}\n`);if(w.notes)report+=`   📝 ${w.notes.substring(0,80)}\n`})}
     navigator.clipboard.writeText(report);showModal('📋','Rapport copié !','Colle-le pour ton coach');
 }
@@ -1327,17 +1219,17 @@ function loadHistory(){
     historyDiv.innerHTML=html;
 }
 
-function generate8WeeksView(){
+function generate8WeeksView(){ // 🆕 Fonction renommée mais garde le même nom pour compatibilité
     const overview=document.getElementById('week-overview');
     if(!overview)return;
     let html='';
-    for(let w=1;w<=8;w++){
+    for(let w=1;w<=10;w++){ // 🆕 10 semaines
         const badge=w<currentWeek?'completed':w===currentWeek?'current':'future';
         html+=`<span class="week-badge ${badge}">S${w}</span>`;
     }
     overview.innerHTML=html;
     
-    generateExerciseTable('incline','lundi',['lun-1a-s1','lun-1a-s2','lun-1a-s3','lun-1a-s4']);
+    generateExerciseTable('incline','lundi',['lun-3-s1','lun-3-s2','lun-3-s3','lun-3-s4','lun-3-s5']); // 🆕 5 séries
     generateExerciseTable('rdl','vendredi',['ven-1-s1','ven-1-s2','ven-1-s3','ven-1-s4','ven-1-s5']);
     generateExerciseTable('tractions','mercredi',['mer-1-s1','mer-1-s2','mer-1-s3','mer-1-s4','mer-1-s5']);
     generateBodyTable();
@@ -1348,7 +1240,7 @@ function generateExerciseTable(name,day,keys){
     if(!table)return;
     const tbody=table.querySelector('tbody');
     tbody.innerHTML='';
-    for(let w=1;w<=8;w++){
+    for(let w=1;w<=10;w++){ // 🆕 10 semaines
         const data=localStorage.getItem(`workout-${day}-w${w}`);
         if(data){
             const workout=JSON.parse(data);
@@ -1366,7 +1258,7 @@ function generateBodyTable(){
     const tbody=table.querySelector('tbody');
     tbody.innerHTML='';
     let baseWeight=null,baseTaille=null;
-    for(let w=1;w<=8;w++){
+    for(let w=1;w<=10;w++){ // 🆕 10 semaines
         const saved=localStorage.getItem(`measures-w${w}`);
         if(saved){
             const m=JSON.parse(saved);
