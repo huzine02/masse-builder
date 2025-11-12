@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Masse Builder v3.1 Ultimate - Phase Sèche</title> <!-- 🆕 NOUVEAU: v3.1 Ultimate -->
+    <title>Masse Builder v3.2 Ultimate - Phase Sèche</title> <!-- 🆕 NOUVEAU: v3.2 Ultimate avec améliorations UX -->
     <style>
         * {margin: 0; padding: 0; box-sizing: border-box;}
         body {font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); min-height: 100vh; padding: 15px; color: #333;}
@@ -33,6 +33,32 @@
         .comparison-photo img {width: 100%; height: 100%; object-fit: cover;}
         .auto-save-indicator {position: fixed; top: 20px; right: 20px; background: #51cf66; color: white; padding: 8px 16px; border-radius: 20px; font-size: 12px; font-weight: bold; opacity: 0; transition: opacity 0.3s; z-index: 1000; box-shadow: 0 4px 12px rgba(0,0,0,0.2);}
         .auto-save-indicator.show {opacity: 1;}
+        /* 🆕 NOUVEAU: Timer flottant persistant */
+        .floating-timer {position: fixed; bottom: 20px; right: 20px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 15px 20px; border-radius: 15px; box-shadow: 0 8px 24px rgba(0,0,0,0.3); z-index: 999; display: none; min-width: 200px;}
+        .floating-timer.active {display: block; animation: slideInUp 0.3s;}
+        @keyframes slideInUp {from {transform: translateY(100px); opacity: 0;} to {transform: translateY(0); opacity: 1;}}
+        .floating-timer-title {font-size: 11px; opacity: 0.9; margin-bottom: 5px; text-transform: uppercase; letter-spacing: 1px;}
+        .floating-timer-display {font-size: 32px; font-weight: bold; margin: 5px 0; font-variant-numeric: tabular-nums;}
+        .floating-timer-display.warning {color: #ffc107; animation: pulse 1s infinite;}
+        .floating-timer-controls {display: flex; gap: 5px; margin-top: 10px;}
+        .floating-timer-controls button {padding: 6px 12px; background: rgba(255,255,255,0.2); border: 1px solid white; border-radius: 6px; color: white; font-size: 11px; font-weight: bold; cursor: pointer; flex: 1;}
+        .floating-timer-controls button:hover {background: rgba(255,255,255,0.3);}
+        /* 🆕 NOUVEAU: Guidage transition automatique */
+        .transition-guide {position: fixed; bottom: 100px; left: 50%; transform: translateX(-50%); background: white; padding: 20px; border-radius: 15px; box-shadow: 0 8px 24px rgba(0,0,0,0.3); z-index: 998; display: none; min-width: 300px; text-align: center;}
+        .transition-guide.show {display: block; animation: bounceIn 0.5s;}
+        @keyframes bounceIn {0% {transform: translateX(-50%) scale(0.3); opacity: 0;} 50% {transform: translateX(-50%) scale(1.05);} 70% {transform: translateX(-50%) scale(0.9);} 100% {transform: translateX(-50%) scale(1); opacity: 1;}}
+        .transition-guide-title {font-size: 18px; font-weight: bold; color: #667eea; margin-bottom: 15px;}
+        .transition-guide-buttons {display: flex; gap: 10px; justify-content: center;}
+        /* 🆕 NOUVEAU: Toggle échauffement */
+        .warmup-toggle {background: #fff3cd; border: 2px solid #ffc107; padding: 12px; border-radius: 10px; margin-bottom: 15px; display: flex; align-items: center; justify-content: space-between;}
+        .warmup-toggle-label {font-weight: bold; font-size: 14px;}
+        .toggle-switch {position: relative; display: inline-block; width: 60px; height: 30px;}
+        .toggle-switch input {opacity: 0; width: 0; height: 0;}
+        .toggle-slider {position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0; background-color: #ccc; transition: .4s; border-radius: 30px;}
+        .toggle-slider:before {position: absolute; content: ""; height: 22px; width: 22px; left: 4px; bottom: 4px; background-color: white; transition: .4s; border-radius: 50%;}
+        input:checked + .toggle-slider {background-color: #51cf66;}
+        input:checked + .toggle-slider:before {transform: translateX(30px);}
+        /* FIN styles 🆕 */
         .tabs {display: grid; grid-template-columns: repeat(auto-fit, minmax(85px, 1fr)); gap: 8px; margin-bottom: 20px;} /* 🆕 NOUVEAU: 85px pour 6 tabs */
         .tab {padding: 12px 8px; background: #f0f0f0; border: none; border-radius: 10px; cursor: pointer; font-weight: bold; transition: all 0.3s; font-size: 13px;}
         .tab.active {background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; transform: translateY(-2px); box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);}
@@ -134,9 +160,30 @@
 </head>
 <body>
     <div class="auto-save-indicator" id="auto-save-indicator">✅ Sauvegardé</div>
+
+    <!-- 🆕 NOUVEAU: Timer flottant persistant -->
+    <div class="floating-timer" id="floating-timer">
+        <div class="floating-timer-title" id="floating-timer-title">⏱️ REPOS</div>
+        <div class="floating-timer-display" id="floating-timer-display">00:00</div>
+        <div class="floating-timer-controls">
+            <button onclick="floatingTimerAdd30()">+30s</button>
+            <button onclick="floatingTimerStop()">Stop</button>
+        </div>
+    </div>
+
+    <!-- 🆕 NOUVEAU: Guide de transition automatique -->
+    <div class="transition-guide" id="transition-guide">
+        <div class="transition-guide-title">✅ Série terminée !</div>
+        <div style="margin: 15px 0; color: #666;">Que veux-tu faire ?</div>
+        <div class="transition-guide-buttons">
+            <button class="btn btn-success" onclick="startRestTimer()">⏱️ Repos <span id="suggested-rest-time">90s</span></button>
+            <button class="btn btn-primary" onclick="goToNextSet()">➡️ Série suivante</button>
+        </div>
+    </div>
+
     <div class="container">
         <h1>💪 MASSE BUILDER</h1>
-        <div style="text-align: center;"><span class="version-badge">v3.1 ULTIMATE • 10 Semaines • Protocoles Thermiques</span></div> <!-- 🆕 NOUVEAU: Ultimate + Protocoles -->
+        <div style="text-align: center;"><span class="version-badge">v3.2 ULTIMATE • 10 Semaines • UX Optimisée</span></div> <!-- 🆕 v3.2: Auto-save + Timer flottant + Guidage + Toggle -->
         <div class="header-info">10 semaines • 3 séances/semaine • Phase Sèche • McGill Big 3</div> <!-- 🆕 NOUVEAU: McGill -->
 
         <div class="week-tracker">
@@ -190,10 +237,22 @@
         <!-- LUNDI -->
         <div id="tab-lundi" class="tab-content active">
             <h2 style="color: #667eea; margin-bottom: 12px; font-size: 20px;">🔴 LUNDI - PUSH + ÉPAULES PRIORITÉ</h2>
-            
+
             <div class="workout-section warmup">
-                <h3>🔥 ÉCHAUFFEMENT COMPLET (28 min)</h3> <!-- 🆕 NOUVEAU: Échauffement étendu -->
-                
+                <h3>🔥 ÉCHAUFFEMENT <span id="warmup-mode-lundi">COMPLET (28 min)</span></h3>
+
+                <!-- 🆕 NOUVEAU: Toggle échauffement optimal/complet -->
+                <div class="warmup-toggle">
+                    <div>
+                        <div class="warmup-toggle-label">Mode Optimal 15min</div>
+                        <div style="font-size: 11px; color: #666;">McGill Big 3 + Activation essentielle</div>
+                    </div>
+                    <label class="toggle-switch">
+                        <input type="checkbox" id="warmup-toggle-lundi" onchange="toggleWarmupMode('lundi')">
+                        <span class="toggle-slider"></span>
+                    </label>
+                </div>
+
                 <!-- 🆕 NOUVEAU: McGill Big 3 -->
                 <div style="background: #e8f5e9; padding: 10px; border-radius: 8px; margin-bottom: 15px;">
                     <h4 style="color: #51cf66; margin-bottom: 10px;">💚 McGILL BIG 3 (8 min) - CORE STABILITY</h4>
@@ -247,22 +306,25 @@
                     <li>Scapular push-ups 2×10</li>
                 </ul>
                 
-                <!-- 🆕 NOUVEAU: Phase 3 pré-activation -->
-                <h4 style="color: #ffa500; margin: 15px 0 10px 0;">🔸 PHASE 3: Pré-activation PUSH (5 min)</h4>
-                <ul>
-                    <li>Écartés câble léger: 2×20 (pecs)</li>
-                    <li>Élévations latérales 2kg: 2×20 (épaules)</li>
-                    <li>Extensions triceps léger: 2×20</li>
-                </ul>
-                
-                <!-- 🆕 NOUVEAU: Phase 4 montée progressive -->
-                <h4 style="color: #ffa500; margin: 15px 0 10px 0;">🔸 PHASE 4: Montée progressive (5 min)</h4>
-                <ul>
-                    <li>Développé incliné vide × 15 reps</li>
-                    <li>Développé incliné 10kg × 12 reps (30% charge)</li>
-                    <li>Développé incliné 15kg × 10 reps (50% charge)</li>
-                    <li>Développé incliné 20kg × 8 reps (70% charge)</li>
-                </ul>
+                <!-- 🆕 NOUVEAU: Phases optionnelles (cachées en mode optimal) -->
+                <div class="warmup-extended-lundi">
+                    <!-- 🆕 NOUVEAU: Phase 3 pré-activation -->
+                    <h4 style="color: #ffa500; margin: 15px 0 10px 0;">🔸 PHASE 3: Pré-activation PUSH (5 min)</h4>
+                    <ul>
+                        <li>Écartés câble léger: 2×20 (pecs)</li>
+                        <li>Élévations latérales 2kg: 2×20 (épaules)</li>
+                        <li>Extensions triceps léger: 2×20</li>
+                    </ul>
+
+                    <!-- 🆕 NOUVEAU: Phase 4 montée progressive -->
+                    <h4 style="color: #ffa500; margin: 15px 0 10px 0;">🔸 PHASE 4: Montée progressive (5 min)</h4>
+                    <ul>
+                        <li>Développé incliné vide × 15 reps</li>
+                        <li>Développé incliné 10kg × 12 reps (30% charge)</li>
+                        <li>Développé incliné 15kg × 10 reps (50% charge)</li>
+                        <li>Développé incliné 20kg × 8 reps (70% charge)</li>
+                    </ul>
+                </div>
                 <!-- FIN phases échauffement 🆕 -->
             </div>
             
@@ -421,10 +483,22 @@
         <!-- MERCREDI -->
         <div id="tab-mercredi" class="tab-content">
             <h2 style="color: #667eea; margin-bottom: 12px; font-size: 20px;">🔵 MERCREDI - PULL</h2>
-            
+
             <div class="workout-section warmup">
-                <h3>🔥 ÉCHAUFFEMENT COMPLET (28 min)</h3> <!-- 🆕 NOUVEAU: Échauffement étendu -->
-                
+                <h3>🔥 ÉCHAUFFEMENT <span id="warmup-mode-mercredi">COMPLET (28 min)</span></h3>
+
+                <!-- 🆕 NOUVEAU: Toggle échauffement optimal/complet -->
+                <div class="warmup-toggle">
+                    <div>
+                        <div class="warmup-toggle-label">Mode Optimal 15min</div>
+                        <div style="font-size: 11px; color: #666;">McGill Big 3 + Activation essentielle</div>
+                    </div>
+                    <label class="toggle-switch">
+                        <input type="checkbox" id="warmup-toggle-mercredi" onchange="toggleWarmupMode('mercredi')">
+                        <span class="toggle-slider"></span>
+                    </label>
+                </div>
+
                 <!-- 🆕 NOUVEAU: McGill Big 3 -->
                 <div style="background: #e8f5e9; padding: 10px; border-radius: 8px; margin-bottom: 15px;">
                     <h4 style="color: #51cf66; margin-bottom: 10px;">💚 McGILL BIG 3 (8 min) - CORE STABILITY</h4>
@@ -445,22 +519,25 @@
                     <li>Dead hangs 2×30s</li>
                 </ul>
                 
-                <!-- 🆕 NOUVEAU: Phase 3 pré-activation -->
-                <h4 style="color: #ffa500; margin: 15px 0 10px 0;">🔸 PHASE 3: Pré-activation PULL (5 min)</h4>
-                <ul>
-                    <li>Pull-overs léger: 2×20 (lats)</li>
-                    <li>Band rows: 2×20 (dorsaux)</li>
-                    <li>Curl léger: 2×20 (biceps)</li>
-                </ul>
-                
-                <!-- 🆕 NOUVEAU: Phase 4 montée progressive -->
-                <h4 style="color: #ffa500; margin: 15px 0 10px 0;">🔸 PHASE 4: Montée progressive (5 min)</h4>
-                <ul>
-                    <li>Tirage poulie léger × 15 reps</li>
-                    <li>Tirage 30% charge × 12 reps</li>
-                    <li>Tirage 50% charge × 10 reps</li>
-                    <li>Tirage 70% charge × 8 reps</li>
-                </ul>
+                <!-- 🆕 NOUVEAU: Phases optionnelles (cachées en mode optimal) -->
+                <div class="warmup-extended-mercredi">
+                    <!-- 🆕 NOUVEAU: Phase 3 pré-activation -->
+                    <h4 style="color: #ffa500; margin: 15px 0 10px 0;">🔸 PHASE 3: Pré-activation PULL (5 min)</h4>
+                    <ul>
+                        <li>Pull-overs léger: 2×20 (lats)</li>
+                        <li>Band rows: 2×20 (dorsaux)</li>
+                        <li>Curl léger: 2×20 (biceps)</li>
+                    </ul>
+
+                    <!-- 🆕 NOUVEAU: Phase 4 montée progressive -->
+                    <h4 style="color: #ffa500; margin: 15px 0 10px 0;">🔸 PHASE 4: Montée progressive (5 min)</h4>
+                    <ul>
+                        <li>Tirage poulie léger × 15 reps</li>
+                        <li>Tirage 30% charge × 12 reps</li>
+                        <li>Tirage 50% charge × 10 reps</li>
+                        <li>Tirage 70% charge × 8 reps</li>
+                    </ul>
+                </div>
                 <!-- FIN phases échauffement 🆕 -->
             </div>
             
@@ -597,10 +674,22 @@
         <!-- VENDREDI -->
         <div id="tab-vendredi" class="tab-content">
             <h2 style="color: #667eea; margin-bottom: 12px; font-size: 20px;">🟢 VENDREDI - LEGS</h2>
-            
+
             <div class="workout-section warmup">
-                <h3>🔥 ÉCHAUFFEMENT COMPLET (28 min)</h3> <!-- 🆕 NOUVEAU: Échauffement étendu -->
-                
+                <h3>🔥 ÉCHAUFFEMENT <span id="warmup-mode-vendredi">COMPLET (28 min)</span></h3>
+
+                <!-- 🆕 NOUVEAU: Toggle échauffement optimal/complet -->
+                <div class="warmup-toggle">
+                    <div>
+                        <div class="warmup-toggle-label">Mode Optimal 15min</div>
+                        <div style="font-size: 11px; color: #666;">McGill Big 3 + Activation essentielle</div>
+                    </div>
+                    <label class="toggle-switch">
+                        <input type="checkbox" id="warmup-toggle-vendredi" onchange="toggleWarmupMode('vendredi')">
+                        <span class="toggle-slider"></span>
+                    </label>
+                </div>
+
                 <!-- 🆕 NOUVEAU: McGill Big 3 -->
                 <div style="background: #e8f5e9; padding: 10px; border-radius: 8px; margin-bottom: 15px;">
                     <h4 style="color: #51cf66; margin-bottom: 10px;">💚 McGILL BIG 3 (8 min) - CORE STABILITY</h4>
@@ -622,22 +711,25 @@
                     <li>Foam roll fessiers 2 min/côté</li>
                 </ul>
                 
-                <!-- 🆕 NOUVEAU: Phase 3 pré-activation -->
-                <h4 style="color: #ffa500; margin: 15px 0 10px 0;">🔸 PHASE 3: Pré-activation LEGS (5 min)</h4>
-                <ul>
-                    <li>Goblet squat vide: 2×15</li>
-                    <li>Hip thrust bodyweight: 2×20</li>
-                    <li>Leg extension léger: 2×20</li>
-                </ul>
-                
-                <!-- 🆕 NOUVEAU: Phase 4 montée progressive -->
-                <h4 style="color: #ffa500; margin: 15px 0 10px 0;">🔸 PHASE 4: Montée progressive RDL (5 min)</h4>
-                <ul>
-                    <li>RDL barre vide × 15 reps</li>
-                    <li>RDL 30% charge × 12 reps</li>
-                    <li>RDL 50% charge × 10 reps</li>
-                    <li>RDL 70% charge × 8 reps</li>
-                </ul>
+                <!-- 🆕 NOUVEAU: Phases optionnelles (cachées en mode optimal) -->
+                <div class="warmup-extended-vendredi">
+                    <!-- 🆕 NOUVEAU: Phase 3 pré-activation -->
+                    <h4 style="color: #ffa500; margin: 15px 0 10px 0;">🔸 PHASE 3: Pré-activation LEGS (5 min)</h4>
+                    <ul>
+                        <li>Goblet squat vide: 2×15</li>
+                        <li>Hip thrust bodyweight: 2×20</li>
+                        <li>Leg extension léger: 2×20</li>
+                    </ul>
+
+                    <!-- 🆕 NOUVEAU: Phase 4 montée progressive -->
+                    <h4 style="color: #ffa500; margin: 15px 0 10px 0;">🔸 PHASE 4: Montée progressive RDL (5 min)</h4>
+                    <ul>
+                        <li>RDL barre vide × 15 reps</li>
+                        <li>RDL 30% charge × 12 reps</li>
+                        <li>RDL 50% charge × 10 reps</li>
+                        <li>RDL 70% charge × 8 reps</li>
+                    </ul>
+                </div>
                 <!-- FIN phases échauffement 🆕 -->
             </div>
             
@@ -1782,6 +1874,278 @@ function openDemo(url){
         navigator.clipboard.writeText(url);
     };
 }
+
+// ============================================
+// 🆕 NOUVEAU: FONCTIONNALITÉS v3.2 ULTIMATE
+// ============================================
+
+// --- 1. AUTO-SAVE AMÉLIORÉ ---
+let lastCompletedInput = null;
+let currentExerciseContext = null;
+
+function enhancedAutoSave(){
+    const indicator = document.getElementById('auto-save-indicator');
+    indicator.innerHTML = '💾 Sauvegarde...';
+    indicator.classList.add('show');
+
+    setTimeout(() => {
+        autoSave(); // Appel de la fonction d'origine
+        indicator.innerHTML = '✅ Sauvegardé';
+        setTimeout(() => indicator.classList.remove('show'), 1500);
+    }, 300);
+}
+
+// --- 2. TIMER FLOTTANT PERSISTANT ---
+let floatingTimerInterval = null;
+let floatingTimeLeft = 0;
+let currentExerciseName = '';
+
+function startFloatingTimer(seconds, exerciseName = '') {
+    stopFloatingTimer();
+    floatingTimeLeft = seconds;
+    currentExerciseName = exerciseName;
+
+    const floatingTimer = document.getElementById('floating-timer');
+    const titleElem = document.getElementById('floating-timer-title');
+
+    titleElem.textContent = exerciseName ? `⏱️ ${exerciseName}` : '⏱️ REPOS';
+    floatingTimer.classList.add('active');
+
+    updateFloatingTimerDisplay();
+
+    floatingTimerInterval = setInterval(() => {
+        floatingTimeLeft--;
+        updateFloatingTimerDisplay();
+
+        if(floatingTimeLeft === 10) {
+            document.getElementById('floating-timer-display').classList.add('warning');
+        }
+
+        if(floatingTimeLeft <= 0) {
+            stopFloatingTimer();
+            playLoudBeep();
+            if('vibrate' in navigator) navigator.vibrate([500,200,500,200,500]);
+            if(Notification.permission === 'granted') {
+                new Notification('⏰ Repos terminé !', {body: 'Go next série ! 💪'});
+            }
+            showModal('⏰', 'Repos terminé !', 'Prêt pour la série suivante ! 💪');
+        }
+    }, 1000);
+}
+
+function updateFloatingTimerDisplay() {
+    const minutes = Math.floor(floatingTimeLeft / 60);
+    const seconds = floatingTimeLeft % 60;
+    document.getElementById('floating-timer-display').textContent =
+        `${String(minutes).padStart(2,'0')}:${String(seconds).padStart(2,'0')}`;
+}
+
+function stopFloatingTimer() {
+    if(floatingTimerInterval) {
+        clearInterval(floatingTimerInterval);
+        floatingTimerInterval = null;
+    }
+    document.getElementById('floating-timer').classList.remove('active');
+    document.getElementById('floating-timer-display').classList.remove('warning');
+    floatingTimeLeft = 0;
+}
+
+function floatingTimerAdd30() {
+    floatingTimeLeft += 30;
+    updateFloatingTimerDisplay();
+    document.getElementById('floating-timer-display').classList.remove('warning');
+}
+
+function floatingTimerStop() {
+    stopFloatingTimer();
+}
+
+// --- 3. GUIDAGE TRANSITION AUTOMATIQUE ---
+let lastInputCompletedTime = 0;
+let guidanceTimeout = null;
+
+function detectSeriesCompletion(input) {
+    // Détecte si une série vient d'être complétée
+    const inputId = input.id;
+    const value = input.value.trim();
+
+    if(value && value.length > 0) {
+        clearTimeout(guidanceTimeout);
+        lastInputCompletedTime = Date.now();
+
+        // Attendre 800ms pour voir si l'utilisateur continue à saisir
+        guidanceTimeout = setTimeout(() => {
+            // Déterminer le temps de repos suggéré
+            const exerciseId = input.dataset.exercise;
+            let suggestedRest = 90; // défaut
+
+            // Logique pour déterminer le temps de repos selon l'exercice
+            if(exerciseId && (exerciseId.includes('1') || exerciseId.includes('2'))) {
+                // Exercices composés principaux
+                suggestedRest = 180; // 3 min
+            } else if(exerciseId && (exerciseId.includes('3') || exerciseId.includes('4'))) {
+                suggestedRest = 120; // 2 min
+            } else {
+                suggestedRest = 90; // 90s pour isolation
+            }
+
+            showTransitionGuide(suggestedRest, input);
+        }, 800);
+    }
+}
+
+function showTransitionGuide(suggestedRest, lastInput) {
+    const guide = document.getElementById('transition-guide');
+    const restTimeSpan = document.getElementById('suggested-rest-time');
+
+    restTimeSpan.textContent = suggestedRest + 's';
+    guide.classList.add('show');
+
+    // Stocker le contexte pour les boutons
+    currentExerciseContext = { rest: suggestedRest, input: lastInput };
+
+    // Auto-cacher après 8 secondes
+    setTimeout(() => {
+        guide.classList.remove('show');
+    }, 8000);
+}
+
+function hideTransitionGuide() {
+    document.getElementById('transition-guide').classList.remove('show');
+}
+
+function startRestTimer() {
+    if(currentExerciseContext) {
+        const exerciseName = currentExerciseContext.input ?
+            currentExerciseContext.input.closest('.exercise')?.querySelector('.exercise-title')?.textContent || 'Repos' : 'Repos';
+        startFloatingTimer(currentExerciseContext.rest, exerciseName);
+    }
+    hideTransitionGuide();
+}
+
+function goToNextSet() {
+    hideTransitionGuide();
+    // Focus sur le prochain input vide
+    if(currentExerciseContext && currentExerciseContext.input) {
+        const currentInput = currentExerciseContext.input;
+        const allInputs = document.querySelectorAll('input[type="text"][data-exercise]');
+        const currentIndex = Array.from(allInputs).indexOf(currentInput);
+
+        if(currentIndex >= 0 && currentIndex < allInputs.length - 1) {
+            const nextInput = allInputs[currentIndex + 1];
+            if(nextInput) {
+                nextInput.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                setTimeout(() => nextInput.focus(), 300);
+            }
+        }
+    }
+}
+
+// --- 4. TOGGLE ÉCHAUFFEMENT OPTIMAL ---
+function toggleWarmupMode(day) {
+    const checkbox = document.getElementById(`warmup-toggle-${day}`);
+    const extendedSection = document.querySelector(`.warmup-extended-${day}`);
+    const modeDisplay = document.getElementById(`warmup-mode-${day}`);
+
+    if(checkbox.checked) {
+        // Mode OPTIMAL (15min)
+        if(extendedSection) extendedSection.style.display = 'none';
+        if(modeDisplay) modeDisplay.textContent = 'OPTIMAL (15 min)';
+        localStorage.setItem(`warmup-mode-${day}`, 'optimal');
+        showModal('⚡', 'Mode Optimal activé', 'Échauffement 15min : McGill Big 3 + Mobilité essentielle');
+    } else {
+        // Mode COMPLET (28min)
+        if(extendedSection) extendedSection.style.display = 'block';
+        if(modeDisplay) modeDisplay.textContent = 'COMPLET (28 min)';
+        localStorage.setItem(`warmup-mode-${day}`, 'complete');
+    }
+}
+
+function loadWarmupPreferences() {
+    ['lundi', 'mercredi', 'vendredi'].forEach(day => {
+        const savedMode = localStorage.getItem(`warmup-mode-${day}`);
+        const checkbox = document.getElementById(`warmup-toggle-${day}`);
+        const extendedSection = document.querySelector(`.warmup-extended-${day}`);
+        const modeDisplay = document.getElementById(`warmup-mode-${day}`);
+
+        if(savedMode === 'optimal' && checkbox) {
+            checkbox.checked = true;
+            if(extendedSection) extendedSection.style.display = 'none';
+            if(modeDisplay) modeDisplay.textContent = 'OPTIMAL (15 min)';
+        }
+    });
+}
+
+// --- 5. AMÉLIORATION VALIDATION COULEURS ---
+function improvedHandleInput(input) {
+    const inputId = input.id;
+    const currentValue = input.value.trim();
+
+    // Initialiser l'état si nécessaire
+    if(!inputStates[inputId]) {
+        inputStates[inputId] = {
+            isPrefilled: false,
+            isModified: false,
+            isSaved: false,
+            originalValue: input.placeholder || ''
+        };
+    }
+
+    const state = inputStates[inputId];
+
+    // Logique de couleurs
+    if(!currentValue || currentValue.length === 0) {
+        // ROUGE: Vide (obligatoire)
+        setInputState(input, 'red');
+        state.isPrefilled = false;
+        state.isModified = false;
+    } else if(currentValue === state.originalValue && !state.isModified) {
+        // JAUNE: Valeur pré-remplie (à vérifier)
+        setInputState(input, 'yellow');
+        state.isPrefilled = true;
+    } else {
+        // VERT: Validé par utilisateur
+        setInputState(input, 'green');
+        state.isModified = true;
+        state.isSaved = false;
+    }
+
+    // Auto-save amélioré
+    enhancedAutoSave();
+
+    // Analyse de performance
+    analyzeExercisePerformance(input.dataset.exercise);
+
+    // Détection série complétée pour guidage
+    if(currentValue && currentValue.length > 0) {
+        detectSeriesCompletion(input);
+    }
+}
+
+// Remplacer handleInput d'origine par la version améliorée
+window.originalHandleInput = handleInput;
+handleInput = improvedHandleInput;
+
+// --- 6. INTÉGRATION TIMER FLOTTANT AVEC TIMER PRINCIPAL ---
+const originalStartTimer = startTimer;
+startTimer = function(seconds) {
+    originalStartTimer(seconds); // Timer principal
+    startFloatingTimer(seconds); // Timer flottant aussi
+};
+
+const originalStopTimer = stopTimer;
+stopTimer = function() {
+    originalStopTimer();
+    stopFloatingTimer();
+};
+
+// --- 7. CHARGEMENT INITIAL ---
+window.addEventListener('load', () => {
+    loadWarmupPreferences();
+    console.log('✅ Masse Builder v3.2 Ultimate - Fonctionnalités avancées chargées');
+});
+
+// FIN FONCTIONNALITÉS v3.2
     </script>
 </body>
 </html>
